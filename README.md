@@ -17,7 +17,9 @@ listed, with its reason, in `scripts/copied-lib.mjs`.
 
 ## Status
 
-Version 0.1.0 is being assembled on the `dev` branch. Nothing here is qualified: every
+The latest release is on the `main` branch, and its demo app is the front page of the
+site: https://jwildfire.github.io/study.viz/. The `dev` branch holds the next release,
+published at https://jwildfire.github.io/study.viz/dev/. Nothing here is qualified: every
 result is exploratory and should be confirmed.
 
 ## Working on it
