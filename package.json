@@ -10,6 +10,8 @@
     "demo": "node scripts/demo.mjs",
     "site": "node scripts/site.mjs",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "demo-path": "node scripts/site.mjs && playwright test -c playwright.demo-path.config.js",
     "copied:check": "node scripts/copied.mjs --check",
     "copied:check-source": "node scripts/copied.mjs --check-source",
     "safety-viz:check": "node scripts/vendor-safety-viz.mjs --check",

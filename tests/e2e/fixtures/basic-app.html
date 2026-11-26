@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>study.viz demo app harness page</title>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Playwright harness page for the demo app (#150). Loads the app bundle
+      that `npm run build:app` writes to build/app/ (a build product, not
+      committed) and mounts it on the demo studies, each fetched from where the
+      repository keeps its files (the site build copies them beside the app).
+      `?empty` mounts it with no demo study, as the single-file build opens.
+    -->
+    <div id="app"></div>
+    <script src="/build/app/study.viz-app.js"></script>
+    <script src="/site/vendor/bio.viz/bio.viz.js"></script>
+    <script src="/build/app/rbqm-tab-options.js"></script>
+    <script>
+      const empty = new URLSearchParams(window.location.search).has('empty');
+      const pitch =
+        'Files you load are read in this browser and never uploaded. Starting R downloads R from webr.r-wasm.org and, for the RBQM tab, its packages from repo.r-wasm.org; your data stays in the browser, and R runs here.';
+      const studies = SafetyVizApp.DEMO_STUDIES.map((study) => ({
+        ...study,
+        base: `/${study.source}/`
+      }));
+      // bio.viz's charts, from the vendored bundle, as the demo page hands them in
+      // (#182), with R on request (#183): the statistics file is the vendored one,
+      // and each connection made is counted for the tests.
+      // `?record` hands the charts a stand-in for R that records what each chart
+      // asks and answers nothing, for scripts/derive-app-statistics.mjs. Every
+      // answer real R gives is recorded too, for the browser tests to compare
+      // with desktop R.
+      const record = new URLSearchParams(window.location.search).has('record');
+      window.__rConnections = 0;
+      window.__rCalls = [];
+      window.__rAnswers = [];
+      const factory = (options) => {
+        window.__rConnections += 1;
+        if (record) {
+          return {
+            run(name, request) {
+              // The app's own calls, the one that starts R on the press and the
+              // two that ask R its version (#276), are not a chart's.
+              if (name !== 'identity' && name !== 'do.call') {
+                window.__rCalls.push({ name, args: request.args, data: request.data });
+              }
+              return Promise.resolve({
+                status: 'unavailable',
+                reason: 'no-r-attached',
+                message: 'Recorded.'
+              });
+            }
+          };
+        }
+        const connection = BioViz.r.createConnection(options);
+        return {
+          async run(name, request) {
+            const answer = await connection.run(name, request);
+            if (name !== 'identity' && name !== 'do.call') {
+              window.__rAnswers.push({
+                name,
+                args: request.args,
+                rows: request.data.length,
+                answer
+              });
+            }
+            return answer;
+          }
+        };
+      };
+      const libraries = [
+        {
+          name: 'bio.viz',
+          charts: BioViz,
+          manifest: BioViz.portfolio,
+          ...SafetyVizApp.rOnRequest({
+            createConnection: factory,
+            browser: { sourceUrl: '/site/vendor/gsm.bio/statistics.R', packages: [] },
+            megabytes: 13,
+            // The charts that draw nothing without R, as the demo page names them (#322).
+            required: ['correlation-matrix', 'biomarker-screen'],
+            host: 'webr.r-wasm.org',
+            webr: BioViz.r.WEBR_VERSION
+          })
+        }
+      ];
+      // The RBQM tab (#235), as the demo page mounts it, with every file where
+      // the repository keeps it. `?rbqm=recorded` gives it a stand-in for R
+      // that answers at once with desktop R's answer for the study loaded
+      // (tests/fixtures/rbqm/expected-tab.json), so a test of the tab's page
+      // need not start R; `?rbqm=recorded&slow` makes each step wait until the
+      // test lets it go. Without it the tab starts real R.
+      const rbqmMode = new URLSearchParams(window.location.search).get('rbqm');
+      window.__rbqmSteps = [];
+      const recordedR = (options) => {
+        const gate = () =>
+          new URLSearchParams(window.location.search).has('slow')
+            ? new Promise((resolve) => (window.__rbqmLetGo = resolve))
+            : Promise.resolve();
+        let fixture = null;
+        return {
+          async run(name, request = {}) {
+            window.__rbqmSteps.push(name);
+            if (name === 'Sys.time') {
+              for (const stage of ['runtime', 'packages', 'files', 'source']) {
+                options.onStage(stage);
+                // R that cannot be fetched fails on its first step, as a blocked host does.
+                if (window.__rbqmFails === 'start') {
+                  return {
+                    status: 'unavailable',
+                    reason: 'load-failed',
+                    message: 'Failed to fetch'
+                  };
+                }
+                await gate();
+              }
+              return { status: 'ok', value: '2026-10-07 12:00:00' };
+            }
+            await gate();
+            if (name !== window.__rbqmTabOptions.r.call) return { status: 'ok', value: null };
+            // The study's files are in R: the tab is told, as the real connection tells it.
+            if (typeof request.onFiles === 'function') {
+              request.onFiles();
+              await gate();
+            }
+            if (window.__rbqmFails === 'run') {
+              return { status: 'error', message: 'Error in rbqm_run: something gave way' };
+            }
+            fixture =
+              fixture || (await (await fetch('/tests/fixtures/rbqm/expected-tab.json')).json());
+            window.__rbqmRequest = request;
+            // Which of desktop R's answers: the whole study's, or the one for
+            // the files this run was handed.
+            const names = Object.keys(request.files).map((file) => file.split('/').pop());
+            // A study of standard domains (#253): desktop R's answer for the
+            // pilot study, handed to R as the app hands it.
+            if (names.some((file) => file.startsWith('Standard_'))) {
+              const standard = await (
+                await fetch('/tests/fixtures/rbqm/expected-standard.json')
+              ).json();
+              return { status: 'ok', value: standard.answer };
+            }
+            const whole = fixture.whole;
+            if (names.length === 9) return { status: 'ok', value: whole };
+            // Two of its files alone, three of them alone (#282), or all but its labs file.
+            const scenario = { 2: 'two-files', 3: 'three-files' }[names.length] || 'no-labs';
+            const partial = fixture.partial[scenario];
+            const ran = new Set(partial.ran.metrics.map((id) => `Analysis_${id}`));
+            const kept = (rows) => rows.filter((row) => ran.has(row.MetricID));
+            return {
+              status: 'ok',
+              value: {
+                ...whole,
+                Results: kept(whole.Results),
+                Bounds: kept(whole.Bounds),
+                Metrics: kept(whole.Metrics),
+                Groups: partial.rows.Groups ? whole.Groups : [],
+                status: partial.status,
+                groups: partial.groups,
+                notes: partial.notes,
+                thresholds: partial.thresholds,
+                ran: partial.ran
+              }
+            };
+          }
+        };
+      };
+      // The view is kept where a test can read what R returned to it. With the
+      // stand-in the clock stands still too, so what the tab says is the same
+      // every time it is captured.
+      window.__rbqmView = SafetyVizApp.rbqmTab({
+        createConnection: rbqmMode === 'recorded' ? recordedR : SafetyVizApp.createRConnection,
+        ...window.__rbqmTabOptions,
+        ...(rbqmMode === 'recorded' ? { now: () => new Date(2026, 9, 7, 9, 0, 0) } : {})
+      });
+      libraries.push({ name: 'gsm.viz', view: window.__rbqmView });
+      window.__safetyVizApp = SafetyVizApp.mount(
+        '#app',
+        empty
+          ? { libraries, pitch, tiers: window.__appTiers }
+          : { demo: { base: '/site/data/', studies }, libraries, pitch, tiers: window.__appTiers }
+      );
+    </script>
+  </body>
+</html>
