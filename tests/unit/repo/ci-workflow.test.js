@@ -25,7 +25,9 @@ const REQUIRED = [
   'npm run gsm-viz:check',
   'npm run rbqm-study:check',
   'npm run study-builder:check',
-  'npm test'
+  'npm test',
+  'npm run site',
+  'npm run build:app'
 ];
 
 const workflow = read('ci.yml');

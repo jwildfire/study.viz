@@ -10,6 +10,9 @@ npm ci
 
 | Command                                      | Purpose                                                                                                                                                                                                                                                                                                                                             |
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run site`                               | Build the site into `_site/` (gitignored): the demo app as the site's root page, with everything it loads beside it; fails on a broken internal link                                                                                                                                                                                                |
+| `npm run build:app`                          | Bundle the demo app (`src/app/`) into `build/app/` (gitignored): `study.viz-app.js` for the browser tests and `study.viz-app.html`, the single file that runs offline; the site build writes its own copies into `_site/`                                                                                                                           |
+| `npm run demo`                               | Build the demo app's directory into `build/demo/` (gitignored), serve it to this machine only and open it                                                                                                                                                                                                                                           |
 | `npm test`                                   | Vitest unit tests (`tests/unit/`)                                                                                                                                                                                                                                                                                                                   |
 | `npm run format` / `npm run format:check`    | Prettier write / check                                                                                                                                                                                                                                                                                                                              |
 | `npm run copied:check` / `:check-source`     | Fail if a file copied from safety.viz differs from the record, `SOURCE.json` / from the safety.viz commit the record names (`-- --from <clone>` reads a local clone); `node scripts/copied.mjs --from <clone>` makes the copy again                                                                                                                 |
@@ -35,6 +38,20 @@ No chart's source is in study.viz. safety.viz builds and commits its bundle, and
 - The app reads the charts through `src/main.js`, `src/tiers.js` and `src/status-label.js`, which hand on the copy and hold no code of their own. Nothing under `src/app/` names the copy.
 - `src/data/portfolio.json` is the chart list the bundle exports as `portfolio`, written out by the same script for the builds and tests that read it as a file. Never edit it.
 - Never edit anything under `site/vendor/`. To change a chart, change it in safety.viz and copy its bundle again.
+
+## The site is the demo app
+
+`npm run site` writes the demo app's page as the site's root page (`scripts/site.mjs`), from the one recipe `npm run demo` also uses (`scripts/demo-app.mjs`). safety.viz served the same page at `demo/` of its docs site. The docs site itself stays in safety.viz: the chart gallery, each chart's demo, API reference, evidence and guide pages, and the About, Architecture, Domains and kit pages. With no docs site beside it, the app's links to the docs, to the Domains page and to each chart's guide and evidence lead to safety.viz's published site.
+
+## The app's name
+
+The app calls itself study.viz wherever a reader sees its name. Each line that differs from safety.viz's for it is listed in `scripts/copied-lib.mjs`.
+
+- study.viz: the header's wordmark, the page titles (`study.viz demo`), the bundle `study.viz-app.js`, the single file `study.viz-app.html`, the mapping file the app saves (`study-viz-mapping.json`), the prefix of its console warnings (`study.viz app:`) and its GitHub link, which is `repoUrl` in `site/config.json`. `scripts/install-demo.mjs` installs a release of study.viz into `./study.viz`.
+- safety.viz: wherever the chart library or its site is meant. The footer's link to the charts' docs reads "safety.viz chart docs and gallery", and each chart's guide and evidence and the Domains page are on safety.viz's site.
+- The footer reads `study.viz <version> · safety.viz <version>`: the app's own version from `package.json`, then the copied bundle's (`scripts/safety-viz-lib.mjs`).
+- The wordmark is not a link. A page that mounts the app may pass `links.home`, and the wordmark then leads there.
+- Not renamed: the names inside the code, which are the global `SafetyVizApp`, `window.__safetyVizApp`, the `sva-` class prefix and the build define `__SAFETY_VIZ_VERSION__`; and the `safetyVizMapping` key that marks a saved mapping file, which the app reads back, so a mapping saved from safety.viz's demo still loads here.
 
 ## The record of the copy
 

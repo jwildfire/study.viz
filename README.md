@@ -25,6 +25,8 @@ result is exploratory and should be confirmed.
 ```sh
 npm ci
 npm test
+npm run demo   # build the demo app and open it on this machine
+npm run site   # build the site into _site/
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the commands and how a pull request merges, and

@@ -6,8 +6,7 @@ import { fileURLToPath } from 'node:url';
 import {
   DEMO_APP_FONTS,
   publishDemoAppFonts,
-  renderDemoAppPage,
-  renderShell
+  renderDemoAppPage
 } from '../../../scripts/site-lib.mjs';
 import { APP_LIBRARIES, chartLinks, libraryManifest } from '../../../scripts/app-libraries.mjs';
 import { BIO_VIZ, readRecord } from '../../../scripts/vendor-lib.mjs';
@@ -217,40 +216,6 @@ describe('renderDemoAppPage', () => {
   });
 });
 
-// The docs site's header sets the app's link apart (#172): it is the one entry
-// that leaves the docs pages for a page of its own.
-describe('site shell: the Demo app nav entry', () => {
-  const shell = readFileSync(
-    fileURLToPath(new URL('../../../site/shell.html', import.meta.url)),
-    'utf8'
-  );
-  const css = readFileSync(
-    fileURLToPath(new URL('../../../site/site.css', import.meta.url)),
-    'utf8'
-  );
-
-  it('APP-PAGE-029: the shell marks the Demo app link as the app link at every mount depth, and its text stays "Demo app" (#172)', () => {
-    for (const root of ['', '../']) {
-      const page = renderShell({ shell, title: 'T', content: 'C', root, renderers: [] });
-      expect(page).toContain(`<a class="nav-app" href="${root}demo/index.html">Demo app</a>`);
-    }
-    // One such link, and no other entry carries the mark.
-    expect(shell.match(/class="nav-app"/g)).toHaveLength(1);
-    // It comes first in the header, before the Gallery entry.
-    expect(shell.indexOf('class="nav-app"')).toBeLessThan(shell.indexOf('{{galleryNav}}'));
-    expect(shell.indexOf('class="nav-app"')).toBeGreaterThan(shell.indexOf('class="site-nav"'));
-  });
-
-  it('APP-PAGE-029: the stylesheet gives the app link a border and draws its arrow as decoration, not as text (#172)', () => {
-    const rule = css.match(/\.site-nav a\.nav-app \{([^}]*)\}/);
-    expect(rule, 'no .site-nav a.nav-app rule').not.toBeNull();
-    expect(rule[1]).toMatch(/border: 1px solid/);
-    const arrow = css.match(/\.site-nav a\.nav-app::after \{([^}]*)\}/);
-    expect(arrow, 'no ::after arrow').not.toBeNull();
-    expect(arrow[1]).toMatch(/mask:/);
-  });
-});
-
 // Each chart's own pages (#246): the footnote under a chart in the app links
 // its clinical guide and its test evidence, and the page that mounts the app
 // says where those are.
@@ -285,15 +250,12 @@ describe('chartLinks', () => {
     ]);
   });
 
-  it('APP-PAGE-031: every address of a safety chart is a page the site build writes: its renderer is available, and its guide is a file in docs/guides/ (#246)', () => {
+  it('APP-PAGE-031: every address of a safety chart is a page safety.viz’s site build writes: its renderer is available (#246)', () => {
     const links = chartLinks({ site: '../' });
     for (const module of own) {
       expect(renderer(module).status, module).toBe('available');
-      if (links[module].guide) {
-        expect(existsSync(path.join(rootDir, 'docs/guides', renderer(module).guide)), module).toBe(
-          true
-        );
-      }
+      // That a chart’s guide is a file in docs/guides/ is held in safety.viz, where the
+      // guides are.
     }
     // A chart the site has no pages for is given no address, and so has no footnote.
     const planned = {

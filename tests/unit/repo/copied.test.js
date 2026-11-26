@@ -164,12 +164,27 @@ describe('the record of the copy from safety.viz', () => {
     ]);
     // A cut cannot be undone from the file alone.
     expect(undoChanges(bytes, changes)).toBeNull();
+    // A cut may also stop before a line, or run to the end of the file, whose
+    // last line feed is kept; and its ends may each be several lines.
+    const before = [{ cut: { from: 'line two', before: 'line four' }, reason: 'r' }];
+    expect(applyChanges(read('a/two.js'), before).bytes.toString()).toBe('line one\nline four\n');
+    const toEnd = [{ cut: { from: 'line two\nline three', before: null }, reason: 'r' }];
+    expect(applyChanges(read('a/two.js'), toEnd).bytes.toString()).toBe('line one\n');
+    expect(applyChanges(read('a/two.js'), toEnd).changes[0].cut).toMatchObject({ lines: 3 });
     expect(() =>
       applyChanges(read('a/two.js'), [{ cut: { from: 'line three', to: 'line two' }, reason: 'r' }])
-    ).toThrow(/does not follow/);
+    ).toThrow(/stops before it starts/);
     expect(() =>
       applyChanges(read('a/two.js'), [{ cut: { from: 'line two' }, reason: 'r' }])
-    ).toThrow(/its first line and its last/);
+    ).toThrow(/where it starts, and either its last lines or the lines it stops before/);
+    expect(() =>
+      applyChanges(read('a/two.js'), [
+        { cut: { from: 'line two', to: 'line three', before: 'line four' }, reason: 'r' }
+      ])
+    ).toThrow(/where it starts/);
+    expect(() =>
+      applyChanges(read('a/two.js'), [{ cut: { from: 'line two', to: 'line 9' }, reason: 'r' }])
+    ).toThrow(/there 0 times/);
   });
 
   it('COPY-008: a changed file is held to its source with the listed changes and no other', () => {
