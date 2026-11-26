@@ -3,7 +3,9 @@ name: CI
 # The required check on dev is the one job below, which carries the name the
 # ruleset asks for: "Build, format, and test". It mirrors the shape of
 # safety.viz's check, cut to what study.viz has: one job, every step of which
-# must pass.
+# must pass. safety.viz splits its check across four jobs to answer sooner; if
+# this one grows slow, split it the same way, behind a gate job that carries
+# the name (the developer guidelines, "A required check split across jobs").
 #
 # tests/unit/repo/ci-workflow.test.js reads this file and fails unless the job
 # keeps the shape that makes it safe to require. CONTRIBUTING.md, "How the
@@ -30,7 +32,7 @@ jobs:
   check:
     name: Build, format, and test
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -95,3 +97,13 @@ jobs:
       # The app bundle and the single file that opens from disk.
       - name: Build the app bundle and the single file
         run: npm run build:app
+
+      # With its system packages, as the screenshot baselines were written.
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # Every browser test, the ones that start real R among them: they
+      # download R from its public hosts. On this runner each captured
+      # screenshot is compared with its baseline in docs/evidence/basic-app/.
+      - name: Run browser tests
+        run: npm run test:e2e -- --project=chromium

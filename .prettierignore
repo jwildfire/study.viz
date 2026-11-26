@@ -34,3 +34,7 @@ site/data/rbqm/SOURCE.json
 # What each gsm workflow needs, as desktop R reads it from the specs: written
 # by scripts/rbqm-reference.mjs, and held to what it is derived from by a test.
 site/rbqm/needs.json
+
+# The app's requirement matrix: a wide, hand-maintained table, copied from
+# safety.viz byte for byte. Alignment padding would rewrite every row.
+requirements/*.md

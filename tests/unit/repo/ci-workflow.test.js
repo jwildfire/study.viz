@@ -27,7 +27,9 @@ const REQUIRED = [
   'npm run study-builder:check',
   'npm test',
   'npm run site',
-  'npm run build:app'
+  'npm run build:app',
+  'npx playwright install --with-deps chromium',
+  'npm run test:e2e -- --project=chromium'
 ];
 
 const workflow = read('ci.yml');

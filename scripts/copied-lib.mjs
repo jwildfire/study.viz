@@ -98,7 +98,10 @@ export const COPIED = {
     // their drift check write and compare the whole folder.
     'site/data',
     // The script that builds the gsm packages for R in the browser.
-    'scripts/r-wasm'
+    'scripts/r-wasm',
+    // The pictures the app's browser tests are compared with on the Linux
+    // runner, and the measurements they wrote there.
+    'docs/evidence/basic-app'
   ],
   files: [
     // The tests of the site build that are about the demo app's page.
@@ -152,9 +155,124 @@ export const COPIED = {
     'scripts/site-lib.mjs',
     'scripts/demo.mjs',
     'scripts/demo-server.mjs',
-    'scripts/install-demo.mjs'
+    'scripts/install-demo.mjs',
+    // The browser tests of the app, their pages and their configuration.
+    'tests/e2e/basic-app.spec.js',
+    'tests/e2e/local-demo.spec.js',
+    'tests/e2e/rbqm-pipeline.spec.js',
+    'tests/e2e/smoke.spec.js',
+    'tests/e2e/evidence.js',
+    'tests/e2e/fixtures/basic-app.html',
+    'tests/e2e/fixtures/basic-app-library.html',
+    'tests/e2e/fixtures/rbqm-pipeline.html',
+    'tests/e2e/fixtures/r-wasm.html',
+    'tests/demo-path/demo-path.spec.js',
+    'playwright.config.js',
+    'playwright.demo-path.config.js',
+    // The app's requirement matrix: the APP-* rows its tests are named for.
+    'requirements/demo-app.md'
   ],
-  left: {},
+  left: {
+    ...Object.fromEntries(
+      [
+        '01-opens-on-the-pilot-study',
+        '02-a-chart-is-opened',
+        '03-the-apps-status-label',
+        '04-an-experimental-charts-label',
+        '05-a-statistic-from-r',
+        '06-rbqm-on-the-pilot-study',
+        '07-the-rbqm-demo-study-on-the-data-tab',
+        '08-rbqm-eight-metrics',
+        '09-one-metrics-page'
+      ].map((step) => [
+        `docs/evidence/basic-app/demo-path/${step}.png`,
+        'A screenshot a walk of safety.viz’s published demo wrote. The walk writes its ' +
+          'screenshots here each time it runs (npm run demo-path), so a copy would change ' +
+          'under the record at the first walk.'
+      ])
+    ),
+    // The pictures the app's browser tests are compared with on the Linux
+    // runner. Each shows the app's header and footer, which name study.viz
+    // here, so study.viz's own run on that runner draws them (the "Refresh
+    // baselines" workflow) and a copy would change under the record at the
+    // first refresh. The three files of measurements beside them stay copied.
+    ...Object.fromEntries(
+      [
+        'APP-BIO-015-trend-tiles',
+        'APP-BIO-016-over-time',
+        'APP-BIO-018-cross-tabulation',
+        'APP-LIB-037-tab-colours',
+        'APP-LOAD-004-mapping-table',
+        'APP-LOAD-007-renamed-study-chart',
+        'APP-LOAD-017-sidebar',
+        'APP-NOTE-003-information-note',
+        'APP-NOTE-003-warning-note',
+        'APP-PAGE-002-demo-study',
+        'APP-PAGE-040-phone-header-rbqm',
+        'APP-PAGE-044-first-screen',
+        'APP-R-018-r-did-not-start',
+        'APP-R-051-r-control-off',
+        'APP-R-051-r-control-ready-details',
+        'APP-R-052-r-control-390-details',
+        'APP-R-052-r-control-390-off',
+        'APP-R-053-rbqm-r-host-blocked',
+        'APP-R-054-rbqm-back-with-no-panel-1280',
+        'APP-R-060-r-note-information-1280',
+        'APP-R-060-r-note-warning-1280',
+        'APP-R-060-r-note-warning-biomarker-screen-1280',
+        'APP-R-061-r-note-failed-1280',
+        'APP-R-061-r-note-starting-1280',
+        'APP-R-062-r-note-gone-when-ready-1280',
+        'APP-R-063-r-note-info-390',
+        'APP-R-063-r-note-warning-390',
+        'APP-R-063-rbqm-note-390',
+        'APP-RBQM-019-rbqm-tab-running',
+        'APP-RBQM-020-rbqm-metric',
+        'APP-RBQM-020-rbqm-tab',
+        'APP-RBQM-022-metric-did-not-run',
+        'APP-RBQM-022-metric-did-not-run-1280',
+        'APP-RBQM-023-rbqm-charts-390',
+        'APP-RBQM-023-rbqm-tab-390',
+        'APP-RBQM-024-rbqm-r-did-not-start',
+        'APP-RBQM-036-own-files-390',
+        'APP-RBQM-036-own-files-before-r',
+        'APP-RBQM-036-own-files-two',
+        'APP-RBQM-046-pilot-before-r',
+        'APP-RBQM-046-pilot-overview',
+        'APP-RBQM-046-pilot-run-details',
+        'APP-RBQM-046-pilot-tab',
+        'APP-RBQM-046-pilot-tab-390',
+        'APP-RBQM-070-overview-fitted-pilot',
+        'APP-RBQM-070-overview-fitted-rbqm',
+        'APP-RBQM-071-rbqm-row-before-r',
+        'APP-RBQM-071-rbqm-row-pilot',
+        'APP-RBQM-071-rbqm-row-rbqm',
+        'APP-RBQM-073-rbqm-after-run-1280',
+        'APP-RBQM-073-rbqm-before-r-1280',
+        'APP-RBQM-073-rbqm-run-details-1280',
+        'APP-RBQM-075-mixed-drop-1280',
+        'APP-RBQM-076-own-files-1280',
+        'APP-RBQM-076-own-files-390',
+        'APP-RBQM-076-pilot-study-1280',
+        'APP-RBQM-076-pilot-study-390',
+        'APP-RBQM-076-pilot-study-after-run',
+        'APP-RBQM-076-rbqm-study-1280',
+        'APP-RBQM-076-rbqm-study-390',
+        'APP-RBQM-080-rbqm-footnote',
+        'APP-RBQM-082-rbqm-note-starting-1280',
+        'APP-RBQM-082-rbqm-note-warning-1280',
+        'APP-TIER-014-app-label-panel',
+        'APP-TIER-016-phone-app-label-panel',
+        'APP-TIER-021-chart-label-panel',
+        'APP-TIER-022-phone-chart-label-panel'
+      ].map((picture) => [
+        `docs/evidence/basic-app/${picture}.png`,
+        'A picture the browser tests are compared with on the Linux runner. It shows the ' +
+          'app under its own name, so study.viz draws its own (the “Refresh baselines” ' +
+          'workflow), and a copy would change under the record at the first refresh.'
+      ])
+    )
+  },
   changes: {
     // The charts are safety.viz's built bundle here, and no chart's source is
     // in study.viz: a test that read a source file of the chart library reads
@@ -407,6 +525,128 @@ export const COPIED = {
           'One test of validateEvidenceScreenshots, which stays in safety.viz with the evidence pages.'
       }
     ],
+    // The smoke test opened safety.viz's scaffold page, a placeholder from
+    // before there were charts. Here it opens the site as `npm run site` builds
+    // it, whose root page is the demo app.
+    'tests/e2e/smoke.spec.js': [
+      {
+        original:
+          "import { test, expect } from '@playwright/test';\n" +
+          '\n' +
+          "test.describe('safety.viz scaffold', () => {\n" +
+          "  test('demo page loads with no console errors (#1)', async ({ page }) => {\n" +
+          '    const errors = [];\n' +
+          "    page.on('pageerror', (error) => errors.push(error.message));\n" +
+          "    page.on('console', (msg) => {\n" +
+          "      if (msg.type() === 'error') errors.push(msg.text());\n" +
+          '    });\n' +
+          '\n' +
+          "    await page.goto('/tests/e2e/fixtures/');\n" +
+          '\n' +
+          "    await expect(page.locator('#scaffold-heading')).toHaveText('safety.viz scaffold');\n" +
+          '    expect(errors).toEqual([]);\n' +
+          '  });\n' +
+          '});',
+        replacement:
+          "import { execSync } from 'node:child_process';\n" +
+          "import { test, expect } from '@playwright/test';\n" +
+          "import { SITE } from '../../src/app/site.js';\n" +
+          '\n' +
+          '// Site smoke: the site `npm run site` builds is the demo app, as its root\n' +
+          '// page, and it must mount with no console errors and no failed request,\n' +
+          '// served straight out of _site/. The build runs here so every context that\n' +
+          '// runs the browser suite exercises the current tree. It is the test\n' +
+          '// safety.viz’s site suite makes of the page it serves at demo/ (APP-PAGE-013),\n' +
+          '// for a page with no docs site beside it.\n' +
+          "test.describe('the built site', () => {\n" +
+          '  test.beforeAll(() => {\n' +
+          "    execSync('npm run site', { stdio: 'inherit', cwd: new URL('../..', import.meta.url) });\n" +
+          '  });\n' +
+          '\n' +
+          "  test('the site’s root page is the demo app, mounted on the demo study with every chart of both libraries, no console errors and no failed request (#1)', async ({\n" +
+          '    page\n' +
+          '  }) => {\n' +
+          '    const errors = [];\n' +
+          "    page.on('pageerror', (error) => errors.push(error.message));\n" +
+          "    page.on('console', (msg) => {\n" +
+          "      if (msg.type() === 'error') errors.push(msg.text());\n" +
+          '    });\n' +
+          '    const failed = [];\n' +
+          "    page.on('response', (response) => {\n" +
+          '      if (response.status() >= 400) failed.push(`${response.status()} ${response.url()}`);\n' +
+          '    });\n' +
+          '\n' +
+          "    await page.goto('/_site/');\n" +
+          "    await page.evaluate('window.__safetyVizApp.ready');\n" +
+          '\n' +
+          '    // The title names the chart the app opens on.\n' +
+          "    await expect(page).toHaveTitle('Histogram · study.viz demo');\n" +
+          "    await expect(page.locator('.sva-count')).toHaveText(\n" +
+          "      '18 of 18 charts supported by the loaded data'\n" +
+          '    );\n' +
+          "    await expect(page.locator('.sva-chart canvas:visible').first()).toBeVisible();\n" +
+          "    await expect(page.locator('.sva-tab[data-domain=\"biomarkers\"] .sva-tab-count')).toHaveText('5');\n" +
+          "    await expect(page.locator('.sva-header .sva-wordmark')).toHaveText('study.viz');\n" +
+          '    // With no docs site beside it, its link to the charts’ docs leads to safety.viz’s\n' +
+          '    // published site, and its source link to study.viz’s own repository; the single\n' +
+          '    // file is beside it, as a download.\n' +
+          "    await expect(page.locator('.sva-links a[data-link=\"docs\"]')).toHaveAttribute('href', SITE);\n" +
+          '    await expect(page.locator(\'.sva-links a[data-link="github"]\')).toHaveAttribute(\n' +
+          "      'href',\n" +
+          "      'https://github.com/jwildfire/study.viz'\n" +
+          '    );\n' +
+          '    const download = page.locator(\'.sva-links a[data-link="download"]\');\n' +
+          "    await expect(download).toHaveAttribute('href', './study.viz-app.html');\n" +
+          "    const response = await page.request.get('/_site/study.viz-app.html');\n" +
+          '    expect(response.ok()).toBe(true);\n' +
+          "    expect(await response.text()).toContain('<title>study.viz demo</title>');\n" +
+          '    expect(failed).toEqual([]);\n' +
+          '    expect(errors).toEqual([]);\n' +
+          '  });\n' +
+          '});',
+        reason:
+          'safety.viz’s smoke test opens tests/e2e/fixtures/index.html, a placeholder page of ' +
+          'the chart library’s scaffold, which is not copied. The task asks for the smoke test ' +
+          'pointed at study.viz’s own site build, so it builds the site and opens its root page.'
+      }
+    ],
+    // The demo-path walk went to safety.viz's published dev demo unless told
+    // another address. Here, told none, it walks this checkout's own site
+    // build, served by a small server the configuration starts.
+    'playwright.demo-path.config.js': [
+      {
+        original:
+          "// No server is started: the address is the dev demo's, or DEMO_PATH_URL's.\n" +
+          "const base = process.env.DEMO_PATH_URL || 'https://jwildfire.github.io/safety.viz/dev/demo/';",
+        replacement:
+          '// With DEMO_PATH_URL the walk is of the demo app at that address, and no server\n' +
+          '// is started. Without it the walk is of this checkout’s own site build:\n' +
+          '// `npm run demo-path` builds _site/ first, and a small server is started over\n' +
+          '// it, two ports past the browser suite’s so the two can run side by side.\n' +
+          'const port = Number(process.env.PW_PORT || 8099) + 2;\n' +
+          'const local = `http://127.0.0.1:${port}/`;\n' +
+          'const base = process.env.DEMO_PATH_URL || local;',
+        reason:
+          'The task asks for the demo-path test pointed at study.viz’s own site build. ' +
+          'study.viz has no published site yet, and safety.viz’s dev demo is not this code.'
+      },
+      {
+        original: "  reporter: [['list']],",
+        replacement:
+          "  reporter: [['list']],\n" +
+          '  ...(process.env.DEMO_PATH_URL\n' +
+          '    ? {}\n' +
+          '    : {\n' +
+          '        webServer: {\n' +
+          '          command: `python3 -m http.server ${port} --directory _site`,\n' +
+          '          url: local,\n' +
+          '          reuseExistingServer: false,\n' +
+          '          timeout: 10_000\n' +
+          '        }\n' +
+          '      }),',
+        reason: 'The server over _site/ for a walk of this checkout’s own site build.'
+      }
+    ],
     'tests/unit/app/status-label.test.js': [
       {
         cut: {
@@ -466,11 +706,46 @@ const WHY = {
   checksums:
     'The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which ' +
     'changed with the app’s name. The requests were recorded again from the renamed app ' +
-    'and are the same; desktop R’s answers are the ones it gave, untouched.'
+    'and are the same; desktop R’s answers are the ones it gave, untouched.',
+  matrix:
+    'The requirement rows say what the app does here: it is named study.viz, its wordmark ' +
+    'is not a link to safety.viz’s docs, its footer names both versions, and its ' +
+    'installer installs into ./study.viz. An amended row says so in its last column.',
+  leak:
+    'The test asks that the server never hands out package.json, by looking for the ' +
+    'package’s name in the answer. The package here is study.viz, so that is the name to ' +
+    'look for.'
 };
 const why = (...keys) => keys.map((key) => WHY[key]).join(' ');
 
 const RENAMED = {
+  'requirements/demo-app.md': [
+    {
+      original:
+        "| APP-PAGE-018 | PAGE | The app's own parts on every view are a header and a footer; the data view alone adds a sidebar (APP-LOAD-021). The header carries the safety.viz wordmark and hex mark and says it is the demo app; the footer says what the page that mounts it does with a study, and carries the version: by default that everything runs in the browser and nothing is sent anywhere; on the hosted page that the study's data never leaves the browser and no request leaves the page unless the reader starts R; in the single file that it loads nothing. The view's name is the page's one heading, kept for screen readers and not shown. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | A header and a footer, not a sidebar (@jwildfire, 2026-10-02): beside the chart's own controls and the participant profile, a sidebar left the chart a fifth of the screen. Amended at @jwildfire's word (#183): his choice of 2026-10-02, \"R on request\", changes what this row promised that day, and the row now says what is true. |\n" +
+        '| APP-PAGE-019 | PAGE | The footer links to the docs site, the Domains page, the single file and the repository, each only where it was given an address; the single file is offered as a download. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. |  |',
+      replacement:
+        "| APP-PAGE-018 | PAGE | The app's own parts on every view are a header and a footer; the data view alone adds a sidebar (APP-LOAD-021). The header carries the study.viz wordmark and hex mark and says it is the demo app; the footer says what the page that mounts it does with a study, and carries the app's own version and, beside it, the safety.viz version of the charts it carries: by default that everything runs in the browser and nothing is sent anywhere; on the hosted page that the study's data never leaves the browser and no request leaves the page unless the reader starts R; in the single file that it loads nothing. The view's name is the page's one heading, kept for screen readers and not shown. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | A header and a footer, not a sidebar (@jwildfire, 2026-10-02): beside the chart's own controls and the participant profile, a sidebar left the chart a fifth of the screen. Amended at @jwildfire's word (#183): his choice of 2026-10-02, \"R on request\", changes what this row promised that day, and the row now says what is true. Amended for study.viz (@jwildfire, 2026-11-26, obot.roadmap#440): the wordmark reads study.viz, and the footer names study.viz's version before safety.viz's. |\n" +
+        "| APP-PAGE-019 | PAGE | The footer links to the charts' docs, in words that say they are safety.viz's, the Domains page, the single file and the repository, each only where it was given an address; the single file is offered as a download. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | Amended for study.viz (@jwildfire, 2026-11-26, obot.roadmap#440): the docs link reads \"safety.viz chart docs and gallery\", because the docs are the chart library's and the app is study.viz. |",
+      reason: why('matrix')
+    },
+    {
+      original:
+        "| APP-PAGE-037 | PAGE | The wordmark is a link to the docs home, with the mark and the words \"Demo app\" inside it, where the page says where the docs are; on the site's page that is the site's own home, and the app's default is the published site. It keeps the header's ink and has no underline, and nothing else in the header moves. | safety.viz src/app/page.js::mountApp; src/app/styles.js | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | Until release 1.11 the only way back to the docs was a link in the footer. |\n" +
+        "| APP-PAGE-038 | PAGE | The browser tab's title names the open view before the app's name: a chart by the name on its chip (\"Histogram · safety.viz demo\"), a library's tab by its own (\"RBQM · safety.viz demo\"), and the Data tab. It follows the address, and a destroyed app leaves the tab the app's name. | safety.viz src/app/page.js::render, viewName | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js; tests/e2e/local-demo.spec.js | ai-reviewed | OK for human review. | So a shared screen's tab bar says where the presenter is. |",
+      replacement:
+        "| APP-PAGE-037 | PAGE | The wordmark reads study.viz, with the mark and the words \"Demo app\" beside it. It is not a link to the charts' docs: it is plain words, and a link only where the page that mounts the app gives the app's own home. The charts' docs are a link in the footer, named as safety.viz's, and the app's default for it is safety.viz's published site. The wordmark keeps the header's ink and has no underline, and nothing else in the header moves. | safety.viz src/app/page.js::mountApp; src/app/styles.js | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | Until release 1.11 the only way back to the docs was a link in the footer. Amended for study.viz (@jwildfire, 2026-11-26, obot.roadmap#440): in safety.viz the wordmark led to the docs home. Here the app is study.viz, so its wordmark does not lead to safety.viz's docs, and the footer's link does. |\n" +
+        "| APP-PAGE-038 | PAGE | The browser tab's title names the open view before the app's name: a chart by the name on its chip (\"Histogram · study.viz demo\"), a library's tab by its own (\"RBQM · study.viz demo\"), and the Data tab. It follows the address, and a destroyed app leaves the tab the app's name. | safety.viz src/app/page.js::render, viewName | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js; tests/e2e/local-demo.spec.js | ai-reviewed | OK for human review. | So a shared screen's tab bar says where the presenter is. |",
+      reason: why('matrix')
+    },
+    {
+      original:
+        "| APP-LOCAL-008 | LOCAL | Run with no arguments, the installer clones the latest release alone, without its history and with its files as the repository holds them, into ./safety.viz, installs what the release's lock file names, and starts the release's own demo script with the Node that ran the installer, ending as the demo ends; `--ref` names another release, `--dir` another directory, and `--port` and `--no-open` reach the demo. Run again where a checkout already is, it uses it as it is: nothing is cloned, and nothing is installed unless an earlier install did not finish. Run again with the `--ref` it was installed with, it does the same: the release named is the one installed when it is the tag of the installed version, `v` and that version, or the branch the clone's own git record names, and nothing is asked of the network to tell. A checkout is never moved to another release: `--ref` naming any other release where one already is stops the installer, which says to name another directory and changes nothing. A release's tag named over a clone of a branch other than `main` stops it too and names the branch, because such a branch holds a version both before and after its tag. A release that does not exist stops it with git's own reason and leaves no clone behind, and a release from before the demo command says so before anything is installed for it. Stopping the installer stops the demo it started. | safety.viz scripts/install-demo.mjs::parseInstallArgs, steps, isInstalled, holdsRelease, branchIn, spawnable | unit | tests/unit/local-demo/install-demo.test.js | ai-reviewed | OK for human review. | Each case is tested by running the file itself on a made-up release, a small git repository with nothing to install, so no test installs from the network; the run against the real repository, from an empty directory to the page answering, is recorded on the pull request (#214). `main` is the release branch, so it is the latest release. The independent review (#214) found the first version ignored `--ref` once a clone existed, reinstalled on every run, and left the demo running when the installer alone was stopped; each now has a test that failed when the fix was taken out. The review of the v1.9.2 release candidate (#219) found that the installer, run again with the `--ref` it was installed with, stopped and told the reader to install the release they already had; the test of that second run failed before the fix. On Windows npm is started through a shell, as one string of its own fixed arguments; that path is tested as a function and has not been run on Windows. |",
+      replacement:
+        "| APP-LOCAL-008 | LOCAL | Run with no arguments, the installer clones the latest release alone, without its history and with its files as the repository holds them, into ./study.viz, installs what the release's lock file names, and starts the release's own demo script with the Node that ran the installer, ending as the demo ends; `--ref` names another release, `--dir` another directory, and `--port` and `--no-open` reach the demo. Run again where a checkout already is, it uses it as it is: nothing is cloned, and nothing is installed unless an earlier install did not finish. Run again with the `--ref` it was installed with, it does the same: the release named is the one installed when it is the tag of the installed version, `v` and that version, or the branch the clone's own git record names, and nothing is asked of the network to tell. A checkout is never moved to another release: `--ref` naming any other release where one already is stops the installer, which says to name another directory and changes nothing. A release's tag named over a clone of a branch other than `main` stops it too and names the branch, because such a branch holds a version both before and after its tag. A release that does not exist stops it with git's own reason and leaves no clone behind, and a release from before the demo command says so before anything is installed for it. Stopping the installer stops the demo it started. | safety.viz scripts/install-demo.mjs::parseInstallArgs, steps, isInstalled, holdsRelease, branchIn, spawnable | unit | tests/unit/local-demo/install-demo.test.js | ai-reviewed | OK for human review. | Each case is tested by running the file itself on a made-up release, a small git repository with nothing to install, so no test installs from the network; the run against the real repository, from an empty directory to the page answering, is recorded on the pull request (#214). `main` is the release branch, so it is the latest release. The independent review (#214) found the first version ignored `--ref` once a clone existed, reinstalled on every run, and left the demo running when the installer alone was stopped; each now has a test that failed when the fix was taken out. The review of the v1.9.2 release candidate (#219) found that the installer, run again with the `--ref` it was installed with, stopped and told the reader to install the release they already had; the test of that second run failed before the fix. On Windows npm is started through a shell, as one string of its own fixed arguments; that path is tested as a function and has not been run on Windows. |",
+      reason: why('matrix')
+    }
+  ],
   'scripts/build-app.mjs': [
     {
       original:
@@ -863,6 +1138,151 @@ const RENAMED = {
       replacement:
         "          console.warn('study.viz app: a source could not list its studies.', error);",
       reason: why('warning')
+    }
+  ],
+  'tests/e2e/basic-app.spec.js': [
+    {
+      original:
+        '  test(\'APP-PAGE-037: the wordmark is a link to the docs home, the mark and the words "Demo app" inside it, and nothing else in the header moves (#270)\', async ({',
+      replacement:
+        '  test(\'APP-PAGE-037: the wordmark reads study.viz, the mark and the words "Demo app" beside it; it is not a link to the charts’ docs, which are a link in the footer named as safety.viz’s, and nothing else in the header moves (#270)\', async ({',
+      reason: why('wordmark')
+    },
+    {
+      original:
+        "    const brand = page.locator('.sva-header a.sva-brand');\n" +
+        "    // The harness page gives the app no addresses, so the app's own default stands: the published site.\n" +
+        "    await expect(brand).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n" +
+        "    await expect(brand).toHaveAttribute('title', 'safety.viz: docs and chart gallery');\n" +
+        "    await expect(brand.locator('.sva-wordmark')).toHaveText('safety.viz');\n" +
+        "    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n" +
+        "    // It reads as the wordmark it was: the header's ink, not a link's underline.",
+      replacement:
+        '    // The harness page gives the app no home of its own, so the wordmark is plain words.\n' +
+        "    const brand = page.locator('.sva-header .sva-brand');\n" +
+        "    await expect(page.locator('.sva-header a.sva-brand')).toHaveCount(0);\n" +
+        "    await expect(brand.locator('.sva-wordmark')).toHaveText('study.viz');\n" +
+        "    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n" +
+        "    // The charts' docs are the footer's link. The harness page gives no address\n" +
+        "    // for them, so the app's own default stands: safety.viz's published site.\n" +
+        '    const docs = page.locator(\'.sva-links a[data-link="docs"]\');\n' +
+        "    await expect(docs).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n" +
+        "    await expect(docs).toHaveText('safety.viz chart docs and gallery');\n" +
+        "    // The wordmark is in the header's ink, with no underline.",
+      reason: why('wordmark')
+    },
+    {
+      original:
+        "    await expect(page).toHaveTitle('Histogram · safety.viz demo');\n" +
+        "    await openChart(page, 'hep-explorer');\n" +
+        "    await expect(page).toHaveTitle('Hepatic Explorer · safety.viz demo');\n" +
+        "    await openChart(page, 'group-comparison');\n" +
+        "    await expect(page).toHaveTitle('Group comparison · safety.viz demo');\n" +
+        '    await page.locator(\'.sva-tab[data-tab="rbqm"]\').click();\n' +
+        "    await expect(page).toHaveTitle('RBQM · safety.viz demo');\n" +
+        "    await item(page, 'data').click();\n" +
+        "    await expect(page).toHaveTitle('Overview · safety.viz demo');",
+      replacement:
+        "    await expect(page).toHaveTitle('Histogram · study.viz demo');\n" +
+        "    await openChart(page, 'hep-explorer');\n" +
+        "    await expect(page).toHaveTitle('Hepatic Explorer · study.viz demo');\n" +
+        "    await openChart(page, 'group-comparison');\n" +
+        "    await expect(page).toHaveTitle('Group comparison · study.viz demo');\n" +
+        '    await page.locator(\'.sva-tab[data-tab="rbqm"]\').click();\n' +
+        "    await expect(page).toHaveTitle('RBQM · study.viz demo');\n" +
+        "    await item(page, 'data').click();\n" +
+        "    await expect(page).toHaveTitle('Overview · study.viz demo');",
+      reason: why('title')
+    },
+    {
+      original: "    await expect(page).toHaveTitle('QT Explorer · safety.viz demo');",
+      replacement: "    await expect(page).toHaveTitle('QT Explorer · study.viz demo');",
+      reason: why('title')
+    },
+    {
+      original:
+        "    expect(download.suggestedFilename()).toBe('safety-viz-mapping.json');\n" +
+        "    const saved = testInfo.outputPath('safety-viz-mapping.json');",
+      replacement:
+        "    expect(download.suggestedFilename()).toBe('study-viz-mapping.json');\n" +
+        "    const saved = testInfo.outputPath('study-viz-mapping.json');",
+      reason: why('mapping')
+    },
+    {
+      original:
+        '// `npm run build:app` also writes build/app/safety.viz-app.html: the app inlined\n' +
+        '// into one HTML file. It is opened here from disk, with the browser offline.\n' +
+        '\n' +
+        "const SINGLE_FILE = new URL('../../build/app/safety.viz-app.html', import.meta.url);",
+      replacement:
+        '// `npm run build:app` also writes build/app/study.viz-app.html: the app inlined\n' +
+        '// into one HTML file. It is opened here from disk, with the browser offline.\n' +
+        '\n' +
+        "const SINGLE_FILE = new URL('../../build/app/study.viz-app.html', import.meta.url);",
+      reason: why('files')
+    },
+    {
+      original:
+        "    await expect(page).toHaveTitle('Overview · safety.viz demo');\n" +
+        "    await expect(page.locator('.sva-wordmark')).toHaveText('safety.viz');\n" +
+        "    await expect(page.locator('.sva-kicker')).toHaveText('Demo app');\n" +
+        "    await expect(page.locator('.sva-version')).toHaveText(/^safety\\.viz \\d+\\.\\d+\\.\\d+$/);\n" +
+        '    // With no site around it, its links go to the published one.',
+      replacement:
+        "    await expect(page).toHaveTitle('Overview · study.viz demo');\n" +
+        "    await expect(page.locator('.sva-wordmark')).toHaveText('study.viz');\n" +
+        "    await expect(page.locator('.sva-kicker')).toHaveText('Demo app');\n" +
+        "    // The footer names the app's own version, and the chart library's beside it.\n" +
+        "    await expect(page.locator('.sva-version')).toHaveText(\n" +
+        '      /^study\\.viz \\d+\\.\\d+\\.\\d+ · safety\\.viz \\d+\\.\\d+\\.\\d+$/\n' +
+        '    );\n' +
+        "    // With no site around it, its links to the charts' docs go to safety.viz's published site.",
+      reason: why('version', 'wordmark', 'title')
+    }
+  ],
+  'tests/e2e/fixtures/basic-app-library.html': [
+    {
+      original: '    <title>safety.viz demo app harness page with a second library</title>',
+      replacement: '    <title>study.viz demo app harness page with a second library</title>',
+      reason: why('title', 'name')
+    },
+    {
+      original: '    <script src="/build/app/safety.viz-app.js"></script>',
+      replacement: '    <script src="/build/app/study.viz-app.js"></script>',
+      reason: why('files')
+    }
+  ],
+  'tests/e2e/fixtures/basic-app.html': [
+    {
+      original: '    <title>safety.viz demo app harness page</title>',
+      replacement: '    <title>study.viz demo app harness page</title>',
+      reason: why('title', 'name')
+    },
+    {
+      original: '    <script src="/build/app/safety.viz-app.js"></script>',
+      replacement: '    <script src="/build/app/study.viz-app.js"></script>',
+      reason: why('files')
+    }
+  ],
+  'tests/e2e/local-demo.spec.js': [
+    {
+      original: '    await expect(page).toHaveTitle(/ · safety\\.viz demo$/);',
+      replacement: '    await expect(page).toHaveTitle(/ · study\\.viz demo$/);',
+      reason: why('title')
+    },
+    {
+      original:
+        "    await expect(download).toHaveAttribute('href', './safety.viz-app.html');\n" +
+        '    const single = await page.request.get(`${base}safety.viz-app.html`);',
+      replacement:
+        "    await expect(download).toHaveAttribute('href', './study.viz-app.html');\n" +
+        '    const single = await page.request.get(`${base}study.viz-app.html`);',
+      reason: why('files')
+    },
+    {
+      original: '      expect(response.body, path).not.toContain(\'"name": "safety.viz"\');',
+      replacement: '      expect(response.body, path).not.toContain(\'"name": "study.viz"\');',
+      reason: why('leak')
     }
   ],
   'tests/fixtures/app-statistics/expected.json': [

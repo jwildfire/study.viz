@@ -4,12 +4,380 @@
   "commit": "f94fea414c888b0ad1d628598bf023b24a659038",
   "version": "1.12.0",
   "merged_to_dev": true,
-  "left": [],
+  "left": [
+    {
+      "file": "docs/evidence/basic-app/demo-path/01-opens-on-the-pilot-study.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/02-a-chart-is-opened.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/03-the-apps-status-label.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/04-an-experimental-charts-label.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/05-a-statistic-from-r.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/06-rbqm-on-the-pilot-study.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/07-the-rbqm-demo-study-on-the-data-tab.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/08-rbqm-eight-metrics.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/demo-path/09-one-metrics-page.png",
+      "reason": "A screenshot a walk of safety.viz’s published demo wrote. The walk writes its screenshots here each time it runs (npm run demo-path), so a copy would change under the record at the first walk."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-BIO-015-trend-tiles.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-BIO-016-over-time.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-BIO-018-cross-tabulation.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-LIB-037-tab-colours.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-LOAD-004-mapping-table.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-LOAD-007-renamed-study-chart.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-LOAD-017-sidebar.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-NOTE-003-information-note.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-NOTE-003-warning-note.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-PAGE-002-demo-study.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-PAGE-040-phone-header-rbqm.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-PAGE-044-first-screen.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-018-r-did-not-start.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-051-r-control-off.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-051-r-control-ready-details.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-052-r-control-390-details.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-052-r-control-390-off.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-053-rbqm-r-host-blocked.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-054-rbqm-back-with-no-panel-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-060-r-note-information-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-060-r-note-warning-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-060-r-note-warning-biomarker-screen-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-061-r-note-failed-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-061-r-note-starting-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-062-r-note-gone-when-ready-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-063-r-note-info-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-063-r-note-warning-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-063-rbqm-note-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-019-rbqm-tab-running.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-020-rbqm-metric.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-020-rbqm-tab.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-022-metric-did-not-run.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-022-metric-did-not-run-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-023-rbqm-charts-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-023-rbqm-tab-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-024-rbqm-r-did-not-start.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-036-own-files-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-036-own-files-before-r.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-036-own-files-two.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-046-pilot-before-r.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-046-pilot-overview.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-046-pilot-run-details.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-046-pilot-tab.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-046-pilot-tab-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-070-overview-fitted-pilot.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-070-overview-fitted-rbqm.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-071-rbqm-row-before-r.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-071-rbqm-row-pilot.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-071-rbqm-row-rbqm.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-073-rbqm-after-run-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-073-rbqm-before-r-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-073-rbqm-run-details-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-075-mixed-drop-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-076-own-files-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-076-own-files-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-076-pilot-study-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-076-pilot-study-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-076-pilot-study-after-run.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-076-rbqm-study-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-076-rbqm-study-390.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-080-rbqm-footnote.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-082-rbqm-note-starting-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-082-rbqm-note-warning-1280.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-TIER-014-app-label-panel.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-TIER-016-phone-app-label-panel.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-TIER-021-chart-label-panel.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-TIER-022-phone-chart-label-panel.png",
+      "reason": "A picture the browser tests are compared with on the Linux runner. It shows the app under its own name, so study.viz draws its own (the “Refresh baselines” workflow), and a copy would change under the record at the first refresh."
+    }
+  ],
   "files": [
     {
       "file": "docs/DATA_SOURCES.md",
       "sha256": "97ef7ebd2564f18d3efdf7604fbb7b312ad4dec1cc651e328acc4daedd44dd2c",
       "bytes": 42215
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-R-037-rbqm-pipeline-measurements.json",
+      "sha256": "cb129a9211ec55107554f54bcef76324bdc9481fe75b51711639f351e94f73bc",
+      "bytes": 708
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-012-rbqm-tab-measurements.json",
+      "sha256": "051f0beafa2459b85ce9300c05987555d47071b4ada3f4a3fbebe0db010e5953",
+      "bytes": 851
+    },
+    {
+      "file": "docs/evidence/basic-app/APP-RBQM-021-rbqm-tab-measurements.json",
+      "sha256": "a0c578716388d6edf5ff80fb20198ebfc16b461c5d7946bd48246c32fe627a31",
+      "bytes": 770
+    },
+    {
+      "file": "playwright.config.js",
+      "sha256": "e508be6c7c260998de5c0e19574e383cdaa5065f01e7c76df3bf2f433ee63b36",
+      "bytes": 1723
+    },
+    {
+      "file": "playwright.demo-path.config.js",
+      "sha256": "4e11338b8ac3e3e55c3e8bcec5f1062d150e07d30551016ddfdadfccd30ea3b3",
+      "bytes": 1511,
+      "source_sha256": "34009b087bffeb2d6868f38b5fa6810036f7470f3d5f35305589f8db963c177b",
+      "source_bytes": 976,
+      "changes": [
+        {
+          "original": "// No server is started: the address is the dev demo's, or DEMO_PATH_URL's.\nconst base = process.env.DEMO_PATH_URL || 'https://jwildfire.github.io/safety.viz/dev/demo/';",
+          "replacement": "// With DEMO_PATH_URL the walk is of the demo app at that address, and no server\n// is started. Without it the walk is of this checkout’s own site build:\n// `npm run demo-path` builds _site/ first, and a small server is started over\n// it, two ports past the browser suite’s so the two can run side by side.\nconst port = Number(process.env.PW_PORT || 8099) + 2;\nconst local = `http://127.0.0.1:${port}/`;\nconst base = process.env.DEMO_PATH_URL || local;",
+          "reason": "The task asks for the demo-path test pointed at study.viz’s own site build. study.viz has no published site yet, and safety.viz’s dev demo is not this code."
+        },
+        {
+          "original": "  reporter: [['list']],",
+          "replacement": "  reporter: [['list']],\n  ...(process.env.DEMO_PATH_URL\n    ? {}\n    : {\n        webServer: {\n          command: `python3 -m http.server ${port} --directory _site`,\n          url: local,\n          reuseExistingServer: false,\n          timeout: 10_000\n        }\n      }),",
+          "reason": "The server over _site/ for a walk of this checkout’s own site build."
+        }
+      ]
+    },
+    {
+      "file": "requirements/demo-app.md",
+      "sha256": "08aa4d4f91cbfa75fd0ff726aa15c06580151af65663175dd6d7d4799d5d3528",
+      "bytes": 222527,
+      "source_sha256": "266d8a7a9e63e08cb68164b75e71870910800dd8b5a518ce569acb0495a80ee6",
+      "source_bytes": 221717,
+      "changes": [
+        {
+          "original": "| APP-PAGE-018 | PAGE | The app's own parts on every view are a header and a footer; the data view alone adds a sidebar (APP-LOAD-021). The header carries the safety.viz wordmark and hex mark and says it is the demo app; the footer says what the page that mounts it does with a study, and carries the version: by default that everything runs in the browser and nothing is sent anywhere; on the hosted page that the study's data never leaves the browser and no request leaves the page unless the reader starts R; in the single file that it loads nothing. The view's name is the page's one heading, kept for screen readers and not shown. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | A header and a footer, not a sidebar (@jwildfire, 2026-10-02): beside the chart's own controls and the participant profile, a sidebar left the chart a fifth of the screen. Amended at @jwildfire's word (#183): his choice of 2026-10-02, \"R on request\", changes what this row promised that day, and the row now says what is true. |\n| APP-PAGE-019 | PAGE | The footer links to the docs site, the Domains page, the single file and the repository, each only where it was given an address; the single file is offered as a download. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. |  |",
+          "replacement": "| APP-PAGE-018 | PAGE | The app's own parts on every view are a header and a footer; the data view alone adds a sidebar (APP-LOAD-021). The header carries the study.viz wordmark and hex mark and says it is the demo app; the footer says what the page that mounts it does with a study, and carries the app's own version and, beside it, the safety.viz version of the charts it carries: by default that everything runs in the browser and nothing is sent anywhere; on the hosted page that the study's data never leaves the browser and no request leaves the page unless the reader starts R; in the single file that it loads nothing. The view's name is the page's one heading, kept for screen readers and not shown. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | A header and a footer, not a sidebar (@jwildfire, 2026-10-02): beside the chart's own controls and the participant profile, a sidebar left the chart a fifth of the screen. Amended at @jwildfire's word (#183): his choice of 2026-10-02, \"R on request\", changes what this row promised that day, and the row now says what is true. Amended for study.viz (@jwildfire, 2026-11-26, obot.roadmap#440): the wordmark reads study.viz, and the footer names study.viz's version before safety.viz's. |\n| APP-PAGE-019 | PAGE | The footer links to the charts' docs, in words that say they are safety.viz's, the Domains page, the single file and the repository, each only where it was given an address; the single file is offered as a download. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | Amended for study.viz (@jwildfire, 2026-11-26, obot.roadmap#440): the docs link reads \"safety.viz chart docs and gallery\", because the docs are the chart library's and the app is study.viz. |",
+          "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column."
+        },
+        {
+          "original": "| APP-PAGE-037 | PAGE | The wordmark is a link to the docs home, with the mark and the words \"Demo app\" inside it, where the page says where the docs are; on the site's page that is the site's own home, and the app's default is the published site. It keeps the header's ink and has no underline, and nothing else in the header moves. | safety.viz src/app/page.js::mountApp; src/app/styles.js | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | Until release 1.11 the only way back to the docs was a link in the footer. |\n| APP-PAGE-038 | PAGE | The browser tab's title names the open view before the app's name: a chart by the name on its chip (\"Histogram · safety.viz demo\"), a library's tab by its own (\"RBQM · safety.viz demo\"), and the Data tab. It follows the address, and a destroyed app leaves the tab the app's name. | safety.viz src/app/page.js::render, viewName | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js; tests/e2e/local-demo.spec.js | ai-reviewed | OK for human review. | So a shared screen's tab bar says where the presenter is. |",
+          "replacement": "| APP-PAGE-037 | PAGE | The wordmark reads study.viz, with the mark and the words \"Demo app\" beside it. It is not a link to the charts' docs: it is plain words, and a link only where the page that mounts the app gives the app's own home. The charts' docs are a link in the footer, named as safety.viz's, and the app's default for it is safety.viz's published site. The wordmark keeps the header's ink and has no underline, and nothing else in the header moves. | safety.viz src/app/page.js::mountApp; src/app/styles.js | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | Until release 1.11 the only way back to the docs was a link in the footer. Amended for study.viz (@jwildfire, 2026-11-26, obot.roadmap#440): in safety.viz the wordmark led to the docs home. Here the app is study.viz, so its wordmark does not lead to safety.viz's docs, and the footer's link does. |\n| APP-PAGE-038 | PAGE | The browser tab's title names the open view before the app's name: a chart by the name on its chip (\"Histogram · study.viz demo\"), a library's tab by its own (\"RBQM · study.viz demo\"), and the Data tab. It follows the address, and a destroyed app leaves the tab the app's name. | safety.viz src/app/page.js::render, viewName | unit; browser | tests/unit/app/wordmark-title.test.js; tests/e2e/basic-app.spec.js; tests/e2e/site.spec.js; tests/e2e/local-demo.spec.js | ai-reviewed | OK for human review. | So a shared screen's tab bar says where the presenter is. |",
+          "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column."
+        },
+        {
+          "original": "| APP-LOCAL-008 | LOCAL | Run with no arguments, the installer clones the latest release alone, without its history and with its files as the repository holds them, into ./safety.viz, installs what the release's lock file names, and starts the release's own demo script with the Node that ran the installer, ending as the demo ends; `--ref` names another release, `--dir` another directory, and `--port` and `--no-open` reach the demo. Run again where a checkout already is, it uses it as it is: nothing is cloned, and nothing is installed unless an earlier install did not finish. Run again with the `--ref` it was installed with, it does the same: the release named is the one installed when it is the tag of the installed version, `v` and that version, or the branch the clone's own git record names, and nothing is asked of the network to tell. A checkout is never moved to another release: `--ref` naming any other release where one already is stops the installer, which says to name another directory and changes nothing. A release's tag named over a clone of a branch other than `main` stops it too and names the branch, because such a branch holds a version both before and after its tag. A release that does not exist stops it with git's own reason and leaves no clone behind, and a release from before the demo command says so before anything is installed for it. Stopping the installer stops the demo it started. | safety.viz scripts/install-demo.mjs::parseInstallArgs, steps, isInstalled, holdsRelease, branchIn, spawnable | unit | tests/unit/local-demo/install-demo.test.js | ai-reviewed | OK for human review. | Each case is tested by running the file itself on a made-up release, a small git repository with nothing to install, so no test installs from the network; the run against the real repository, from an empty directory to the page answering, is recorded on the pull request (#214). `main` is the release branch, so it is the latest release. The independent review (#214) found the first version ignored `--ref` once a clone existed, reinstalled on every run, and left the demo running when the installer alone was stopped; each now has a test that failed when the fix was taken out. The review of the v1.9.2 release candidate (#219) found that the installer, run again with the `--ref` it was installed with, stopped and told the reader to install the release they already had; the test of that second run failed before the fix. On Windows npm is started through a shell, as one string of its own fixed arguments; that path is tested as a function and has not been run on Windows. |",
+          "replacement": "| APP-LOCAL-008 | LOCAL | Run with no arguments, the installer clones the latest release alone, without its history and with its files as the repository holds them, into ./study.viz, installs what the release's lock file names, and starts the release's own demo script with the Node that ran the installer, ending as the demo ends; `--ref` names another release, `--dir` another directory, and `--port` and `--no-open` reach the demo. Run again where a checkout already is, it uses it as it is: nothing is cloned, and nothing is installed unless an earlier install did not finish. Run again with the `--ref` it was installed with, it does the same: the release named is the one installed when it is the tag of the installed version, `v` and that version, or the branch the clone's own git record names, and nothing is asked of the network to tell. A checkout is never moved to another release: `--ref` naming any other release where one already is stops the installer, which says to name another directory and changes nothing. A release's tag named over a clone of a branch other than `main` stops it too and names the branch, because such a branch holds a version both before and after its tag. A release that does not exist stops it with git's own reason and leaves no clone behind, and a release from before the demo command says so before anything is installed for it. Stopping the installer stops the demo it started. | safety.viz scripts/install-demo.mjs::parseInstallArgs, steps, isInstalled, holdsRelease, branchIn, spawnable | unit | tests/unit/local-demo/install-demo.test.js | ai-reviewed | OK for human review. | Each case is tested by running the file itself on a made-up release, a small git repository with nothing to install, so no test installs from the network; the run against the real repository, from an empty directory to the page answering, is recorded on the pull request (#214). `main` is the release branch, so it is the latest release. The independent review (#214) found the first version ignored `--ref` once a clone existed, reinstalled on every run, and left the demo running when the installer alone was stopped; each now has a test that failed when the fix was taken out. The review of the v1.9.2 release candidate (#219) found that the installer, run again with the `--ref` it was installed with, stopped and told the reader to install the release they already had; the test of that second run failed before the fix. On Windows npm is started through a shell, as one string of its own fixed arguments; that path is tested as a function and has not been run on Windows. |",
+          "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column."
+        }
+      ]
     },
     {
       "file": "scripts/app-libraries.mjs",
@@ -1442,6 +1810,60 @@
       "bytes": 7519
     },
     {
+      "file": "tests/demo-path/demo-path.spec.js",
+      "sha256": "13687365f84b4f8258dd6d2bf97428dedeccb50152ff5bbb12f0130bf0ff5041",
+      "bytes": 7134
+    },
+    {
+      "file": "tests/e2e/basic-app.spec.js",
+      "sha256": "9a159af3041d0f7d6dae5a9891972374dc6e3be21611420d57699563629275ff",
+      "bytes": 307486,
+      "source_sha256": "6c788865bebc87eb235ae76621635ef50391cd0298f7f16beae3417350d24380",
+      "source_bytes": 307015,
+      "changes": [
+        {
+          "original": "  test('APP-PAGE-037: the wordmark is a link to the docs home, the mark and the words \"Demo app\" inside it, and nothing else in the header moves (#270)', async ({",
+          "replacement": "  test('APP-PAGE-037: the wordmark reads study.viz, the mark and the words \"Demo app\" beside it; it is not a link to the charts’ docs, which are a link in the footer named as safety.viz’s, and nothing else in the header moves (#270)', async ({",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
+        },
+        {
+          "original": "    const brand = page.locator('.sva-header a.sva-brand');\n    // The harness page gives the app no addresses, so the app's own default stands: the published site.\n    await expect(brand).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n    await expect(brand).toHaveAttribute('title', 'safety.viz: docs and chart gallery');\n    await expect(brand.locator('.sva-wordmark')).toHaveText('safety.viz');\n    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n    // It reads as the wordmark it was: the header's ink, not a link's underline.",
+          "replacement": "    // The harness page gives the app no home of its own, so the wordmark is plain words.\n    const brand = page.locator('.sva-header .sva-brand');\n    await expect(page.locator('.sva-header a.sva-brand')).toHaveCount(0);\n    await expect(brand.locator('.sva-wordmark')).toHaveText('study.viz');\n    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n    // The charts' docs are the footer's link. The harness page gives no address\n    // for them, so the app's own default stands: safety.viz's published site.\n    const docs = page.locator('.sva-links a[data-link=\"docs\"]');\n    await expect(docs).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n    await expect(docs).toHaveText('safety.viz chart docs and gallery');\n    // The wordmark is in the header's ink, with no underline.",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
+        },
+        {
+          "original": "    await expect(page).toHaveTitle('Histogram · safety.viz demo');\n    await openChart(page, 'hep-explorer');\n    await expect(page).toHaveTitle('Hepatic Explorer · safety.viz demo');\n    await openChart(page, 'group-comparison');\n    await expect(page).toHaveTitle('Group comparison · safety.viz demo');\n    await page.locator('.sva-tab[data-tab=\"rbqm\"]').click();\n    await expect(page).toHaveTitle('RBQM · safety.viz demo');\n    await item(page, 'data').click();\n    await expect(page).toHaveTitle('Overview · safety.viz demo');",
+          "replacement": "    await expect(page).toHaveTitle('Histogram · study.viz demo');\n    await openChart(page, 'hep-explorer');\n    await expect(page).toHaveTitle('Hepatic Explorer · study.viz demo');\n    await openChart(page, 'group-comparison');\n    await expect(page).toHaveTitle('Group comparison · study.viz demo');\n    await page.locator('.sva-tab[data-tab=\"rbqm\"]').click();\n    await expect(page).toHaveTitle('RBQM · study.viz demo');\n    await item(page, 'data').click();\n    await expect(page).toHaveTitle('Overview · study.viz demo');",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        },
+        {
+          "original": "    await expect(page).toHaveTitle('QT Explorer · safety.viz demo');",
+          "replacement": "    await expect(page).toHaveTitle('QT Explorer · study.viz demo');",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        },
+        {
+          "original": "    expect(download.suggestedFilename()).toBe('safety-viz-mapping.json');\n    const saved = testInfo.outputPath('safety-viz-mapping.json');",
+          "replacement": "    expect(download.suggestedFilename()).toBe('study-viz-mapping.json');\n    const saved = testInfo.outputPath('study-viz-mapping.json');",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": "// `npm run build:app` also writes build/app/safety.viz-app.html: the app inlined\n// into one HTML file. It is opened here from disk, with the browser offline.\n\nconst SINGLE_FILE = new URL('../../build/app/safety.viz-app.html', import.meta.url);",
+          "replacement": "// `npm run build:app` also writes build/app/study.viz-app.html: the app inlined\n// into one HTML file. It is opened here from disk, with the browser offline.\n\nconst SINGLE_FILE = new URL('../../build/app/study.viz-app.html', import.meta.url);",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    await expect(page).toHaveTitle('Overview · safety.viz demo');\n    await expect(page.locator('.sva-wordmark')).toHaveText('safety.viz');\n    await expect(page.locator('.sva-kicker')).toHaveText('Demo app');\n    await expect(page.locator('.sva-version')).toHaveText(/^safety\\.viz \\d+\\.\\d+\\.\\d+$/);\n    // With no site around it, its links go to the published one.",
+          "replacement": "    await expect(page).toHaveTitle('Overview · study.viz demo');\n    await expect(page.locator('.sva-wordmark')).toHaveText('study.viz');\n    await expect(page.locator('.sva-kicker')).toHaveText('Demo app');\n    // The footer names the app's own version, and the chart library's beside it.\n    await expect(page.locator('.sva-version')).toHaveText(\n      /^study\\.viz \\d+\\.\\d+\\.\\d+ · safety\\.viz \\d+\\.\\d+\\.\\d+$/\n    );\n    // With no site around it, its links to the charts' docs go to safety.viz's published site.",
+          "reason": "The footer names the app’s own version, study.viz’s, and beside it the safety.viz version of the charts it carries. The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’. The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        }
+      ]
+    },
+    {
+      "file": "tests/e2e/evidence.js",
+      "sha256": "ee4e6ff9755bc06eea0d36792da1f7dd779594abed8b0270c8c28dd27e6039b5",
+      "bytes": 2024
+    },
+    {
       "file": "tests/e2e/fixtures/app/ae.csv",
       "sha256": "d0401aa762bcd17790cc67c19c913460edcf2a71e2e1cccefc96de4b76eeaf0d",
       "bytes": 16691
@@ -1467,9 +1889,100 @@
       "bytes": 234
     },
     {
+      "file": "tests/e2e/fixtures/basic-app-library.html",
+      "sha256": "7430d63372dfca1cd1663c5ef2c2f34474648f213769d6b35d5bfef0d631ef8c",
+      "bytes": 1250,
+      "source_sha256": "b5f76dad0256cf5b9c8a87759b2833ab2a7e840d1e751afcc54fed7f363ec0e4",
+      "source_bytes": 1252,
+      "changes": [
+        {
+          "original": "    <title>safety.viz demo app harness page with a second library</title>",
+          "replacement": "    <title>study.viz demo app harness page with a second library</title>",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\". The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        },
+        {
+          "original": "    <script src=\"/build/app/safety.viz-app.js\"></script>",
+          "replacement": "    <script src=\"/build/app/study.viz-app.js\"></script>",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        }
+      ]
+    },
+    {
+      "file": "tests/e2e/fixtures/basic-app.html",
+      "sha256": "0f9625a14c5bad6f4461ea669e1fa0d61ade355b75a0255b96051659178874ae",
+      "bytes": 8537,
+      "source_sha256": "1f06aec76ba1b794c2b9d4c95b5fad5c30260a68150902c63d6bf99891852d6c",
+      "source_bytes": 8539,
+      "changes": [
+        {
+          "original": "    <title>safety.viz demo app harness page</title>",
+          "replacement": "    <title>study.viz demo app harness page</title>",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\". The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        },
+        {
+          "original": "    <script src=\"/build/app/safety.viz-app.js\"></script>",
+          "replacement": "    <script src=\"/build/app/study.viz-app.js\"></script>",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        }
+      ]
+    },
+    {
+      "file": "tests/e2e/fixtures/r-wasm.html",
+      "sha256": "2dc72b45120184f8c585ec5e5b534e66b9c6ea1fd7706fdd2ba87308a795bfa3",
+      "bytes": 2789
+    },
+    {
+      "file": "tests/e2e/fixtures/rbqm-pipeline.html",
+      "sha256": "5bdb91ee96a029850d2d24185aecbd6c85299501d3fb5d52cace2499fe196361",
+      "bytes": 4291
+    },
+    {
       "file": "tests/e2e/fixtures/stand-in-library.js",
       "sha256": "23b3926d542128f1977d68df0223a1365fc42ed1b1d8094acba3f40ae8147bed",
       "bytes": 4348
+    },
+    {
+      "file": "tests/e2e/local-demo.spec.js",
+      "sha256": "c964979081e148ca0d803aec4c5e332609a969dbe554161287e834eab52cd54a",
+      "bytes": 8105,
+      "source_sha256": "2775485ee5c4aff77210489a6e01e674df7353c99e6ca0802e1eb4ccb2a4e21b",
+      "source_bytes": 8109,
+      "changes": [
+        {
+          "original": "    await expect(page).toHaveTitle(/ · safety\\.viz demo$/);",
+          "replacement": "    await expect(page).toHaveTitle(/ · study\\.viz demo$/);",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        },
+        {
+          "original": "    await expect(download).toHaveAttribute('href', './safety.viz-app.html');\n    const single = await page.request.get(`${base}safety.viz-app.html`);",
+          "replacement": "    await expect(download).toHaveAttribute('href', './study.viz-app.html');\n    const single = await page.request.get(`${base}study.viz-app.html`);",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "      expect(response.body, path).not.toContain('\"name\": \"safety.viz\"');",
+          "replacement": "      expect(response.body, path).not.toContain('\"name\": \"study.viz\"');",
+          "reason": "The test asks that the server never hands out package.json, by looking for the package’s name in the answer. The package here is study.viz, so that is the name to look for."
+        }
+      ]
+    },
+    {
+      "file": "tests/e2e/rbqm-pipeline.spec.js",
+      "sha256": "c0dc35884c6863cc0c846ad2d05f3ea2ec100f277c53566771b06d89bc82101a",
+      "bytes": 13183
+    },
+    {
+      "file": "tests/e2e/smoke.spec.js",
+      "sha256": "08306190300feb57902b3c6dfabbdc5547024df90a24091763e1dfa04bd88d29",
+      "bytes": 2735,
+      "source_sha256": "7e46bbba76c76ce28c4bf8b1252848c20262d1fa020b4af85fba29da33fd1ad2",
+      "source_bytes": 536,
+      "changes": [
+        {
+          "original": "import { test, expect } from '@playwright/test';\n\ntest.describe('safety.viz scaffold', () => {\n  test('demo page loads with no console errors (#1)', async ({ page }) => {\n    const errors = [];\n    page.on('pageerror', (error) => errors.push(error.message));\n    page.on('console', (msg) => {\n      if (msg.type() === 'error') errors.push(msg.text());\n    });\n\n    await page.goto('/tests/e2e/fixtures/');\n\n    await expect(page.locator('#scaffold-heading')).toHaveText('safety.viz scaffold');\n    expect(errors).toEqual([]);\n  });\n});",
+          "replacement": "import { execSync } from 'node:child_process';\nimport { test, expect } from '@playwright/test';\nimport { SITE } from '../../src/app/site.js';\n\n// Site smoke: the site `npm run site` builds is the demo app, as its root\n// page, and it must mount with no console errors and no failed request,\n// served straight out of _site/. The build runs here so every context that\n// runs the browser suite exercises the current tree. It is the test\n// safety.viz’s site suite makes of the page it serves at demo/ (APP-PAGE-013),\n// for a page with no docs site beside it.\ntest.describe('the built site', () => {\n  test.beforeAll(() => {\n    execSync('npm run site', { stdio: 'inherit', cwd: new URL('../..', import.meta.url) });\n  });\n\n  test('the site’s root page is the demo app, mounted on the demo study with every chart of both libraries, no console errors and no failed request (#1)', async ({\n    page\n  }) => {\n    const errors = [];\n    page.on('pageerror', (error) => errors.push(error.message));\n    page.on('console', (msg) => {\n      if (msg.type() === 'error') errors.push(msg.text());\n    });\n    const failed = [];\n    page.on('response', (response) => {\n      if (response.status() >= 400) failed.push(`${response.status()} ${response.url()}`);\n    });\n\n    await page.goto('/_site/');\n    await page.evaluate('window.__safetyVizApp.ready');\n\n    // The title names the chart the app opens on.\n    await expect(page).toHaveTitle('Histogram · study.viz demo');\n    await expect(page.locator('.sva-count')).toHaveText(\n      '18 of 18 charts supported by the loaded data'\n    );\n    await expect(page.locator('.sva-chart canvas:visible').first()).toBeVisible();\n    await expect(page.locator('.sva-tab[data-domain=\"biomarkers\"] .sva-tab-count')).toHaveText('5');\n    await expect(page.locator('.sva-header .sva-wordmark')).toHaveText('study.viz');\n    // With no docs site beside it, its link to the charts’ docs leads to safety.viz’s\n    // published site, and its source link to study.viz’s own repository; the single\n    // file is beside it, as a download.\n    await expect(page.locator('.sva-links a[data-link=\"docs\"]')).toHaveAttribute('href', SITE);\n    await expect(page.locator('.sva-links a[data-link=\"github\"]')).toHaveAttribute(\n      'href',\n      'https://github.com/jwildfire/study.viz'\n    );\n    const download = page.locator('.sva-links a[data-link=\"download\"]');\n    await expect(download).toHaveAttribute('href', './study.viz-app.html');\n    const response = await page.request.get('/_site/study.viz-app.html');\n    expect(response.ok()).toBe(true);\n    expect(await response.text()).toContain('<title>study.viz demo</title>');\n    expect(failed).toEqual([]);\n    expect(errors).toEqual([]);\n  });\n});",
+          "reason": "safety.viz’s smoke test opens tests/e2e/fixtures/index.html, a placeholder page of the chart library’s scaffold, which is not copied. The task asks for the smoke test pointed at study.viz’s own site build, so it builds the site and opens its root page."
+        }
+      ]
     },
     {
       "file": "tests/fixtures/app-statistics/expected.json",

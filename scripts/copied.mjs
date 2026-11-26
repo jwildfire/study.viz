@@ -57,6 +57,26 @@ const git = (gitArgs, encoding) =>
     ...(encoding ? { encoding } : {})
   });
 
+// The commit, read from GitHub: the list of its files once, and each file as it is asked for.
+let tree = null;
+async function listOnGitHub(folder) {
+  if (!tree) {
+    const url = `https://api.github.com/repos/${slug}/git/trees/${COPIED.commit}?recursive=1`;
+    const response = await fetch(url, { headers: { accept: 'application/vnd.github+json' } });
+    if (!response.ok) throw new Error(`${url} answered ${response.status}.`);
+    const body = await response.json();
+    if (body.truncated) throw new Error(`${url} did not list every file: use --from.`);
+    tree = body.tree.filter((item) => item.type === 'blob').map((item) => item.path);
+  }
+  return tree.filter((file) => file.startsWith(`${folder}/`));
+}
+async function readOnGitHub(file) {
+  const url = `https://raw.githubusercontent.com/${slug}/${COPIED.commit}/${file}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`${url} answered ${response.status}.`);
+  return Buffer.from(await response.arrayBuffer());
+}
+
 // The commit, read from a local clone or from GitHub. Both are read-only.
 const source = from
   ? {
@@ -78,26 +98,10 @@ const source = from
       }
     }
   : {
-      tree: null,
-      async list(folder) {
-        if (!this.tree) {
-          const url = `https://api.github.com/repos/${slug}/git/trees/${COPIED.commit}?recursive=1`;
-          const response = await fetch(url, { headers: { accept: 'application/vnd.github+json' } });
-          if (!response.ok) throw new Error(`${url} answered ${response.status}.`);
-          const body = await response.json();
-          if (body.truncated) throw new Error(`${url} did not list every file: use --from.`);
-          this.tree = body.tree.filter((item) => item.type === 'blob').map((item) => item.path);
-        }
-        return this.tree.filter((file) => file.startsWith(`${folder}/`));
-      },
-      async read(file) {
-        const url = `https://raw.githubusercontent.com/${slug}/${COPIED.commit}/${file}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`${url} answered ${response.status}.`);
-        return Buffer.from(await response.arrayBuffer());
-      },
+      list: listOnGitHub,
+      read: readOnGitHub,
       async more() {
-        const pkg = JSON.parse((await this.read('package.json')).toString('utf8'));
+        const pkg = JSON.parse((await readOnGitHub('package.json')).toString('utf8'));
         // Whether the commit is on safety.viz's dev branch, from GitHub's compare API.
         const url = `https://api.github.com/repos/${slug}/compare/${COPIED.commit}...dev`;
         const response = await fetch(url, { headers: { accept: 'application/vnd.github+json' } });
