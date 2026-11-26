@@ -6,28 +6,6 @@ import { configDefaults, defineConfig } from 'vitest/config';
 // what it waits for, and the task that brings that takes its list away: by task 5 the
 // list is gone and every test runs.
 const WAITING = [
-  // Waiting for the libraries the app carries, the demo studies and their scripts (task 4).
-  'tests/unit/app/charts.test.js',
-  'tests/unit/app/data-panel.test.js',
-  'tests/unit/app/detect.test.js',
-  'tests/unit/app/first-screen.test.js',
-  'tests/unit/app/fixture.test.js',
-  'tests/unit/app/gsm-workflows.test.js',
-  'tests/unit/app/mapping.test.js',
-  'tests/unit/app/page.test.js',
-  'tests/unit/app/parse.test.js',
-  'tests/unit/app/r-on-request.test.js',
-  'tests/unit/app/r-wasm.test.js',
-  'tests/unit/app/rbqm-files.test.js',
-  'tests/unit/app/rbqm-pipeline.test.js',
-  'tests/unit/app/rbqm-study.test.js',
-  'tests/unit/app/rbqm-tab-run.test.js',
-  'tests/unit/app/status.test.js',
-  'tests/unit/app/studies.test.js',
-  'tests/unit/demo-data/adsl.test.js',
-  'tests/unit/demo-data/drift.test.js',
-  'tests/unit/demo-data/ecg.test.js',
-  'tests/unit/demo-data/visits.test.js',
   // Waiting for the build scripts, the site and its configuration’s readers (task 5).
   'tests/unit/app/biomarkers.test.js',
   'tests/unit/app/builder-view.test.js',

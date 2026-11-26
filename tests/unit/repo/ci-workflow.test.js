@@ -18,6 +18,13 @@ const REQUIRED = [
   'npm run format:check',
   'npm run copied:check',
   'npm run safety-viz:check',
+  'npm run bio-viz:check',
+  'npm run statistics:check',
+  'npm run r-wasm:check',
+  'npm run gsm-workflows:check',
+  'npm run gsm-viz:check',
+  'npm run rbqm-study:check',
+  'npm run study-builder:check',
   'npm test'
 ];
 

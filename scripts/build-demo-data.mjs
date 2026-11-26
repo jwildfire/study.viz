@@ -1,0 +1,510 @@
+// build-demo-data.mjs — regenerate the vendored demo datasets from a canonical source.
+//
+// safety.viz demos and evidence run on three vendored CSVs:
+//   site/data/adbds.csv — one row per lab / vital-sign measurement (BDS shape)
+//   site/data/adae.csv  — one row per adverse event
+//   site/data/adeg.csv  — one row per ECG interval measurement (QT / QTc / HR), the
+//                         demo dataset for the QT Safety Explorer
+//   site/data/adsl.csv  — one row per safety participant (id, arm, follow-up-end
+//                         study day, end-of-study status): the population half of
+//                         the Time-to-Event Explorer demo (events come from adae.csv)
+//   site/data/pje-{ex,ae,lb,cm,mh,ds}.csv — six per-domain extracts (exposure,
+//                         adverse events, liver labs, con-meds, medical history,
+//                         disposition) for the Patient Journey Explorer (#142); the
+//                         `pje` group alias builds all six
+//
+// This script (re)builds them from **pharmaverseadam** (https://github.com/pharmaverse/pharmaverseadam),
+// the pharmaverse consortium's ADaM test data derived from the CDISC SDTM/ADaM Pilot 01
+// study (Apache-2.0). It replaces an earlier synthetic stopgap of unclear provenance.
+// One source file, `ds.csv`, comes from the sibling **pharmaversesdtm** package instead
+// (same study, same licence) because pharmaverseadam ships no ADaM DS dataset.
+// See obot.roadmap requirement #25 and docs/DATA_SOURCES.md.
+//
+// The BDS file is the row-bind of ADaM `adlb` (labs) + `advs` (vitals) — both already
+// carry participant demographics, treatment arm, visit, standardized numeric result, and
+// reference ranges, so no separate `adsl` join is needed. The AE file is `adae` projected
+// to the columns the AE renderers map (MedDRA SOC/PT, severity, seriousness, study days).
+// The ECG file is `adeg` projected to a QT measure contract (QTcF / QTcB / HR, each with
+// its analysis value, source-derived baseline, and change-from-baseline) — see buildEg.
+//
+// Usage:  node scripts/build-demo-data.mjs [--source-dir <dir>] [--out-dir <dir>]
+//                                          [--only bds,ae,eg,adsl,pje,pje-ex,…,pje-ds]
+//   Fetches the source CSVs from raw.githubusercontent.com by default (cached under
+//   node's tmp), or reads them from --source-dir if provided
+//   (adlb.csv/advs.csv/adae.csv/adsl.csv/adeg.csv/adex.csv/adcm.csv/admh.csv, plus
+//   ds.csv from pharmaversesdtm).
+//   Writes adbds.csv + adae.csv + adeg.csv + adsl.csv + the six pje-*.csv files to
+//   --out-dir (default: site/data). `--only pje` expands to the six pje-* outputs.
+//
+// The generated CSVs are committed to the repo; rerun this script to refresh them.
+
+import { createWriteStream } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { pipeline } from 'node:stream/promises';
+import { Readable } from 'node:stream';
+// Value helpers and the ECG derivation live in demo-data-lib.mjs so they can be
+// unit-tested without running this script (which downloads ~200 MB of source).
+import {
+  PJE_OUTPUTS,
+  buildAdslRecords,
+  buildEcgRecords,
+  buildPjeAeRecords,
+  buildPjeCmRecords,
+  buildPjeDsRecords,
+  buildPjeExRecords,
+  buildPjeLbRecords,
+  buildPjeMhRecords,
+  clean,
+  isBlank,
+  isNum,
+  num,
+  analysisVisit,
+  safetySubjects,
+  visitNumberer
+} from './demo-data-lib.mjs';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = join(__dirname, '..');
+
+const PHARMAVERSEADAM_BASE =
+  'https://raw.githubusercontent.com/pharmaverse/pharmaverseadam/main/inst/extdata';
+// The disposition source lives in the sibling SDTM package (no ADaM DS exists).
+// The revision the committed pje-ds.csv was taken at is recorded in
+// docs/DATA_SOURCES.md and asserted by demo-data.test.js (design D24).
+const PHARMAVERSESDTM_BASE =
+  'https://raw.githubusercontent.com/pharmaverse/pharmaversesdtm/main/inst/extdata';
+// Per-file source base; anything not listed comes from pharmaverseadam. Cache keys
+// stay the bare file name — `ds.csv` is unique across the two packages.
+const SOURCE_BASE = { 'ds.csv': PHARMAVERSESDTM_BASE };
+// Source files are declared per output in OUTPUTS below, so `--only` fetches
+// just what the requested outputs need.
+
+// Curated measure panel for the demo BDS. The full pilot carries 55 measures
+// (incl. sparse cell-morphology / qualitative-urinalysis labs); the demo keeps a
+// clinically-meaningful continuous panel — core chemistry, the CBC, key vitals, and
+// two endocrine markers — all of which carry reference ranges for the normal-range
+// overlay. Names must match adlb LBTEST / advs PARAM (unit-stripped) exactly; the
+// build warns if any entry is missing from the source.
+const MEASURE_ALLOWLIST = [
+  // Vitals
+  'Diastolic Blood Pressure',
+  'Systolic Blood Pressure',
+  'Pulse Rate',
+  'Temperature',
+  'Weight',
+  // Chemistry
+  'Albumin',
+  'Alanine Aminotransferase',
+  'Alkaline Phosphatase',
+  'Aspartate Aminotransferase',
+  'Bilirubin',
+  'Blood Urea Nitrogen',
+  'Calcium',
+  'Chloride',
+  'Cholesterol',
+  'Creatinine',
+  'Gamma Glutamyl Transferase',
+  'Glucose',
+  'Phosphate',
+  'Potassium',
+  'Protein',
+  'Sodium',
+  'Urate',
+  // Hematology (CBC)
+  'Hemoglobin',
+  'Hematocrit',
+  'Erythrocytes',
+  'Leukocytes',
+  'Platelet',
+  'Lymphocytes'
+];
+// (Thyrotropin / Vitamin B12 are in the pilot but have too few analysis-flagged
+// records to form a histogram, so they are left out of the demo panel.)
+const ALLOWED = new Set(MEASURE_ALLOWLIST);
+
+// ---- tiny arg parser ------------------------------------------------------
+function parseArgs(argv) {
+  const args = { sourceDir: null, outDir: join(REPO_ROOT, 'site', 'data'), only: null };
+  for (let i = 0; i < argv.length; i += 1) {
+    if (argv[i] === '--source-dir') args.sourceDir = argv[(i += 1)];
+    else if (argv[i] === '--out-dir') args.outDir = argv[(i += 1)];
+    else if (argv[i] === '--only') args.only = argv[(i += 1)].split(',').map((s) => s.trim());
+  }
+  return args;
+}
+
+// ---- RFC-4180 CSV parse / serialize ---------------------------------------
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i += 1) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"' && text[i + 1] === '"') {
+        field += '"';
+        i += 1;
+      } else if (c === '"') inQuotes = false;
+      else field += c;
+    } else if (c === '"') inQuotes = true;
+    else if (c === ',') {
+      row.push(field);
+      field = '';
+    } else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i += 1;
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = '';
+    } else field += c;
+  }
+  if (field !== '' || row.length) {
+    row.push(field);
+    rows.push(row);
+  }
+  return rows;
+}
+
+function toRecords(text) {
+  const rows = parseCsv(text);
+  if (!rows.length) return [];
+  const header = rows[0];
+  const records = [];
+  for (let r = 1; r < rows.length; r += 1) {
+    if (rows[r].length === 1 && rows[r][0] === '') continue; // trailing blank line
+    const rec = {};
+    for (let c = 0; c < header.length; c += 1) rec[header[c]] = rows[r][c];
+    records.push(rec);
+  }
+  return records;
+}
+
+function csvField(value) {
+  const s = value == null ? '' : String(value);
+  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function toCsv(columns, records) {
+  const lines = [columns.join(',')];
+  for (const rec of records) lines.push(columns.map((col) => csvField(rec[col])).join(','));
+  return lines.join('\n') + '\n';
+}
+
+// Vitals carry the measure name in PARAM with a trailing unit, e.g.
+// "Diastolic Blood Pressure (mmHg)"; split it into a clean name + unit.
+function splitParamUnit(param) {
+  const m = /^(.*?)\s*\(([^()]*)\)\s*$/.exec(param || '');
+  return m ? { name: m[1].trim(), unit: m[2].trim() } : { name: (param || '').trim(), unit: '' };
+}
+
+// ---- fetch / load source --------------------------------------------------
+async function loadSource(name, sourceDir) {
+  if (sourceDir) {
+    const p = join(sourceDir, name);
+    console.log(`  reading ${p}`);
+    return readFile(p, 'utf8');
+  }
+  const cacheDir = join(tmpdir(), 'safety-viz-demo-data');
+  await mkdir(cacheDir, { recursive: true });
+  const cached = join(cacheDir, name);
+  if (existsSync(cached)) {
+    console.log(`  cached ${cached}`);
+    return readFile(cached, 'utf8');
+  }
+  const url = `${SOURCE_BASE[name] ?? PHARMAVERSEADAM_BASE}/${name}`;
+  console.log(`  fetching ${url}`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`fetch ${url} failed: ${res.status} ${res.statusText}`);
+  await pipeline(Readable.fromWeb(res.body), createWriteStream(cached));
+  return readFile(cached, 'utf8');
+}
+
+// ---- transforms -----------------------------------------------------------
+// Map one ADaM BDS record (adlb or advs) to the safety.viz measure contract.
+// `name`/`unit` are resolved per-domain by the caller (labs use LBTEST/LBSTRESU;
+// vitals derive both from PARAM, whose VSTEST is not populated). AVAL is the
+// standardized numeric result, consistent with the unit and ANRLO/ANRHI range.
+// `visitNum` renumbers the record's visit into the one numbering every extract
+// shares (#366); DY is the ADaM analysis study day (ADY) and ABLFL the baseline
+// flag, both kept so the charts can plot by visit or by study day (#365).
+function mapMeasure(rec, name, unit, visitNum) {
+  return {
+    USUBJID: clean(rec.USUBJID),
+    SITE: isBlank(rec.SITEID) ? '' : `Clinical Site ${rec.SITEID}`,
+    SITEID: clean(rec.SITEID),
+    SEX: clean(rec.SEX),
+    RACE: clean(rec.RACE),
+    ARM: clean(rec.ARM),
+    VISIT: analysisVisit(rec),
+    VISITNUM: visitNum(rec),
+    TEST: name,
+    STRESU: unit,
+    STRESN: rec.AVAL,
+    STNRLO: num(rec.ANRLO),
+    STNRHI: num(rec.ANRHI),
+    DY: num(rec.ADY),
+    ABLFL: clean(rec.ABLFL)
+  };
+}
+
+// Keep one analysis record per measurement: numeric result, not an ADaM-derived row
+// (DTYPE populated = derived, e.g. calculated absolutes / baseline averages), and either
+// the primary-analysis record (ANL01FL='Y') or the baseline record (ABLFL='Y' — baseline
+// carries ABLFL, not ANL01FL, so it must be kept explicitly or change-from-baseline
+// displays lose their anchor visit). Together this de-duplicates the intra-visit
+// vital-sign timepoints to one analysis value per visit while retaining baseline.
+const isAnalysisMeasure = (rec) =>
+  isBlank(rec.DTYPE) && isNum(rec.AVAL) && (rec.ANL01FL === 'Y' || rec.ABLFL === 'Y');
+
+function buildBds(adlbText, advsText) {
+  const labSource = toRecords(adlbText);
+  const labVisit = visitNumberer(labSource);
+  const labs = labSource
+    .filter((r) => isAnalysisMeasure(r) && ALLOWED.has(clean(r.LBTEST)))
+    .map((r) => mapMeasure(r, clean(r.LBTEST), clean(r.LBSTRESU), labVisit));
+  const vitalSource = toRecords(advsText);
+  const vitalVisit = visitNumberer(vitalSource);
+  const vitals = vitalSource
+    .filter((r) => isAnalysisMeasure(r) && ALLOWED.has(splitParamUnit(r.PARAM).name))
+    .map((r) => {
+      const { name, unit } = splitParamUnit(r.PARAM);
+      return mapMeasure(r, name, clean(r.VSSTRESU) || unit, vitalVisit);
+    });
+  const columns = [
+    'USUBJID',
+    'SITE',
+    'SITEID',
+    'SEX',
+    'RACE',
+    'ARM',
+    'VISIT',
+    'VISITNUM',
+    'TEST',
+    'STRESU',
+    'STRESN',
+    'STNRLO',
+    'STNRHI',
+    'DY',
+    'ABLFL'
+  ];
+  const records = [...labs, ...vitals];
+
+  // Guard: every curated measure should be present in the source.
+  const found = new Set(records.map((r) => r.TEST));
+  const missing = MEASURE_ALLOWLIST.filter((m) => !found.has(m));
+  if (missing.length)
+    console.warn(`  WARNING: curated measures not found in source: ${missing.join(', ')}`);
+
+  return { columns, records };
+}
+
+function buildAe(adaeText, adslText) {
+  // AETERM is the verbatim term the AE Timelines renderer requires (term_col);
+  // AEDECOD/AEBODSYS are the MedDRA PT/SOC the AE Explorer's hierarchy uses.
+  const columns = [
+    'USUBJID',
+    'ARM',
+    'AESEQ',
+    'AEBODSYS',
+    'AEDECOD',
+    'AETERM',
+    'AESEV',
+    'AESER',
+    'ASTDY',
+    'AENDY'
+  ];
+  const records = toRecords(adaeText)
+    // Treatment-emergent AEs only (TRTEMFL='Y') — the standard focus of an AE
+    // safety display, and it drops a handful of pre-existing conditions whose
+    // onset is years before treatment (ASTDY down to −13,469) that otherwise
+    // dominate the timeline axis.
+    .filter((r) => r.TRTEMFL === 'Y' && (!isBlank(r.AETERM) || !isBlank(r.AEDECOD)))
+    .map((r) => ({
+      USUBJID: clean(r.USUBJID),
+      ARM: clean(r.TRTA) || clean(r.ARM),
+      AESEQ: clean(r.AESEQ),
+      AEBODSYS: clean(r.AEBODSYS),
+      AEDECOD: clean(r.AEDECOD),
+      AETERM: clean(r.AETERM) || clean(r.AEDECOD),
+      AESEV: clean(r.AESEV) || clean(r.ASEV),
+      AESER: clean(r.AESER),
+      ASTDY: num(r.ASTDY),
+      AENDY: num(r.AENDY)
+    }));
+
+  // One placeholder row (all AE columns blank) per safety-population subject
+  // with no treatment-emergent AEs, so participant denominators are the
+  // treated population, not just participants with events — the AE
+  // renderers' shared placeholder-row convention (AE Explorer counts them
+  // toward group denominators; AE Timelines keeps them in its participant
+  // total while dropping the blank-term record with a reported count).
+  const seen = new Set(records.map((r) => r.USUBJID));
+  const placeholders = toRecords(adslText)
+    .filter((r) => r.SAFFL === 'Y' && !seen.has(clean(r.USUBJID)))
+    .map((r) => ({
+      USUBJID: clean(r.USUBJID),
+      ARM: clean(r.TRT01A) || clean(r.ARM),
+      AESEQ: '',
+      AEBODSYS: '',
+      AEDECOD: '',
+      AETERM: '',
+      AESEV: '',
+      AESER: '',
+      ASTDY: '',
+      AENDY: ''
+    }));
+  return { columns, records: [...records, ...placeholders], placeholders: placeholders.length };
+}
+
+// The ECG file: QTcF / QTcB derived from the measured QT and RR (#79), plus heart
+// rate as recorded. See demo-data-lib.mjs for the derivation and its guard.
+function buildEg(adegText) {
+  return buildEcgRecords(toRecords(adegText), {
+    log: (msg) => console.log(msg),
+    warn: (msg) => console.warn(msg)
+  });
+}
+
+// ---- main -----------------------------------------------------------------
+// Each output declares the source files it needs so `--only` (e.g. `--only tte`)
+// fetches and rebuilds just that output — regenerating adbds.csv outside a full
+// rebuild would drop the synthetic cohorts the cohort scripts append to it.
+const OUTPUTS = {
+  bds: {
+    file: 'adbds.csv',
+    sources: ['adlb.csv', 'advs.csv'],
+    build: (src) => buildBds(src['adlb.csv'], src['advs.csv']),
+    report: (bds) => {
+      const measures = new Set(bds.records.map((r) => r.TEST));
+      const subjects = new Set(bds.records.map((r) => r.USUBJID));
+      const arms = new Set(bds.records.map((r) => r.ARM));
+      return (
+        `adbds.csv: ${bds.records.length} rows · ${subjects.size} participants · ` +
+        `${measures.size} measures · arms {${[...arms].join(', ')}}`
+      );
+    }
+  },
+  ae: {
+    file: 'adae.csv',
+    sources: ['adae.csv', 'adsl.csv'],
+    build: (src) => buildAe(src['adae.csv'], src['adsl.csv']),
+    report: (ae) =>
+      `adae.csv : ${ae.records.length - ae.placeholders} events + ${ae.placeholders} ` +
+      `placeholder rows · ${new Set(ae.records.map((r) => r.USUBJID)).size} participants · ` +
+      `${new Set(ae.records.map((r) => r.AEBODSYS).filter(Boolean)).size} body systems`
+  },
+  eg: {
+    file: 'adeg.csv',
+    sources: ['adeg.csv'],
+    build: (src) => buildEg(src['adeg.csv']),
+    report: (eg) => {
+      const egSubjects = new Set(eg.records.map((r) => r.USUBJID));
+      const egParams = new Set(eg.records.map((r) => r.TEST));
+      const egArms = new Set(eg.records.map((r) => r.ARM));
+      return (
+        `adeg.csv : ${eg.records.length} rows · ${egSubjects.size} participants · ` +
+        `${egParams.size} parameters {${[...egParams].join(', ')}} · arms {${[...egArms].join(', ')}}`
+      );
+    }
+  },
+  adsl: {
+    file: 'adsl.csv',
+    sources: ['adsl.csv'],
+    build: (src) =>
+      buildAdslRecords(toRecords(src['adsl.csv']), { warn: (msg) => console.warn(msg) }),
+    report: (adsl) => {
+      const arms = new Set(adsl.records.map((r) => r.ARM));
+      const days = adsl.records.map((r) => Number(r.EOSDY)).filter(Number.isFinite);
+      return (
+        `adsl.csv : ${adsl.records.length} participants · arms {${[...arms].join(', ')}} · ` +
+        `EOSDY ${Math.min(...days)}–${Math.max(...days)}`
+      );
+    }
+  },
+  // Patient Journey Explorer (#142): six per-domain extracts, one builder each in
+  // demo-data-lib.mjs. `--only pje` expands to all six through GROUPS below.
+  ...pjeOutputs()
+};
+
+function pjeOutputs() {
+  const warn = (msg) => console.warn(msg);
+  const participants = (built) => new Set(built.records.map((r) => r.USUBJID)).size;
+  const builders = {
+    'pje-ex': (src) => buildPjeExRecords(toRecords(src['adex.csv'])),
+    'pje-ae': (src) => buildPjeAeRecords(toRecords(src['adae.csv'])),
+    'pje-lb': (src) => buildPjeLbRecords(toRecords(src['adlb.csv']), { warn }),
+    'pje-cm': (src) => buildPjeCmRecords(toRecords(src['adcm.csv'])),
+    'pje-mh': (src) => buildPjeMhRecords(toRecords(src['admh.csv'])),
+    'pje-ds': (src) =>
+      buildPjeDsRecords(toRecords(src['ds.csv']), {
+        subjects: safetySubjects(toRecords(src['adsl.csv'])),
+        warn
+      })
+  };
+  const reports = {
+    'pje-ex': (b) =>
+      `pje-ex.csv: ${b.records.length} dosing records · ${participants(b)} participants · ` +
+      `treatments {${[...new Set(b.records.map((r) => r.EXTRT))].join(', ')}}`,
+    'pje-ae': (b) =>
+      `pje-ae.csv: ${b.records.length} treatment-emergent events · ${participants(b)} participants · ` +
+      `${b.records.filter((r) => r.AESER === 'Y').length} serious · ` +
+      `${b.records.filter((r) => r.AENDY === '').length} with no end day`,
+    'pje-lb': (b) =>
+      `pje-lb.csv: ${b.records.length} liver-panel results · ${participants(b)} participants · ` +
+      `tests {${[...new Set(b.records.map((r) => r.LBTESTCD))].join(', ')}}`,
+    'pje-cm': (b) =>
+      `pje-cm.csv: ${b.records.length} con-med courses · ${participants(b)} participants · ` +
+      `${Math.round((100 * b.records.filter((r) => r.CMCLAS === 'UNCODED').length) / b.records.length)}% UNCODED`,
+    'pje-mh': (b) =>
+      `pje-mh.csv: ${b.records.length} medical-history records · ${participants(b)} participants · ` +
+      `MHDY ${Math.min(...b.records.map((r) => Number(r.MHDY)))}–${Math.max(...b.records.map((r) => Number(r.MHDY)))}`,
+    'pje-ds': (b) =>
+      `pje-ds.csv: ${b.records.length} disposition rows · ${participants(b)} participants · ` +
+      `categories {${[...new Set(b.records.map((r) => r.DSCAT))].join(', ')}}`
+  };
+  return Object.fromEntries(
+    PJE_OUTPUTS.map(({ name, file, sources }) => [
+      name,
+      { file, sources, build: builders[name], report: reports[name] }
+    ])
+  );
+}
+
+// Group aliases for `--only`: a group name expands to its member outputs.
+const GROUPS = { pje: PJE_OUTPUTS.map((o) => o.name) };
+
+async function main() {
+  const { sourceDir, outDir, only } = parseArgs(process.argv.slice(2));
+  const requested = [
+    ...new Set((only || Object.keys(OUTPUTS)).flatMap((name) => GROUPS[name] ?? [name]))
+  ];
+  const unknown = requested.filter((name) => !OUTPUTS[name]);
+  if (unknown.length)
+    throw new Error(
+      `unknown --only output(s): ${unknown.join(', ')} (valid: ${[...Object.keys(OUTPUTS), ...Object.keys(GROUPS)].join(', ')})`
+    );
+
+  console.log('Loading pharmaverse source datasets…');
+  const needed = [...new Set(requested.flatMap((name) => OUTPUTS[name].sources))];
+  const texts = await Promise.all(needed.map((f) => loadSource(f, sourceDir)));
+  const src = Object.fromEntries(needed.map((f, i) => [f, texts[i]]));
+
+  await mkdir(outDir, { recursive: true });
+  console.log('');
+  for (const name of requested) {
+    const output = OUTPUTS[name];
+    const built = output.build(src);
+    await writeFile(join(outDir, output.file), toCsv(built.columns, built.records));
+    console.log(output.report(built));
+  }
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

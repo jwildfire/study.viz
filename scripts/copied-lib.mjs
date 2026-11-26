@@ -72,7 +72,28 @@ export const COPIED = {
     // for the biomarker charts and for the RBQM pipeline.
     'tests/e2e/fixtures/app',
     'tests/fixtures/app-statistics',
-    'tests/fixtures/rbqm'
+    'tests/fixtures/rbqm',
+    // The libraries the app carries, each copied from its own repository with
+    // a record of its own, which is copied with it: bio.viz, gsm.bio's
+    // statistics, the gsm workflows, gsm.viz, the gsm packages built for R in
+    // the browser, and study.builder.
+    'site/vendor/bio.viz',
+    'site/vendor/gsm.bio',
+    'site/vendor/gsm.kri',
+    'site/vendor/gsm.mapping',
+    'site/vendor/gsm.reporting',
+    'site/vendor/gsm.viz',
+    'site/vendor/r-wasm',
+    'site/vendor/study.builder',
+    // The site-level risk pipeline R is given, and what each workflow needs.
+    'site/rbqm',
+    // The demo studies: the pilot study's extracts, the liver cohort, and the
+    // RBQM study with its record. The six pje-* extracts belong to a chart
+    // page that stays in safety.viz; they come too because the generators and
+    // their drift check write and compare the whole folder.
+    'site/data',
+    // The script that builds the gsm packages for R in the browser.
+    'scripts/r-wasm'
   ],
   files: [
     // The tests of the site build that are about the demo app's page.
@@ -85,7 +106,36 @@ export const COPIED = {
     // The copying of another library with a record, and its command line:
     // scripts/vendor-safety-viz.mjs copies safety.viz's bundle with them.
     'scripts/vendor-lib.mjs',
-    'scripts/vendor-cli.mjs'
+    'scripts/vendor-cli.mjs',
+    // The scripts that copy each library and check the copy.
+    'scripts/vendor-bio-viz.mjs',
+    'scripts/vendor-statistics.mjs',
+    'scripts/vendor-gsm-workflows.mjs',
+    'scripts/vendor-gsm-viz.mjs',
+    'scripts/vendor-rbqm-study.mjs',
+    'scripts/vendor-study-builder.mjs',
+    'scripts/r-wasm.mjs',
+    'scripts/r-wasm-lib.mjs',
+    // The site-level risk pipeline: what R is given, and desktop R's answers.
+    'scripts/rbqm-lib.mjs',
+    'scripts/rbqm-reference.mjs',
+    'scripts/rbqm-reference.R',
+    'scripts/rbqm-labs-check.R',
+    // Desktop R's answers for the biomarker charts' statistics.
+    'scripts/app-statistics-lib.mjs',
+    'scripts/app-statistics.R',
+    'scripts/derive-app-statistics.mjs',
+    // The demo data's generators and their drift check, and where the data is from.
+    'scripts/build-demo-data.mjs',
+    'scripts/demo-data-lib.mjs',
+    'scripts/build-hep-composite-cohort.mjs',
+    'scripts/build-nep-aki-cohort.mjs',
+    'scripts/build-hep-abnbl-cohort.mjs',
+    'scripts/check-demo-data.mjs',
+    'scripts/build-app-fixture.mjs',
+    'docs/DATA_SOURCES.md',
+    // The rung each chart and each tab of the app stands on.
+    'site/config.json'
   ],
   left: {},
   changes: {
@@ -172,6 +222,16 @@ const WHY = {
 const why = (...keys) => keys.map((key) => WHY[key]).join(' ');
 
 const RENAMED = {
+  'site/config.json': [
+    {
+      original:
+        '  "siteTitle": "safety.viz",\n' +
+        '  "repoUrl": "https://github.com/jwildfire/safety.viz",',
+      replacement:
+        '  "siteTitle": "study.viz",\n' + '  "repoUrl": "https://github.com/jwildfire/study.viz",',
+      reason: why('repo', 'name')
+    }
+  ],
   'src/app/libraries.js': [
     {
       original: '  const warn = (message) => console.warn(`safety.viz app: ${message}`);',

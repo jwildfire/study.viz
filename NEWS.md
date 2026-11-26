@@ -17,6 +17,7 @@ demo app is copied in from safety.viz with a record.
 
 - **The repository exists and checks itself.** One check, "Build, format, and test", runs on every pull request, and the site workflow publishes the `dev` branch. [obot.roadmap#440](https://github.com/jwildfire/obot.roadmap/issues/440)
 - **The charts are safety.viz's built bundle, copied with a record.** No chart's source is in study.viz: the app reads safety.viz 1.12.0's bundle from `site/vendor/safety.viz/`, copied byte for byte from the same commit, and `npm run safety-viz:check` holds the copy to its record. [obot.roadmap#440](https://github.com/jwildfire/obot.roadmap/issues/440)
+- **The libraries the app carries came with it, each with its record.** bio.viz, gsm.bio's statistics, the gsm workflows, gsm.viz, the gsm packages built for R in the browser, the site-level risk study and study.builder v0.4.0 are in `site/vendor/` and `site/data/rbqm/`, with the records they had in safety.viz and a `:check` command each. [obot.roadmap#440](https://github.com/jwildfire/obot.roadmap/issues/440)
 
 ## Also in this release
 
