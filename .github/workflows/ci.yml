@@ -53,5 +53,11 @@ jobs:
       - name: Files copied from safety.viz match their record
         run: npm run copied:check
 
+      # safety.viz's charts are its built bundle, copied with a record: the
+      # copy must match the record, and src/data/portfolio.json must be the
+      # chart list the bundle exports.
+      - name: Copied safety.viz bundle matches its record
+        run: npm run safety-viz:check
+
       - name: Run unit tests
         run: npm test

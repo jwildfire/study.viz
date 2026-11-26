@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
 import manifest from '../../../src/data/portfolio.json';
-import schema from '../../../src/data/schema/portfolio.json';
+import schema from '../../../site/vendor/safety.viz/src/data/schema/portfolio.json';
 import { mergeLibraries, chartGroups } from '../../../src/app/libraries.js';
 import {
   BIO_VIZ,

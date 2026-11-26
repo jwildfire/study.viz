@@ -22,3 +22,7 @@ tests/fixtures/app-statistics/
 # Desktop R's rows for the RBQM pipeline: written by scripts/rbqm-reference.mjs,
 # and held to what they are derived from by a test.
 tests/fixtures/rbqm/
+
+# Copied libraries: each is copied byte for byte from its own repository and
+# held to a recorded checksum, so formatting it would break the record.
+site/vendor/

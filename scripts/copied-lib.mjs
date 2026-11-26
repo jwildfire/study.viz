@@ -29,6 +29,18 @@ import path from 'node:path';
 
 export const RECORD_FILE = 'SOURCE.json';
 
+// The JSON Schema of a library's chart list is not in the bundle, so it is
+// copied beside it (scripts/safety-viz-lib.mjs), and the two tests that hold a
+// second library's chart list to it read the copy.
+const SCHEMA_FROM_THE_COPY = {
+  original: "import schema from '../../../src/data/schema/portfolio.json';",
+  replacement:
+    "import schema from '../../../site/vendor/safety.viz/src/data/schema/portfolio.json';",
+  reason:
+    'src/data/schema/portfolio.json is a file of the chart library. It is copied with the ' +
+    'bundle into site/vendor/safety.viz/, under that folder’s record, and read from there.'
+};
+
 /**
  * What is copied from safety.viz, and from which commit.
  *
@@ -69,10 +81,55 @@ export const COPIED = {
     'tests/unit/site/validate.test.js',
     'tests/unit/no-absolute-paths.test.js',
     // The stand-in second chart library the app's tests hand it.
-    'tests/e2e/fixtures/stand-in-library.js'
+    'tests/e2e/fixtures/stand-in-library.js',
+    // The copying of another library with a record, and its command line:
+    // scripts/vendor-safety-viz.mjs copies safety.viz's bundle with them.
+    'scripts/vendor-lib.mjs',
+    'scripts/vendor-cli.mjs'
   ],
   left: {},
-  changes: {}
+  changes: {
+    // The charts are safety.viz's built bundle here, and no chart's source is
+    // in study.viz: a test that read a source file of the chart library reads
+    // the bundle, or the copy beside it, instead.
+    'tests/unit/app/charts.test.js': [
+      {
+        original:
+          "import { normalizeXAxis, renderXAxisControl, resolveXAxis } from '../../../src/x-axis.js';",
+        replacement:
+          "import { kit } from '../../../src/main.js';\n" +
+          '\n' +
+          '// safety.viz’s x-axis helpers, from the bundle’s kit: study.viz holds no chart’s source.\n' +
+          'const { normalizeXAxis, renderXAxisControl, resolveXAxis } = kit;',
+        reason:
+          'src/x-axis.js is a source file of the chart library, which stays in safety.viz. The ' +
+          'bundle exports the same three functions on its kit, and the test reads them there.'
+      }
+    ],
+    'tests/unit/app/libraries.test.js': [SCHEMA_FROM_THE_COPY],
+    'tests/unit/app/biomarkers.test.js': [SCHEMA_FROM_THE_COPY],
+    'tests/unit/app/status-label.test.js': [
+      {
+        cut: {
+          from: "import * as shell from '../../../src/shell.js';",
+          to: "import * as shell from '../../../src/shell.js';"
+        },
+        reason:
+          'src/shell.js is the charts’ shell, a source file of the chart library, which stays in ' +
+          'safety.viz. Only the three assertions cut below read it.'
+      },
+      {
+        cut: {
+          from: "    // The shared shell hands the label on, with the rest of the charts' chrome.",
+          to: '    expect(shell.wireStatusLabels).toBe(wireStatusLabels);'
+        },
+        reason:
+          'These three assertions say that safety.viz’s shell exports the status label. The shell ' +
+          'is not in study.viz, and the bundle’s kit leaves the label out, so there is nothing here ' +
+          'for them to hold. They stay with src/shell.js in safety.viz’s own suite.'
+      }
+    ]
+  }
 };
 
 // The rename (obot.roadmap#440): the app is study.viz from its first commit

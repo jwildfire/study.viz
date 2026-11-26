@@ -8,11 +8,21 @@ npm ci
 
 ## Commands
 
-| Command                                   | Purpose                                                                                                                                                                                                                             |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm test`                                | Vitest unit tests (`tests/unit/`)                                                                                                                                                                                                   |
-| `npm run format` / `npm run format:check` | Prettier write / check                                                                                                                                                                                                              |
-| `npm run copied:check` / `:check-source`  | Fail if a file copied from safety.viz differs from the record, `SOURCE.json` / from the safety.viz commit the record names (`-- --from <clone>` reads a local clone); `node scripts/copied.mjs --from <clone>` makes the copy again |
+| Command                                      | Purpose                                                                                                                                                                                                                                                                                                                                             |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm test`                                   | Vitest unit tests (`tests/unit/`)                                                                                                                                                                                                                                                                                                                   |
+| `npm run format` / `npm run format:check`    | Prettier write / check                                                                                                                                                                                                                                                                                                                              |
+| `npm run copied:check` / `:check-source`     | Fail if a file copied from safety.viz differs from the record, `SOURCE.json` / from the safety.viz commit the record names (`-- --from <clone>` reads a local clone); `node scripts/copied.mjs --from <clone>` makes the copy again                                                                                                                 |
+| `npm run safety-viz:check` / `:check-source` | Fail if `site/vendor/safety.viz/`, safety.viz's built bundle and the three source files copied beside it, differs from its record / from the safety.viz commit the record names, or if `src/data/portfolio.json` is not the chart list the bundle exports; `node scripts/vendor-safety-viz.mjs` copies them again from safety.viz `dev`, or `--tag` |
+
+## The charts are safety.viz's bundle
+
+No chart's source is in study.viz. safety.viz builds and commits its bundle, and `node scripts/vendor-safety-viz.mjs` copies `dist/safety.viz-{version}/safety.viz.esm.js` into `site/vendor/safety.viz/`, byte for byte, with `SOURCE.json` beside it naming the commit and the version. The source maps are not copied: a map carries every chart's source.
+
+- Three source files are copied with the bundle, from the same commit and under the same record, because the bundle does not export what they hold and the app reads it: `src/tiers.js`, `src/status-label.js` (safety.viz's kit leaves the status label out) and `src/data/schema/portfolio.json`. None is a chart.
+- The app reads the charts through `src/main.js`, `src/tiers.js` and `src/status-label.js`, which hand on the copy and hold no code of their own. Nothing under `src/app/` names the copy.
+- `src/data/portfolio.json` is the chart list the bundle exports as `portfolio`, written out by the same script for the builds and tests that read it as a file. Never edit it.
+- Never edit anything under `site/vendor/`. To change a chart, change it in safety.viz and copy its bundle again.
 
 ## The record of the copy
 

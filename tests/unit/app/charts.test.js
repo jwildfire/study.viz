@@ -8,7 +8,10 @@ import { parseFile } from '../../../src/app/parse.js';
 import { buildMapping, setColumn, setMeasure } from '../../../src/app/mapping.js';
 import { chartData, chartSettings, isDestination } from '../../../src/app/charts.js';
 import { mountApp } from '../../../src/app/page.js';
-import { normalizeXAxis, renderXAxisControl, resolveXAxis } from '../../../src/x-axis.js';
+import { kit } from '../../../src/main.js';
+
+// safety.viz’s x-axis helpers, from the bundle’s kit: study.viz holds no chart’s source.
+const { normalizeXAxis, renderXAxisControl, resolveXAxis } = kit;
 
 // jsdom replaces the global URL, so the fixture path is built with node:path.
 const dataDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../../site/data');
