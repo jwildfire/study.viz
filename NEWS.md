@@ -28,3 +28,4 @@ demo app is copied in from safety.viz with a record.
 
 - `dev` is the integration branch and `main` the release branch, as in safety.viz and bio.viz.
 - The `Update evidence baselines` workflow makes the pictures the browser tests are compared with again, on the Linux runner the check runs on, and commits them to the branch it is started for.
+- `npm run demo-path` walks all eight of its steps. The seventh, where the walk stopped, opens the RBQM demo study through the study chip in the header, where the app chooses a study. [#8](https://github.com/jwildfire/study.viz/issues/8)

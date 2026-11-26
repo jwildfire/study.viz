@@ -750,6 +750,39 @@ export const COPIED = {
         reason: 'The server over _site/ for a walk of this checkout’s own site build.'
       }
     ],
+    // The walk's seventh step looked for the study menu on the Overview tab. The
+    // app now chooses a study through the study chip in its header, and the
+    // Overview tab opens on the study looked through, so the step is rewritten
+    // to open the RBQM demo study through the chip (study.viz#8). The other
+    // seven steps, their order and their screenshots are as safety.viz has them.
+    'tests/demo-path/demo-path.spec.js': [
+      {
+        original:
+          "  await test.step('7. the RBQM demo study is chosen on the Overview tab', async () => {\n" +
+          "    await chart('data').click();\n" +
+          "    await page.locator('.sva-side select.sva-study').selectOption('rbqm');\n" +
+          "    await expect(page.locator('.sva-loaded-name')).toHaveCount(9);",
+        replacement:
+          "  await test.step('7. the RBQM demo study is chosen through the study chip', async () => {\n" +
+          "    await chart('data').click();\n" +
+          '    // A study is chosen through the study chip in the header. The Overview tab\n' +
+          '    // opens on the study looked through: its study menu and its list of loaded\n' +
+          '    // files are on its other face, Files.\n' +
+          '    await page.locator(\'[data-action="study-chip"]\').click();\n' +
+          '    const study = page.locator(\'.sva-chip-item[data-study="demo:rbqm"]\');\n' +
+          "    await expect(study.locator('small')).toHaveText('9 files');\n" +
+          '    await study.click();\n' +
+          "    await expect(page.locator('.sva-chip-name')).toHaveText('RBQM study');",
+        reason:
+          'The walk stopped at this step: on a page that serves study.viewer the Overview tab ' +
+          'opens on the study looked through, and the study menu the step pressed, with the ' +
+          'list of loaded files it counted, is on the tab’s other face. A study is chosen ' +
+          'through the study chip in the header, so the step opens the RBQM demo study there, ' +
+          'reads its nine files from the chip’s list and the study’s name from the chip. What ' +
+          'the data supports and the step’s screenshot are held as before. safety.viz’s walk ' +
+          'has the same step to fix (safety.viz#396); until it does, this is a listed change.'
+      }
+    ],
     'tests/unit/app/status-label.test.js': [
       {
         cut: {
