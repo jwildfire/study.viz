@@ -59,5 +59,30 @@ jobs:
       - name: Copied safety.viz bundle matches its record
         run: npm run safety-viz:check
 
+      # The libraries the app carries are copied from their own repositories,
+      # each with a record beside it. Each step fails if a copy and its record
+      # disagree; none needs the network. The `:check-source` script of the
+      # same name also reads the source repository, and is run by hand.
+      - name: Copied bio.viz bundle matches its record
+        run: npm run bio-viz:check
+
+      - name: Copied gsm.bio statistics file matches its record
+        run: npm run statistics:check
+
+      - name: The gsm packages built for R in the browser match their record and pins
+        run: npm run r-wasm:check
+
+      - name: Copied gsm workflows match their records
+        run: npm run gsm-workflows:check
+
+      - name: Copied gsm.viz bundle matches its record
+        run: npm run gsm-viz:check
+
+      - name: Copied RBQM demo study matches its record
+        run: npm run rbqm-study:check
+
+      - name: Copied study.builder matches its record
+        run: npm run study-builder:check
+
       - name: Run unit tests
         run: npm test

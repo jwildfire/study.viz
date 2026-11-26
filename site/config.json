@@ -1,0 +1,203 @@
+{
+  "siteTitle": "study.viz",
+  "repoUrl": "https://github.com/jwildfire/study.viz",
+  "hubUrl": "https://jwildfire.github.io/obot.roadmap/",
+  "matrixBaseUrl": "https://github.com/jwildfire/safety.viz/blob/HEAD/requirements",
+  "appTabs": [
+    {
+      "id": "rbqm",
+      "title": "RBQM",
+      "tier": "experimental",
+      "tierNote": "Experimental: new in 1.10. R runs in the browser, and what the tab shows may still change.",
+      "blurb": "Risk-based quality monitoring in the demo app: gsm's site metrics, run by R in the browser on the loaded study and drawn with gsm.viz."
+    }
+  ],
+  "renderers": [
+    {
+      "module": "histogram",
+      "title": "Safety Histogram",
+      "status": "available",
+      "blurb": "Distribution of a chosen lab or vital-sign measure with filters, grouping, normal-range overlay, and a linked participant listing.",
+      "hero": "SH-CTRL-001-control-panel.png",
+      "heroAsset": "histogram-hero.png",
+      "matrix": "safety-histogram.md"
+    },
+    {
+      "module": "outlier-explorer",
+      "title": "Safety Outlier Explorer",
+      "status": "available",
+      "blurb": "Participant-level results over time: one line per participant for the selected measure against a population normal-range band, with filters, x-axis and y-limit controls, color-by grouping, and click-to-select participant detail.",
+      "hero": "SOE-FUNC-010-participant-detail.png",
+      "matrix": "safety-outlier-explorer.md",
+      "heroAsset": "outlier-explorer-hero.png"
+    },
+    {
+      "module": "results-over-time",
+      "title": "Safety Results Over Time",
+      "status": "available",
+      "blurb": "Population-level distribution of a measure at each study visit as box-and-whisker marks, with grouping, an outlier overlay, and linear/log y-axis controls.",
+      "hero": "SROT-FUNC-001-control-panel.png",
+      "matrix": "safety-results-over-time.md",
+      "heroAsset": "results-over-time-hero.png"
+    },
+    {
+      "module": "shift-plot",
+      "title": "Safety Shift Plot",
+      "status": "available",
+      "blurb": "Baseline versus comparison-visit values for a measure on a scatter with an identity line, measure and visit controls, filters, and a brush selection that opens a linked participant listing.",
+      "hero": "SSP-CTRL-001-baseline-scatter.png",
+      "matrix": "safety-shift-plot.md",
+      "heroAsset": "shift-plot-hero.png"
+    },
+    {
+      "module": "delta-delta",
+      "title": "Safety Delta-Delta",
+      "status": "available",
+      "blurb": "Paired change-from-baseline comparison of two measures on one scatter — quadrant reference lines, an optional regression line, measure and visit pickers, and a linked per-measure detail table with sparklines.",
+      "hero": "SDD-FUNC-002-baseline-scatter.png",
+      "matrix": "safety-delta-delta.md",
+      "heroAsset": "delta-delta-hero.png"
+    },
+    {
+      "module": "hep-explorer",
+      "title": "Hepatic Safety Explorer",
+      "status": "available",
+      "blurb": "eDISH scatter of peak ALT vs peak total bilirubin (\u00d7ULN) with Hy's-Law quadrant cut-lines, a quadrant summary table, eDISH/mDISH display modes, R-Ratio and timing controls, and click-to-inspect participant visit paths — plus a baseline-referenced composite plot (Tesfaldet et al., Drug Safety 2024) for subjects with abnormal baseline liver tests, with pretreatment/on-treatment eDISH panels, a four-panel \u00d7Baseline shift plot, and a migration table.",
+      "hero": "HEP-SELECT-001-participant-detail.png",
+      "matrix": "hep-explorer.md",
+      "guide": "hep-explorer.md",
+      "heroAsset": "hep-explorer-hero.png",
+      "data": "adbds.csv",
+      "related": ["hep-waterfall"]
+    },
+    {
+      "module": "hep-waterfall",
+      "title": "Hepatic ALT Waterfall",
+      "status": "available",
+      "tier": "experimental",
+      "tierNote": "Experimental: a new chart, drawn from a 2025 paper; its layout and settings may still change.",
+      "blurb": "For trials that enrol participants with elevated baseline ALT but normal baseline bilirubin, where eDISH's \u00d7ULN quadrants lose their meaning — a floating bar per participant from their own baseline ALT to their maximum on-treatment ALT in absolute U/L, ranked by baseline so the two arms' highest baselines meet at the seam, blue for placebo and bronze for active drug with new-onset jaundice in green, flanked by a box-and-whisker summary per arm (Amirzadegan et al., Drug Safety 2025, Figure 5).",
+      "hero": "HWF-BAR-001-waterfall-default.png",
+      "heroAsset": "hep-waterfall-hero.png",
+      "matrix": "hep-waterfall.md",
+      "data": "adbds-abnbl.csv",
+      "guide": "hep-waterfall.md",
+      "guideTagline": "When to reach for the ALT waterfall instead of eDISH, how to read the baseline trace and the bar directions, and why the axis is absolute U/L.",
+      "guideCaution": "Bars flag participants for review, they do not diagnose drug-induced liver injury; and the maximum on-treatment value can hide a rise that follows a larger decline.",
+      "related": ["hep-explorer"]
+    },
+    {
+      "module": "participant-profile",
+      "title": "Participant Profile",
+      "status": "available",
+      "tier": "experimental",
+      "tierNote": "Experimental: what it lists for a participant, and how, may still change.",
+      "blurb": "The standardized-lab participant drill-down as a chart-agnostic module: a demographics header with R Ratio and a templated record link-out, a labs-over-time spaghetti with reference cut-lines, and a per-measure summary table with sparklines that expand to an inset chart — stepping worst-first through a multi-participant cohort in a rail beside the Hepatic Safety Explorer, or mounted standalone against any chart that dispatches participantsSelected.",
+      "hero": "PPRF-HEP-001-scatter-rail.png",
+      "heroAsset": "participant-profile-hero.png",
+      "matrix": "participant-profile.md",
+      "guide": "participant-profile.md",
+      "guideTagline": "How to read the participant profile — header, labs-over-time spaghetti, and measure table — and how to wire it to your own chart through the participantsSelected event.",
+      "guideCaution": "The profile summarizes one participant's lab course to support review; it does not adjudicate causality or diagnose drug-induced liver injury.",
+      "data": ["adbds.csv", "adae.csv"],
+      "related": ["hep-explorer"]
+    },
+    {
+      "module": "nep-explorer",
+      "title": "Nephrotoxicity Explorer",
+      "status": "available",
+      "tier": "experimental",
+      "tierNote": "Experimental until its kidney-injury staging has had a clinical review.",
+      "blurb": "KDIGO acute-kidney-injury screening: one point per participant at their maximum post-baseline fold change in serum creatinine against their maximum absolute change, over the L-shaped KDIGO stage zones, with a distinct mark for the ≥ 4.0 mg/dL Stage-3 rule, per-record mg/dL unit resolution, counted and exportable dropped records, and a stage summary table counting the population by fold change, by absolute change, and by the combined stage.",
+      "hero": "NEP-ZONE-001-stage-zones-scatter.png",
+      "heroAsset": "nep-explorer-hero.png",
+      "matrix": "nep-explorer.md",
+      "guide": "nep-explorer.md",
+      "guideTagline": "How to read the KDIGO creatinine scatter to screen for acute kidney injury — the two axes, the L-shaped stage zones, the ≥ 4.0 mg/dL mark — and what the criteria's time window means for a flagged participant.",
+      "guideCaution": "The chart flags participants for review, it does not diagnose acute kidney injury; and no time window is applied, so a slow drift stages the same as an acute injury.",
+      "data": "adbds.csv",
+      "related": ["hep-explorer"]
+    },
+    {
+      "module": "time-to-event",
+      "title": "Time-to-Event Explorer",
+      "status": "available",
+      "tier": "experimental",
+      "tierNote": "Experimental until an external clinical review confirms its Kaplan–Meier estimates.",
+      "blurb": "Kaplan–Meier time-to-event display: step curves by treatment group with censoring tick marks, pointwise 95% confidence bands (Greenwood, log-log — matching survival::survfit), and the at-risk / cumulative-events strip table beneath the time axis, all derived from one estimator pass so the table cannot disagree with the curve. The endpoint is composed live from flexible multiselect filters over the event data — time to first qualifying event, censored at end of follow-up — with cumulative-incidence orientation by default and the estimator named on the axis.",
+      "hero": "TTE-CURV-001-km-curves-incidence.png",
+      "heroAsset": "time-to-event-hero.png",
+      "matrix": "time-to-event.md",
+      "guide": "time-to-event.md",
+      "guideTagline": "How to read the Kaplan–Meier safety display — the step curves, censor marks, pointwise bands, and the risk table — and what 1 − KM does and does not claim when competing events are present.",
+      "guideCaution": "1 − KM overestimates absolute risk when competing events (death, discontinuation) are present, and the bands are pointwise, not simultaneous; the curves flag timing patterns for review, they do not establish absolute risk.",
+      "data": ["adae.csv", "adsl.csv"],
+      "related": ["ae-explorer", "ae-timelines"]
+    },
+    {
+      "module": "paneled-outlier-explorer",
+      "title": "Paneled Outlier Explorer",
+      "status": "planned",
+      "blurb": "Small-multiple outlier views across a panel of related measures.",
+      "matrix": "paneled-outlier-explorer.md"
+    },
+    {
+      "module": "ae-explorer",
+      "title": "Adverse Event Explorer",
+      "status": "available",
+      "blurb": "Hierarchical adverse-event incidence table — System Organ Class rows expandable to Preferred Terms — with per-arm rates, an inline rate dot plot, group-difference confidence intervals, prevalence/search/characteristic filters, and drill-down to the underlying records.",
+      "hero": "AE-DATA-003-default-table.png",
+      "matrix": "aeexplorer.md",
+      "data": "adae.csv",
+      "heroAsset": "ae-explorer-hero.png"
+    },
+    {
+      "module": "ae-timelines",
+      "title": "Adverse Event Timelines",
+      "status": "available",
+      "blurb": "Participant-level adverse-event timelines by severity and onset relative to study start, with serious-event marks and click-through participant detail.",
+      "hero": "AET-FUNC-002-baseline-timelines.png",
+      "matrix": "ae-timelines.md",
+      "data": "adae.csv",
+      "heroAsset": "ae-timelines-hero.png"
+    },
+    {
+      "module": "web-codebook",
+      "title": "Web Codebook",
+      "status": "planned",
+      "blurb": "Interactive data codebook: variable-level summaries, distributions, and filters for any dataset.",
+      "matrix": "web-codebook.md"
+    },
+    {
+      "module": "qt-explorer",
+      "title": "QT Safety Explorer",
+      "status": "available",
+      "tier": "experimental",
+      "tierNote": "Experimental: its settings and its table may still change.",
+      "blurb": "ECG QT/QTc safety review: per-arm central-tendency change over time (\u0394 / placebo-corrected \u0394\u0394) with a 90% CI band and the ICH-E14 metric, the flagship outlier scatter of change vs baseline with the 450/480/500 ms absolute diagonals and 30/60 ms change lines, and a by-arm categorical exceedance table — QTcF / QTcB corrections plus heart rate.",
+      "hero": "QT-OUT-003-outlier-scatter-max.png",
+      "matrix": "qt-explorer.md",
+      "guide": "qt-explorer.md",
+      "guideTagline": "How to read the QT Safety Explorer to screen ECG data for drug-induced QT/QTc prolongation, and where each step lives in the controls on this page.",
+      "guideCaution": "A drug-induced QT-prolongation conclusion requires the validated ICH-E14 analyses; this graphic flags signals for review, it does not confirm them.",
+      "data": "adeg.csv",
+      "heroAsset": "qt-explorer-hero.png"
+    },
+    {
+      "module": "patient-journey-explorer",
+      "title": "Patient Journey Explorer",
+      "status": "available",
+      "tier": "prototype",
+      "blurb": "One participant’s whole safety record on a single study-day axis — exposure and dose changes, adverse events, labs, con-meds, medical history and disposition as stacked lanes; anchor time on any event to see the con-meds, abnormal labs and dose changes that co-occurred inside the context window, each linking back to its source row.",
+      "hero": "PJE-ANCH-001-anchored.png",
+      "heroAsset": "patient-journey-explorer-hero.png",
+      "heroSelector": ".sv-pje-lanes",
+      "guideCaution": "Co-occurrence is not causation: this view lists what was recorded around an anchor, it does not assess relatedness. A con-med with no start day is not asserted active, a con-med whose end was never recorded is shown as active and labelled as such, and an adverse event with no end day is only called ongoing when its outcome says so.",
+      "matrix": "patient-journey-explorer.md",
+      "guide": "patient-journey-explorer.md",
+      "guideTagline": "How to read one participant's journey, what anchoring does, and what the context panel does and does not claim.",
+      "data": ["pje-ex.csv", "pje-ae.csv", "pje-lb.csv", "pje-cm.csv", "pje-mh.csv", "pje-ds.csv"],
+      "related": ["ae-timelines", "participant-profile", "hep-explorer"]
+    }
+  ]
+}

@@ -26,3 +26,11 @@ tests/fixtures/rbqm/
 # Copied libraries: each is copied byte for byte from its own repository and
 # held to a recorded checksum, so formatting it would break the record.
 site/vendor/
+
+# The RBQM demo study's source record: written by scripts/vendor-rbqm-study.mjs,
+# which lists the kept columns one to a line.
+site/data/rbqm/SOURCE.json
+
+# What each gsm workflow needs, as desktop R reads it from the specs: written
+# by scripts/rbqm-reference.mjs, and held to what it is derived from by a test.
+site/rbqm/needs.json
