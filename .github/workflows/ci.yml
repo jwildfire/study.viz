@@ -1,0 +1,51 @@
+name: CI
+
+# The required check on dev is the one job below, which carries the name the
+# ruleset asks for: "Build, format, and test". It mirrors the shape of
+# safety.viz's check, cut to what study.viz has: one job, every step of which
+# must pass.
+#
+# tests/unit/repo/ci-workflow.test.js reads this file and fails unless the job
+# keeps the shape that makes it safe to require. CONTRIBUTING.md, "How the
+# check is laid out", says what it is for. Change both with this file.
+
+on:
+  pull_request:
+    # Explicit types so a draft marked ready for review is checked; the default
+    # set (opened, synchronize, reopened) would leave that transition untested.
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - main
+      - dev
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Build, format, and test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Run unit tests
+        run: npm test
