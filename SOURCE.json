@@ -1,7 +1,7 @@
 {
   "copy": "safety.viz’s demo app, as study.viz began",
   "repository": "https://github.com/jwildfire/safety.viz",
-  "commit": "f94fea414c888b0ad1d628598bf023b24a659038",
+  "commit": "b0c9385142e88cc106236f4d3e37a69b860640d4",
   "version": "1.12.0",
   "merged_to_dev": true,
   "left": [
@@ -721,8 +721,8 @@
     },
     {
       "file": "scripts/vendor-lib.mjs",
-      "sha256": "a27227dda21f6bc947e3107d895ee2257ac6e8c955bba6afde5adaf52e332f9d",
-      "bytes": 38315
+      "sha256": "498bc370043278a9ae1e93047915441cc08128fe29d24e87574812ef95911382",
+      "bytes": 38832
     },
     {
       "file": "scripts/vendor-rbqm-study.mjs",
@@ -1110,48 +1110,68 @@
     },
     {
       "file": "site/vendor/study.builder/SOURCE.json",
-      "sha256": "281d1ce8093355e5dd6f22a751bd33c5167f6f72093de78b1d1e3161c7fc4648",
-      "bytes": 18944
+      "sha256": "3a24f0ca27a8ea6f30c10daf632920a7086276eefb283b9ae01a15ad4dfd3d47",
+      "bytes": 20802
     },
     {
       "file": "site/vendor/study.builder/presets/cdisc-pilot-protocol.study.json.gz",
-      "sha256": "904338e73d8ad6b74b4ba955b6e098cc7d8b710794d5f5a6777f2a8a7df8a0d4",
-      "bytes": 2295508
+      "sha256": "d685afa9434d5fbc02a5e10aa6c7fd48927a6aa21924bb5f8aac77c8742c53b2",
+      "bytes": 2312936
     },
     {
       "file": "site/vendor/study.builder/presets/index.json",
-      "sha256": "4745537ad906ccea09edb38ecb88e0e7f3b8e77ddc3c4612c56b3ce154ed25e7",
-      "bytes": 30517
+      "sha256": "ccb7b27f7f90a266fbf0dce63de8bdb1c245496dacd472c4ceaccd8054db5235",
+      "bytes": 30916
     },
     {
       "file": "site/vendor/study.builder/presets/phase1-small.study.json.gz",
-      "sha256": "7f86b3ed33009c41e2b88f23fa133e379acddad7376905b2f2d7fbca1ce35ca0",
-      "bytes": 1154833
+      "sha256": "6eb32e43638bad289fcf205409da2157d100e3641ccf6ffd09de13a0632b3543",
+      "bytes": 1162846
     },
     {
       "file": "site/vendor/study.builder/presets/phase2-oncology.study.json.gz",
-      "sha256": "05e8dce7893c32f974abc981e697ec6594d261c25a2cfcb4570de260467b4523",
-      "bytes": 1340309
+      "sha256": "5eec799e3a82fb1db156749833f2d66488ae2f7d3f2fbb94c8619303d266a20a",
+      "bytes": 1346638
+    },
+    {
+      "file": "site/vendor/study.builder/protocols/alexion-wilsons.protocol.json",
+      "sha256": "752da07890946060eab0a5f9d8f361fb5246f8ffd53db7f769b8dcbed2e19be3",
+      "bytes": 34382
+    },
+    {
+      "file": "site/vendor/study.builder/protocols/cdisc-pilot-devices.protocol.json",
+      "sha256": "eb3a9f00d81e66c2b763c7d98edde61ea8dabada965558416fbc2aaed9083a00",
+      "bytes": 18932
     },
     {
       "file": "site/vendor/study.builder/protocols/cdisc-pilot.protocol.json",
-      "sha256": "4ce4f8ce25010d3ab4d7be84cbd5836dfa435a1dac566d4b84ccbfea83d4072b",
-      "bytes": 20686
+      "sha256": "addd057e74d03da8a7e91ff60da72467f13a97a216921cf5d65e9f549d33ac7c",
+      "bytes": 21061
+    },
+    {
+      "file": "site/vendor/study.builder/protocols/lilly-nasal-glucagon.protocol.json",
+      "sha256": "4ec0c9287f69ad34856c568e634b685d8effaea8e64ff167f582c6483cbc0f96",
+      "bytes": 17327
+    },
+    {
+      "file": "site/vendor/study.builder/protocols/observational.protocol.json",
+      "sha256": "990022a6a8a84759a733e21f920f8d791e9e8bc9e27f1e3e8988385c2075b63a",
+      "bytes": 7882
     },
     {
       "file": "site/vendor/study.builder/r/builder.R",
-      "sha256": "c5514579ff902cd3ff65383a09131d77427a96c6efe5b0a27d38782993747182",
-      "bytes": 35173
+      "sha256": "8aa52184c122c5b063856696a9d75b71ac353098c46c6f146cc3a40e1590d89c",
+      "bytes": 33687
     },
     {
       "file": "site/vendor/study.builder/study.builder.js",
-      "sha256": "a6a3215cec7763b8933bcda079e3315508f0ad2a9224ceef7c8b5b2ccf283470",
-      "bytes": 142169
+      "sha256": "350bb5efc2b12879c807010629fd1011ee5116669aa785e4f2d9f946eb0d606b",
+      "bytes": 172031
     },
     {
       "file": "site/vendor/study.builder/study.viewer.js",
-      "sha256": "3b1249f207254439baedf851afc75db0f93c8d7e06aba9aa4c4cbea61664afe4",
-      "bytes": 30168
+      "sha256": "1fef20a71ba1b214fc05a74a39fcbb17341f255729073f040d0e8f46936f286d",
+      "bytes": 31130
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/DESCRIPTION",
@@ -1250,8 +1270,8 @@
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/Raw_SITE.R",
-      "sha256": "5ac718e1662a65dc0507a7362c7aa217fe08980ca166de114a4c6ac473ae51b1",
-      "bytes": 4032
+      "sha256": "a67407036897cf7d78e710a6bc05012782bad97106518a140de02fcf84ad21ed",
+      "bytes": 4211
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/Raw_STUDCOMP.R",
@@ -1290,8 +1310,8 @@
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/create_longitudinal_study.R",
-      "sha256": "766ed1dc6c33600c63962de990dd8670e7ed0c7ce557b13ecde8157ac02ab524",
-      "bytes": 31647
+      "sha256": "0348cc50d2006e827c91412f50463958ffd6851204ea61fc2d62d9e049c26c69",
+      "bytes": 34804
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/create_snapshot_reports.R",
@@ -1335,8 +1355,8 @@
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/gsm_utils.R",
-      "sha256": "5407a45eefbfe8297d1387fb8e84927cc6d5dd6f08f1852c616fb42d3f0b51ff",
-      "bytes": 34372
+      "sha256": "cce646b90eecb1709801abc09dbe92e9a2db3d76f3e39dbbd6ef08f1520fa183",
+      "bytes": 36317
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/import-gsm.mapping-CombineSpecs.R",
@@ -1359,9 +1379,19 @@
       "bytes": 12604
     },
     {
+      "file": "site/vendor/study.builder/vendor/gsm.datasim/R/study_options.R",
+      "sha256": "74c7765880cbc6d171956d8b7a0b560090eb35fb5c8d0504debbeff9ac86cb94",
+      "bytes": 4785
+    },
+    {
+      "file": "site/vendor/study.builder/vendor/gsm.datasim/R/study_profile.R",
+      "sha256": "d26e0cbaaf9e5a04eebadea9b62f8ce439ee19d394d6bcae8484dfd6dd89618c",
+      "bytes": 9291
+    },
+    {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/study_results.R",
-      "sha256": "5bc54ac7f3fb76f97b4836f6b9fc8e03bf701ed8162e7a865b27286eadb8d03d",
-      "bytes": 19121
+      "sha256": "a74d5e379b4f8a19c93d36aaa3e3bf28ec081c41282a5db17f7841862171e291",
+      "bytes": 37713
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/R/util-pipe.R",
@@ -1380,8 +1410,8 @@
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/SOURCE.json",
-      "sha256": "06b0850a55c2dbad7952a33f6eec1ac947da48de171f99e9f2666a4c75cf53fb",
-      "bytes": 9757
+      "sha256": "15c61358edbc24b28b16548af652827de7b109840ce329caf3b8e80a39e4b611",
+      "bytes": 10135
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.datasim/inst/small_template.csv",
@@ -1514,14 +1544,24 @@
       "bytes": 2323
     },
     {
+      "file": "site/vendor/study.builder/workflows/analysis/AESummaryByArm.yaml",
+      "sha256": "cd501328ff48e19814af363eba378e6d873f7f9289459e625272605fbce60014",
+      "bytes": 2551
+    },
+    {
+      "file": "site/vendor/study.builder/workflows/analysis/EfficacyModel.R",
+      "sha256": "620c769333b831a53a1e40dcf0ba44aad7eeb3c9fb4c6a1a0be5d6a9a4cd3e85",
+      "bytes": 3769
+    },
+    {
       "file": "site/vendor/study.builder/workflows/analysis/EfficacySummary.yaml",
-      "sha256": "9746cbad00523ed53cfb4119e394d4056c325877c52494f1002330581144fb5f",
-      "bytes": 3486
+      "sha256": "a7df344c210c681928a6f2cc3eea905496e6bd45edeee5d6446b5b6ceeb6397a",
+      "bytes": 4211
     },
     {
       "file": "src/app/builder-view.js",
-      "sha256": "45081ae30a34cd93bf543cf85b23c41912f9e8b7a1c5877952f5fdd4c13ad2d1",
-      "bytes": 13230
+      "sha256": "4ba22727169d968e4130d21ff44139b8b0ff72206805ce10ef6909d43251ce40",
+      "bytes": 13403
     },
     {
       "file": "src/app/charts.js",
@@ -1806,8 +1846,8 @@
     },
     {
       "file": "src/app/viewer-view.js",
-      "sha256": "21a7d28cf3aaa0ea6d6dda964bc7160b05f5128963dfa71ead5c38f55c4d0320",
-      "bytes": 7519
+      "sha256": "1e78c1dc6d5e724081f27ea45802dcf695b065f7292b8d537296897565aebd8c",
+      "bytes": 7729
     },
     {
       "file": "tests/demo-path/demo-path.spec.js",
@@ -1972,8 +2012,8 @@
     },
     {
       "file": "tests/e2e/smoke.spec.js",
-      "sha256": "08306190300feb57902b3c6dfabbdc5547024df90a24091763e1dfa04bd88d29",
-      "bytes": 2735,
+      "sha256": "7b807d1e07cf296837a2dcdd1d6e90f359f95370b468648355fbf2bdf2a7f3e0",
+      "bytes": 6830,
       "source_sha256": "7e46bbba76c76ce28c4bf8b1252848c20262d1fa020b4af85fba29da33fd1ad2",
       "source_bytes": 536,
       "changes": [
@@ -1981,6 +2021,11 @@
           "original": "import { test, expect } from '@playwright/test';\n\ntest.describe('safety.viz scaffold', () => {\n  test('demo page loads with no console errors (#1)', async ({ page }) => {\n    const errors = [];\n    page.on('pageerror', (error) => errors.push(error.message));\n    page.on('console', (msg) => {\n      if (msg.type() === 'error') errors.push(msg.text());\n    });\n\n    await page.goto('/tests/e2e/fixtures/');\n\n    await expect(page.locator('#scaffold-heading')).toHaveText('safety.viz scaffold');\n    expect(errors).toEqual([]);\n  });\n});",
           "replacement": "import { execSync } from 'node:child_process';\nimport { test, expect } from '@playwright/test';\nimport { SITE } from '../../src/app/site.js';\n\n// Site smoke: the site `npm run site` builds is the demo app, as its root\n// page, and it must mount with no console errors and no failed request,\n// served straight out of _site/. The build runs here so every context that\n// runs the browser suite exercises the current tree. It is the test\n// safety.viz’s site suite makes of the page it serves at demo/ (APP-PAGE-013),\n// for a page with no docs site beside it.\ntest.describe('the built site', () => {\n  test.beforeAll(() => {\n    execSync('npm run site', { stdio: 'inherit', cwd: new URL('../..', import.meta.url) });\n  });\n\n  test('the site’s root page is the demo app, mounted on the demo study with every chart of both libraries, no console errors and no failed request (#1)', async ({\n    page\n  }) => {\n    const errors = [];\n    page.on('pageerror', (error) => errors.push(error.message));\n    page.on('console', (msg) => {\n      if (msg.type() === 'error') errors.push(msg.text());\n    });\n    const failed = [];\n    page.on('response', (response) => {\n      if (response.status() >= 400) failed.push(`${response.status()} ${response.url()}`);\n    });\n\n    await page.goto('/_site/');\n    await page.evaluate('window.__safetyVizApp.ready');\n\n    // The title names the chart the app opens on.\n    await expect(page).toHaveTitle('Histogram · study.viz demo');\n    await expect(page.locator('.sva-count')).toHaveText(\n      '18 of 18 charts supported by the loaded data'\n    );\n    await expect(page.locator('.sva-chart canvas:visible').first()).toBeVisible();\n    await expect(page.locator('.sva-tab[data-domain=\"biomarkers\"] .sva-tab-count')).toHaveText('5');\n    await expect(page.locator('.sva-header .sva-wordmark')).toHaveText('study.viz');\n    // With no docs site beside it, its link to the charts’ docs leads to safety.viz’s\n    // published site, and its source link to study.viz’s own repository; the single\n    // file is beside it, as a download.\n    await expect(page.locator('.sva-links a[data-link=\"docs\"]')).toHaveAttribute('href', SITE);\n    await expect(page.locator('.sva-links a[data-link=\"github\"]')).toHaveAttribute(\n      'href',\n      'https://github.com/jwildfire/study.viz'\n    );\n    const download = page.locator('.sva-links a[data-link=\"download\"]');\n    await expect(download).toHaveAttribute('href', './study.viz-app.html');\n    const response = await page.request.get('/_site/study.viz-app.html');\n    expect(response.ok()).toBe(true);\n    expect(await response.text()).toContain('<title>study.viz demo</title>');\n    expect(failed).toEqual([]);\n    expect(errors).toEqual([]);\n  });\n});",
           "reason": "safety.viz’s smoke test opens tests/e2e/fixtures/index.html, a placeholder page of the chart library’s scaffold, which is not copied. The task asks for the smoke test pointed at study.viz’s own site build, so it builds the site and opens its root page."
+        },
+        {
+          "original": "    expect(failed).toEqual([]);\n    expect(errors).toEqual([]);\n  });\n});",
+          "replacement": "    expect(failed).toEqual([]);\n    expect(errors).toEqual([]);\n  });\n\n  // The test safety.viz makes of its demo page in tests/e2e/site.spec.js, which is\n  // not copied: here the demo app is the site’s root page, so it is made beside\n  // the smoke test, on the one site build.\n  test('on the site’s root page a ready-made simulated study opens from the Studies view with no R, and the Overview tab draws it with study.builder’s study view in sections: Overview, Design, Data, One participant and Reporting, with no RBQM view and no Safety view, since the app has tabs of its own for both; a view is reached through its section; at 1,400 pixels nothing of the overview runs past the page', async ({\n    page\n  }) => {\n    const errors = [];\n    page.on('pageerror', (error) => errors.push(error.message));\n    page.on('console', (msg) => {\n      if (msg.type() === 'error') errors.push(msg.text());\n    });\n    await page.setViewportSize({ width: 1400, height: 900 });\n    await page.goto('/_site/#studies');\n    await page.evaluate('window.__safetyVizApp.ready');\n    // The study built on the CDISC pilot protocol: it has a protocol, snapshots\n    // and an efficacy score, so every section study.builder has is there.\n    const row = page.locator('.sva-studies-row[data-study=\"preset:cdisc-pilot-protocol\"]');\n    await row.locator('[data-action=\"open\"]').click();\n    await expect(row).toHaveAttribute('data-current', 'true');\n    await expect(page.locator('.sva-chip-name')).toHaveText('PILOT-PROTOCOL');\n    // No R was started: the study came whole from its file.\n    await expect(page.locator('.sva-chip.sva-r-ready')).toHaveCount(0);\n    await page.locator('.sva-item[data-view=\"data\"]').click();\n    const view = page.locator('.sva-explore-body');\n    const sections = view.locator('.sv-views [data-section]');\n    const within = view.locator('.sv-subviews [data-view]');\n    // Operations is One participant alone: RBQM and Safety are the app's own tabs.\n    await expect(sections).toHaveText([\n      'Overview',\n      'Design',\n      'Data',\n      'One participant',\n      'Reporting'\n    ]);\n    await expect(view.locator('[data-section=\"overview\"]')).toHaveAttribute(\n      'aria-selected',\n      'true'\n    );\n    // On the overview at 1,400 pixels, the table of how the study grew is\n    // inside the page with the rest.\n    const grew = view.getByText('How the study grew, snapshot by snapshot');\n    await expect(grew).toBeVisible();\n    expect(\n      await page.evaluate(() => {\n        const width = document.documentElement.clientWidth;\n        return {\n          wider: document.documentElement.scrollWidth - width,\n          past: [...document.querySelectorAll('.sva-explore-body *')].filter(\n            (element) =>\n              element.getClientRects().length > 0 &&\n              element.getBoundingClientRect().right > width + 0.5\n          ).length\n        };\n      })\n    ).toEqual({ wider: 0, past: 0 });\n    // A view's tab is on the page only while its section is open.\n    await expect(view.locator('[data-view]')).toHaveCount(0);\n    const inside = {};\n    for (const section of ['design', 'data', 'operations', 'reporting']) {\n      await view.locator(`[data-section=\"${section}\"]`).click();\n      await expect(view.locator(`[data-section=\"${section}\"]`)).toHaveAttribute(\n        'aria-selected',\n        'true'\n      );\n      inside[section] = await within.allTextContents();\n    }\n    expect(inside).toEqual({\n      design: ['Protocol', 'Schedule'],\n      data: ['Pipeline', 'Tables', 'Columns'],\n      operations: [],\n      reporting: ['Efficacy', 'Adverse events']\n    });\n    await view.locator('[data-section=\"data\"]').click();\n    await view.locator('[data-view=\"tables\"]').click();\n    await expect(view.locator('[data-view=\"tables\"]')).toHaveAttribute('aria-selected', 'true');\n    // Where the reader was is kept when the page draws the tab again.\n    await page.locator('.sva-tab[data-domain=\"ae\"]').click();\n    await page.locator('.sva-item[data-view=\"data\"]').click();\n    await expect(view.locator('[data-view=\"tables\"]')).toHaveAttribute('aria-selected', 'true');\n    expect(errors).toEqual([]);\n  });\n});",
+          "reason": "safety.viz’s move of study.builder to v0.5.0 adds a browser test of the study view’s sections to its tests/e2e/site.spec.js, the docs site’s suite, which is not copied. study.viz makes the same test here, beside the smoke test and on its one site build: the demo app is the site’s root page, so it opens /_site/ where safety.viz’s opens /_site/demo/index.html. Nothing else of the test differs (study.viz#16)."
         }
       ]
     },
@@ -2063,8 +2108,8 @@
     },
     {
       "file": "tests/unit/app/builder-view.test.js",
-      "sha256": "5cf8d20c8ba470160b157d67874c712ec00aabbdb9b501cc5e5b5706d9185b7e",
-      "bytes": 14599
+      "sha256": "d9db2ebd7ee36170f87672053cda117d1c9433eea7f6e8abf1b48b22566f89bd",
+      "bytes": 15691
     },
     {
       "file": "tests/unit/app/charts.test.js",
@@ -2189,8 +2234,8 @@
     },
     {
       "file": "tests/unit/app/portfolio.test.js",
-      "sha256": "3e8455c8fca3ea92874a751fe329cbb7e7b7a3fb974456402cd509eba50b0550",
-      "bytes": 11519
+      "sha256": "28e5b6cf6fc00b75bf1d6753a18ea2a8a9285b9418c69df16821d4cc5d6538b7",
+      "bytes": 13029
     },
     {
       "file": "tests/unit/app/r-browser.test.js",

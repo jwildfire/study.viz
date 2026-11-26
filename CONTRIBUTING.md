@@ -64,7 +64,7 @@ The app calls itself study.viz wherever a reader sees its name. Each line that d
 - The baselines came from safety.viz and are study.viz's own from the start: each shows the app's name, so the `Update evidence baselines` workflow draws them again here (see "How the check is laid out"). They are listed under `left` in `scripts/copied-lib.mjs` and are not in the record of the copy, so redrawing one does not fail `npm run copied:check`. The three files of measurements beside them are still copied files.
 - The tests tagged `@real-r` download R from `webr.r-wasm.org` and its packages from `repo.r-wasm.org`. They fail when those are unreachable; do not make them skip or retry.
 - A test is named for the row of [`requirements/demo-app.md`](requirements/demo-app.md) it evidences, as `APP-PAGE-001`. The matrix came from safety.viz with the app; the evidence pages built from it stay on safety.viz's site.
-- safety.viz's tests of the built demo page are in its `tests/e2e/site.spec.js`, with the docs site's. They are not carried yet: only the smoke test opens the built site here.
+- safety.viz's tests of the built demo page are in its `tests/e2e/site.spec.js`, with the docs site's, and that file is not copied. One of them is made here, in `tests/e2e/smoke.spec.js` beside the smoke test and on the same site build: a ready-made simulated study opened from the Studies view, drawn in study.builder's study view. It is listed in `scripts/copied-lib.mjs` as a change to the smoke test's file. The others are not carried yet.
 
 ## The record of the copy
 
@@ -72,6 +72,7 @@ study.viz began as the demo app of safety.viz. The app (`src/app/`), its tests a
 
 - A copied file is changed only by a change listed in `scripts/copied-lib.mjs`, with its reason: whole lines swapped for others, or whole lines cut. `npm run copied:check` then holds the file to its source with those changes and no other. A change written into `SOURCE.json` alone fails the check.
 - `npm run copied:check-source` reads the commit itself, from GitHub or from a local clone, and fails on any difference.
+- To take a later commit of safety.viz, set `COPIED.commit` in `scripts/copied-lib.mjs` and run `node scripts/copied.mjs --from <clone>`. The copy stops if a listed change's lines no longer stand in the new source exactly once; change that entry deliberately, then copy again. `site/vendor/study.builder/` and the script that copies it come from safety.viz this way, so safety.viz moves its copy of study.builder first.
 - The record is the proof of the copy, not a lock on the app. When safety.viz no longer carries the app and study.viz is its only home, the record is retired in one pull request: `SOURCE.json`, `scripts/copied.mjs`, `scripts/copied-lib.mjs`, their tests, the two npm scripts and the CI step. Until then a change to a copied file is listed.
 
 ## How a pull request merges

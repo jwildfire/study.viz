@@ -63,8 +63,10 @@ export const COPIED = {
   name: 'safety.viz’s demo app, as study.viz began',
   label: 'copy',
   repository: 'https://github.com/jwildfire/safety.viz',
-  // The head of safety.viz's dev branch when the copy was made.
-  commit: 'f94fea414c888b0ad1d628598bf023b24a659038',
+  // The head of safety.viz's dev branch when the copy was last made: the commit
+  // that points safety.viz's copy of study.builder at its v0.5.0 release
+  // (safety.viz#399, after the move from v0.4.0 in safety.viz#398; study.viz#16).
+  commit: 'b0c9385142e88cc106236f4d3e37a69b860640d4',
   folders: [
     // The app.
     'src/app',
@@ -608,6 +610,107 @@ export const COPIED = {
           'safety.viz’s smoke test opens tests/e2e/fixtures/index.html, a placeholder page of ' +
           'the chart library’s scaffold, which is not copied. The task asks for the smoke test ' +
           'pointed at study.viz’s own site build, so it builds the site and opens its root page.'
+      },
+      {
+        original:
+          '    expect(failed).toEqual([]);\n' +
+          '    expect(errors).toEqual([]);\n' +
+          '  });\n' +
+          '});',
+        replacement:
+          '    expect(failed).toEqual([]);\n' +
+          '    expect(errors).toEqual([]);\n' +
+          '  });\n' +
+          '\n' +
+          '  // The test safety.viz makes of its demo page in tests/e2e/site.spec.js, which is\n' +
+          '  // not copied: here the demo app is the site’s root page, so it is made beside\n' +
+          '  // the smoke test, on the one site build.\n' +
+          "  test('on the site’s root page a ready-made simulated study opens from the Studies view with no R, and the Overview tab draws it with study.builder’s study view in sections: Overview, Design, Data, One participant and Reporting, with no RBQM view and no Safety view, since the app has tabs of its own for both; a view is reached through its section; at 1,400 pixels nothing of the overview runs past the page', async ({\n" +
+          '    page\n' +
+          '  }) => {\n' +
+          '    const errors = [];\n' +
+          "    page.on('pageerror', (error) => errors.push(error.message));\n" +
+          "    page.on('console', (msg) => {\n" +
+          "      if (msg.type() === 'error') errors.push(msg.text());\n" +
+          '    });\n' +
+          '    await page.setViewportSize({ width: 1400, height: 900 });\n' +
+          "    await page.goto('/_site/#studies');\n" +
+          "    await page.evaluate('window.__safetyVizApp.ready');\n" +
+          '    // The study built on the CDISC pilot protocol: it has a protocol, snapshots\n' +
+          '    // and an efficacy score, so every section study.builder has is there.\n' +
+          '    const row = page.locator(\'.sva-studies-row[data-study="preset:cdisc-pilot-protocol"]\');\n' +
+          '    await row.locator(\'[data-action="open"]\').click();\n' +
+          "    await expect(row).toHaveAttribute('data-current', 'true');\n" +
+          "    await expect(page.locator('.sva-chip-name')).toHaveText('PILOT-PROTOCOL');\n" +
+          '    // No R was started: the study came whole from its file.\n' +
+          "    await expect(page.locator('.sva-chip.sva-r-ready')).toHaveCount(0);\n" +
+          '    await page.locator(\'.sva-item[data-view="data"]\').click();\n' +
+          "    const view = page.locator('.sva-explore-body');\n" +
+          "    const sections = view.locator('.sv-views [data-section]');\n" +
+          "    const within = view.locator('.sv-subviews [data-view]');\n" +
+          "    // Operations is One participant alone: RBQM and Safety are the app's own tabs.\n" +
+          '    await expect(sections).toHaveText([\n' +
+          "      'Overview',\n" +
+          "      'Design',\n" +
+          "      'Data',\n" +
+          "      'One participant',\n" +
+          "      'Reporting'\n" +
+          '    ]);\n' +
+          '    await expect(view.locator(\'[data-section="overview"]\')).toHaveAttribute(\n' +
+          "      'aria-selected',\n" +
+          "      'true'\n" +
+          '    );\n' +
+          '    // On the overview at 1,400 pixels, the table of how the study grew is\n' +
+          '    // inside the page with the rest.\n' +
+          "    const grew = view.getByText('How the study grew, snapshot by snapshot');\n" +
+          '    await expect(grew).toBeVisible();\n' +
+          '    expect(\n' +
+          '      await page.evaluate(() => {\n' +
+          '        const width = document.documentElement.clientWidth;\n' +
+          '        return {\n' +
+          '          wider: document.documentElement.scrollWidth - width,\n' +
+          "          past: [...document.querySelectorAll('.sva-explore-body *')].filter(\n" +
+          '            (element) =>\n' +
+          '              element.getClientRects().length > 0 &&\n' +
+          '              element.getBoundingClientRect().right > width + 0.5\n' +
+          '          ).length\n' +
+          '        };\n' +
+          '      })\n' +
+          '    ).toEqual({ wider: 0, past: 0 });\n' +
+          "    // A view's tab is on the page only while its section is open.\n" +
+          "    await expect(view.locator('[data-view]')).toHaveCount(0);\n" +
+          '    const inside = {};\n' +
+          "    for (const section of ['design', 'data', 'operations', 'reporting']) {\n" +
+          '      await view.locator(`[data-section="${section}"]`).click();\n' +
+          '      await expect(view.locator(`[data-section="${section}"]`)).toHaveAttribute(\n' +
+          "        'aria-selected',\n" +
+          "        'true'\n" +
+          '      );\n' +
+          '      inside[section] = await within.allTextContents();\n' +
+          '    }\n' +
+          '    expect(inside).toEqual({\n' +
+          "      design: ['Protocol', 'Schedule'],\n" +
+          "      data: ['Pipeline', 'Tables', 'Columns'],\n" +
+          '      operations: [],\n' +
+          "      reporting: ['Efficacy', 'Adverse events']\n" +
+          '    });\n' +
+          '    await view.locator(\'[data-section="data"]\').click();\n' +
+          '    await view.locator(\'[data-view="tables"]\').click();\n' +
+          "    await expect(view.locator('[data-view=\"tables\"]')).toHaveAttribute('aria-selected', 'true');\n" +
+          '    // Where the reader was is kept when the page draws the tab again.\n' +
+          '    await page.locator(\'.sva-tab[data-domain="ae"]\').click();\n' +
+          '    await page.locator(\'.sva-item[data-view="data"]\').click();\n' +
+          "    await expect(view.locator('[data-view=\"tables\"]')).toHaveAttribute('aria-selected', 'true');\n" +
+          '    expect(errors).toEqual([]);\n' +
+          '  });\n' +
+          '});',
+        reason:
+          'safety.viz’s move of study.builder to v0.5.0 adds a browser test of the study ' +
+          'view’s sections to its tests/e2e/site.spec.js, the docs site’s suite, which is ' +
+          'not copied. study.viz makes the same test here, beside the smoke test and on its one ' +
+          'site build: the demo app is the site’s root page, so it opens /_site/ where ' +
+          'safety.viz’s opens /_site/demo/index.html. Nothing else of the test differs ' +
+          '(study.viz#16).'
       }
     ],
     // The demo-path walk went to safety.viz's published dev demo unless told
