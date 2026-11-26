@@ -9,6 +9,8 @@
     "test": "vitest run",
     "copied:check": "node scripts/copied.mjs --check",
     "copied:check-source": "node scripts/copied.mjs --check-source",
+    "safety-viz:check": "node scripts/vendor-safety-viz.mjs --check",
+    "safety-viz:check-source": "node scripts/vendor-safety-viz.mjs --check-source",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

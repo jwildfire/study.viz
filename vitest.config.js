@@ -6,12 +6,6 @@ import { configDefaults, defineConfig } from 'vitest/config';
 // what it waits for, and the task that brings that takes its list away: by task 5 the
 // list is gone and every test runs.
 const WAITING = [
-  // Waiting for safety.viz’s chart bundle and the three files that hand it on (task 3).
-  'tests/unit/app/portfolio.test.js',
-  'tests/unit/app/status-label.test.js',
-  'tests/unit/app/tiers-page.test.js',
-  'tests/unit/app/view-items.test.js',
-  'tests/unit/app/wordmark-title.test.js',
   // Waiting for the libraries the app carries, the demo studies and their scripts (task 4).
   'tests/unit/app/charts.test.js',
   'tests/unit/app/data-panel.test.js',
@@ -64,6 +58,10 @@ export default defineConfig({
     // reads window.localStorage then fails before it tests anything
     // (APP-PAGE-044). Turned off, a test's page has jsdom's storage, as on the
     // Node 22 that CI runs.
-    execArgv: ['--no-experimental-webstorage']
+    execArgv: ['--no-experimental-webstorage'],
+    // safety.viz's bundle is loaded by Node as it stands, not passed through
+    // the test runner's transform: it is one built file, and the source map
+    // its last line names is deliberately not copied with it.
+    server: { deps: { external: [/\/site\/vendor\/safety\.viz\/safety\.viz\.esm\.js$/] } }
   }
 });

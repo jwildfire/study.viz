@@ -7,6 +7,16 @@
   "left": [],
   "files": [
     {
+      "file": "scripts/vendor-cli.mjs",
+      "sha256": "8e472bcb98722635286c9d50edf77ea53eac5bfea51b725bf5bda0831ab7092b",
+      "bytes": 9339
+    },
+    {
+      "file": "scripts/vendor-lib.mjs",
+      "sha256": "a27227dda21f6bc947e3107d895ee2257ac6e8c955bba6afde5adaf52e332f9d",
+      "bytes": 38315
+    },
+    {
       "file": "src/app/builder-view.js",
       "sha256": "45081ae30a34cd93bf543cf85b23c41912f9e8b7a1c5877952f5fdd4c13ad2d1",
       "bytes": 13230
@@ -392,8 +402,17 @@
     },
     {
       "file": "tests/unit/app/biomarkers.test.js",
-      "sha256": "dc1df623414025fbdd6632b7829a9a56cd54a868a9d9109c4177be26fa34ff26",
-      "bytes": 14629
+      "sha256": "7296c1e60b7bb1c7bda47e3ae63598f234b674c56d37f9b785db8b3201ca3a5d",
+      "bytes": 14652,
+      "source_sha256": "dc1df623414025fbdd6632b7829a9a56cd54a868a9d9109c4177be26fa34ff26",
+      "source_bytes": 14629,
+      "changes": [
+        {
+          "original": "import schema from '../../../src/data/schema/portfolio.json';",
+          "replacement": "import schema from '../../../site/vendor/safety.viz/src/data/schema/portfolio.json';",
+          "reason": "src/data/schema/portfolio.json is a file of the chart library. It is copied with the bundle into site/vendor/safety.viz/, under that folder’s record, and read from there."
+        }
+      ]
     },
     {
       "file": "tests/unit/app/builder-view.test.js",
@@ -402,8 +421,17 @@
     },
     {
       "file": "tests/unit/app/charts.test.js",
-      "sha256": "51e4d863ef09979d2669177e02c6fd23b37f6207011728af9b6aa005d813829f",
-      "bytes": 22369
+      "sha256": "9b9d2667ee8b94f59e7f47e40e65db1c4e84d35c5c924f8b087449b76b85b2a5",
+      "bytes": 22485,
+      "source_sha256": "51e4d863ef09979d2669177e02c6fd23b37f6207011728af9b6aa005d813829f",
+      "source_bytes": 22369,
+      "changes": [
+        {
+          "original": "import { normalizeXAxis, renderXAxisControl, resolveXAxis } from '../../../src/x-axis.js';",
+          "replacement": "import { kit } from '../../../src/main.js';\n\n// safety.viz’s x-axis helpers, from the bundle’s kit: study.viz holds no chart’s source.\nconst { normalizeXAxis, renderXAxisControl, resolveXAxis } = kit;",
+          "reason": "src/x-axis.js is a source file of the chart library, which stays in safety.viz. The bundle exports the same three functions on its kit, and the test reads them there."
+        }
+      ]
     },
     {
       "file": "tests/unit/app/data-panel.test.js",
@@ -456,8 +484,17 @@
     },
     {
       "file": "tests/unit/app/libraries.test.js",
-      "sha256": "13151dc9fbe046ed4296ca349574f084783d61808e29cadfc28319fd28c6383f",
-      "bytes": 30757
+      "sha256": "697924690201cdc637792aef731b33ebc40087411edbfe232243e36837689e10",
+      "bytes": 30780,
+      "source_sha256": "13151dc9fbe046ed4296ca349574f084783d61808e29cadfc28319fd28c6383f",
+      "source_bytes": 30757,
+      "changes": [
+        {
+          "original": "import schema from '../../../src/data/schema/portfolio.json';",
+          "replacement": "import schema from '../../../site/vendor/safety.viz/src/data/schema/portfolio.json';",
+          "reason": "src/data/schema/portfolio.json is a file of the chart library. It is copied with the bundle into site/vendor/safety.viz/, under that folder’s record, and read from there."
+        }
+      ]
     },
     {
       "file": "tests/unit/app/mapping.test.js",
@@ -612,8 +649,30 @@
     },
     {
       "file": "tests/unit/app/status-label.test.js",
-      "sha256": "bc760457f9cb19bb57c32c427f9cade1501e217c7f25b16b38f15493cbb9d1c4",
-      "bytes": 22639
+      "sha256": "3dba15d4cc8bab5f338724afc8a345ae91ca25dac07e0c44230839d98897a640",
+      "bytes": 22345,
+      "source_sha256": "bc760457f9cb19bb57c32c427f9cade1501e217c7f25b16b38f15493cbb9d1c4",
+      "source_bytes": 22639,
+      "changes": [
+        {
+          "cut": {
+            "from": "import * as shell from '../../../src/shell.js';",
+            "to": "import * as shell from '../../../src/shell.js';",
+            "lines": 1,
+            "sha256": "709077f1f549c58cdef65c34b41fc44ce6ad432a1606e72bb5b16fc1abe78524"
+          },
+          "reason": "src/shell.js is the charts’ shell, a source file of the chart library, which stays in safety.viz. Only the three assertions cut below read it."
+        },
+        {
+          "cut": {
+            "from": "    // The shared shell hands the label on, with the rest of the charts' chrome.",
+            "to": "    expect(shell.wireStatusLabels).toBe(wireStatusLabels);",
+            "lines": 4,
+            "sha256": "2853844f3f6eb7ea70ad29fe5ed71904539a92a34d2dae4156ac3a9e7837c996"
+          },
+          "reason": "These three assertions say that safety.viz’s shell exports the status label. The shell is not in study.viz, and the bundle’s kit leaves the label out, so there is nothing here for them to hold. They stay with src/shell.js in safety.viz’s own suite."
+        }
+      ]
     },
     {
       "file": "tests/unit/app/status.test.js",

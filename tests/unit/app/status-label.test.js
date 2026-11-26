@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach } from 'vitest';
 import manifest from '../../../src/data/portfolio.json';
-import * as shell from '../../../src/shell.js';
 import {
   LADDER_URL,
   STATUS_LABEL_STYLES,
@@ -297,10 +296,6 @@ describe('the status label', () => {
     expect(parts(two).panel.hidden).toBe(false);
     parts(two).cross.click();
     expect(parts(two).panel.hidden).toBe(true);
-    // The shared shell hands the label on, with the rest of the charts' chrome.
-    expect(shell.statusLabel).toBe(statusLabel);
-    expect(shell.statusLabelHtml).toBe(statusLabelHtml);
-    expect(shell.wireStatusLabels).toBe(wireStatusLabels);
   });
 });
 
