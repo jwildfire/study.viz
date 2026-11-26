@@ -13,7 +13,7 @@ const read = (file) =>
   parse(readFileSync(new URL(`../../../.github/workflows/${file}`, import.meta.url), 'utf8'));
 
 const CHECK_NAME = 'Build, format, and test';
-const REQUIRED = ['npm ci', 'npm run format:check', 'npm test'];
+const REQUIRED = ['npm ci', 'npm run format:check', 'npm run copied:check', 'npm test'];
 
 const workflow = read('ci.yml');
 const jobs = Object.values(workflow.jobs);

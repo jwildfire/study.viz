@@ -7,6 +7,8 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
+    "copied:check": "node scripts/copied.mjs --check",
+    "copied:check-source": "node scripts/copied.mjs --check-source",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

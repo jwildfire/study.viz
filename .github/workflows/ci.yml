@@ -47,5 +47,11 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
+      # The demo app, its tests and what they read were copied from one commit
+      # of safety.viz: every copied file must match the record, SOURCE.json,
+      # and the record must be the one scripts/copied-lib.mjs declares.
+      - name: Files copied from safety.viz match their record
+        run: npm run copied:check
+
       - name: Run unit tests
         run: npm test
