@@ -1,0 +1,155 @@
+name: Update evidence baselines
+
+# Canonical-environment baseline refresh, carried from safety.viz's workflow of
+# the same name: reruns the browser tests with --update-snapshots on the same
+# Ubuntu runner the check uses (the canonical rendering environment) and
+# commits the refreshed screenshots back to the selected branch. Run it against
+# a feature branch whenever captures change.
+#
+# A default run rewrites only the baselines whose capture now differs beyond
+# the comparison limit (Playwright's --update-snapshots "changed" mode). A
+# change that stays under the limit leaves its baseline stale. For those,
+# `refresh` takes a Playwright --grep pattern: after the default run, the
+# tests it matches are run again with --update-snapshots=all, so only their
+# baselines are rewritten whatever the difference. Left empty, the run is
+# exactly the default one.
+#
+#   gh workflow run evidence-update.yml -R jwildfire/study.viz \
+#     --ref <branch> -f refresh='APP-PAGE-037'
+#
+# The obot app cannot start a workflow_dispatch run (it has no actions:write),
+# but it can send a repository_dispatch event, which needs only contents:write.
+# So the same run starts from an `evidence-update` event whose payload names
+# the branch and, optionally, the pattern:
+#
+#   gh api repos/jwildfire/study.viz/dispatches -f event_type=evidence-update \
+#     -f 'client_payload[ref]=<branch>' -f 'client_payload[refresh]=APP-PAGE-037'
+#
+# A repository_dispatch run always uses this file as it is on the repository's
+# default branch, so the event works once this file is there.
+#
+# Either way the run first checks its target, and refuses: the integration and
+# release branches (dev, main, stable), since evidence reaches them through a
+# pull request; any name starting with refs/; a name git does not accept as a
+# branch; a branch that does not exist, or whose name the branches API does
+# not return unchanged; and, from the Actions tab, a run started on a tag, so
+# no push can create a branch named like the tag.
+#
+# What differs from safety.viz's workflow: study.viz keeps no evidence.json, so
+# nothing rebuilds one; the browser tests are run directly, as the check runs
+# them; and the builds are the two the check makes before them. A baseline that
+# is rewritten is no longer the file copied from safety.viz, so the record of
+# the copy has to let it go before the check passes again: the picture is
+# listed under `left` in scripts/copied-lib.mjs, with the reason, and
+# scripts/copied.mjs writes the record again.
+
+on:
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: 'Optional Playwright --grep pattern. The baselines of the tests it matches are force-rewritten (--update-snapshots=all) after the default run. Leave empty for the default run.'
+        required: false
+        default: ''
+        type: string
+  repository_dispatch:
+    types: [evidence-update]
+
+permissions:
+  contents: write
+
+# The branch and pattern come from the dispatch form or from the event's
+# payload, whichever started the run. They reach every script through the
+# environment, never into the script text.
+env:
+  TARGET_REF: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.ref || github.ref_name }}
+  REFRESH: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.refresh || inputs.refresh }}
+
+concurrency:
+  group: evidence-update-${{ github.event_name == 'repository_dispatch' && github.event.client_payload.ref || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  update-evidence:
+    name: Refresh baselines
+    # Named, not ubuntu-latest: the image the screenshots are written and compared
+    # on changes by a commit to this file and to ci.yml, and not by GitHub.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      # Runs for both events, before anything is checked out or pushed.
+      - name: Check the target branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] && [ "$GITHUB_REF" != "refs/heads/${TARGET_REF}" ]; then
+            echo "::error::Start this run on a feature branch, not '${GITHUB_REF}'."
+            exit 1
+          fi
+          case "$TARGET_REF" in
+            ''|main|stable|dev|refs/*)
+              echo "::error::The run must name a feature branch, not '${TARGET_REF}'."
+              exit 1 ;;
+          esac
+          if ! git check-ref-format --branch "$TARGET_REF" > /dev/null; then
+            echo "::error::'${TARGET_REF}' is not a branch name."
+            exit 1
+          fi
+          if ! FOUND=$(gh api "repos/${GITHUB_REPOSITORY}/branches/${TARGET_REF}" --jq .name); then
+            echo "::error::There is no branch '${TARGET_REF}' in ${GITHUB_REPOSITORY}."
+            exit 1
+          fi
+          if [ "$FOUND" != "$TARGET_REF" ]; then
+            echo "::error::The branches API answered '${FOUND}' for '${TARGET_REF}'; name the branch exactly."
+            exit 1
+          fi
+          echo "Refreshing evidence on ${TARGET_REF} (pattern: '${REFRESH}')."
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_REF }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The two builds the check makes before its browser tests.
+      - name: Build the site
+        run: npm run site
+
+      - name: Build the app bundle and the single file
+        run: npm run build:app
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # Every browser test, as the check runs them, the ones that start real R
+      # among them. A baseline is rewritten where its capture differs beyond the
+      # comparison limit; a test that fails for any other reason fails the run,
+      # and nothing is committed.
+      - name: Regenerate baselines
+        run: npm run test:e2e -- --project=chromium --update-snapshots
+
+      # Only when `refresh` is given: force-rewrite the matching tests'
+      # baselines. The pattern is passed through the environment, never into
+      # the script text.
+      - name: Force-refresh the named baselines
+        if: ${{ env.REFRESH != '' }}
+        run: npx playwright test --project=chromium --grep "$REFRESH" --update-snapshots=all
+
+      - name: Commit refreshed evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/evidence
+          if git diff --cached --quiet; then
+            echo "Evidence already up to date — nothing to commit."
+          else
+            git commit -m "Update evidence baselines (canonical environment refresh)"
+            git push origin "HEAD:refs/heads/${TARGET_REF}"
+          fi
