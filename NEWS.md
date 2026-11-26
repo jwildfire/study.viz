@@ -23,5 +23,7 @@ demo app is copied in from safety.viz with a record.
 
 ## Also in this release
 
+- `node scripts/compare-demos.mjs` sets two served copies of the demo app side by side, safety.viz's and study.viz's, and writes down what each says of a study: charts ready and site-level risk metrics run, with a screenshot of each view.
+
 - `dev` is the integration branch and `main` the release branch, as in safety.viz and bio.viz.
 - The `Update evidence baselines` workflow makes the pictures the browser tests are compared with again, on the Linux runner the check runs on, and commits them to the branch it is started for.
