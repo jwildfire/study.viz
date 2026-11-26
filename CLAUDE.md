@@ -6,6 +6,9 @@ The platform and demo app that reviews a clinical study in safety.viz's charts a
 
 ```sh
 npm ci                # install
+npm run site          # build the site into _site/ (gitignored): the demo app as the root page
+npm run build:app     # the app bundle and the single file, into build/app/ (gitignored)
+npm run demo          # build the demo app and serve it on this machine
 npm test              # Vitest unit tests (tests/unit/)
 npm run format:check  # Prettier (npm run format to fix)
 npm run copied:check  # the files copied from safety.viz match their record, SOURCE.json (:check-source reads safety.viz)

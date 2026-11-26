@@ -1,35 +1,8 @@
-import { configDefaults, defineConfig } from 'vitest/config';
-
-// Unit tests that wait for a later task of the copy (obot.roadmap#440). The app comes
-// across one task at a time, and each of these files reads something this commit does
-// not hold yet, so it cannot pass here. Each is left out of `npm test` by name, under
-// what it waits for, and the task that brings that takes its list away: by task 5 the
-// list is gone and every test runs.
-const WAITING = [
-  // Waiting for the build scripts, the site and its configuration’s readers (task 5).
-  'tests/unit/app/biomarkers.test.js',
-  'tests/unit/app/builder-view.test.js',
-  'tests/unit/app/gsm-viz.test.js',
-  'tests/unit/app/libraries.test.js',
-  'tests/unit/app/r-wiring.test.js',
-  'tests/unit/app/rbqm-view.test.js',
-  'tests/unit/app/rbqm.test.js',
-  'tests/unit/app/single-file.test.js',
-  'tests/unit/app/tab-colours.test.js',
-  'tests/unit/app/tiers.test.js',
-  'tests/unit/local-demo/demo-app-dir.test.js',
-  'tests/unit/local-demo/demo-cli.test.js',
-  'tests/unit/local-demo/demo-server.test.js',
-  'tests/unit/local-demo/install-demo.test.js',
-  'tests/unit/site/demo-app-page.test.js',
-  'tests/unit/site/favicon.test.js',
-  'tests/unit/site/validate.test.js'
-];
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     include: ['tests/unit/**/*.test.js'],
-    exclude: [...configDefaults.exclude, ...WAITING],
     environment: 'node',
     // Node 25 and later carry a web storage of their own, which stands in front
     // of jsdom's and is undefined without a file to keep it in: a test that

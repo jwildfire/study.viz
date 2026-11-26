@@ -1,0 +1,185 @@
+// Demo app build (#150, #152, obot.roadmap#352): bundles src/app/main.js —
+// the charts and the page that hosts them — two ways:
+//
+//   study.viz-app.js      one IIFE script with the global `SafetyVizApp`, for
+//                         the site's demo app page and the browser tests
+//   study.viz-app.html    the same script inlined into one HTML file that opens
+//                         from disk with no network and no demo study, with
+//                         the vendored bundle of every chart library the app
+//                         ships with (scripts/app-libraries.mjs, #182) inlined
+//                         beside it
+//
+// Unlike dist/, both are build products and are not committed: the site build
+// writes them into _site/demo/, and `npm run build:app` writes them to
+// build/app/.
+
+import { build } from 'esbuild';
+import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import {
+  APP_LIBRARIES,
+  FILE_PITCH,
+  RBQM_CHARTS,
+  chartLinks as chartLinksFor,
+  chartTiers,
+  inlineJson,
+  librariesExpression,
+  libraryScript,
+  rbqmTabExpression,
+  rbqmTabOptions
+} from './app-libraries.mjs';
+import { RBQM_TAB } from './rbqm-lib.mjs';
+import { chartsVersion } from './safety-viz-lib.mjs';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, '..');
+
+export const APP_BUNDLE = 'study.viz-app.js';
+export const APP_HTML = 'study.viz-app.html';
+
+// A script made safe to inline: any source-map comment dropped, and a closing
+// script tag inside it escaped so it cannot end the inline script.
+const inlineScript = (script) =>
+  script
+    .replace(/^\/\/# sourceMappingURL=.*$/gm, '')
+    .replace(/<\/script/gi, '<\\/script')
+    .trim();
+
+/**
+ * Wrap the app script in the single file's HTML. The file makes no request of
+ * any kind: the scripts are inline, the app draws its own header and injects
+ * its own styles, and any source-map comment is dropped. Each further chart
+ * library's bundle is inlined after the app's and handed to it when it mounts.
+ * @param {Object} options Wrapper options.
+ * @param {string} options.script The bundled app script.
+ * @param {Array<{name: string, global: string, script: string}>} [options.libraries] Further libraries: name, the global their bundle defines, and the bundle.
+ * @param {Object<string, {guide?: string, evidence?: string}>} [options.chartLinks] Each chart's own pages (#246), handed to the app for the footnote under each chart: addresses a reader may follow, which the file asks nothing of.
+ * @param {Object<string, {tier: string, note?: string}>} [options.tiers] Each chart's and each tab's rung of the status ladder (#272), as scripts/app-libraries.mjs::chartTiers gives them, handed to the app.
+ * @returns {string} The HTML document.
+ */
+export function renderAppHtml({ script, libraries = [], chartLinks = {}, tiers = {} }) {
+  const inline = inlineScript(script);
+  const others = libraries
+    .map((library) => `<script>${inlineScript(library.script)}</script>\n`)
+    .join('');
+  // The file loads nothing, so its biomarker charts cannot start R: each
+  // statistics line says so, and there is no control (#183).
+  const options = [
+    ...(libraries.length
+      ? [
+          `libraries: ${librariesExpression(libraries, { r: 'unavailable', fromFile: false, more: [rbqmTabExpression({ r: 'unavailable' })] })}`,
+          `pitch: ${JSON.stringify(FILE_PITCH)}`
+        ]
+      : []),
+    ...(Object.keys(chartLinks).length ? [`chartLinks: ${inlineJson(chartLinks)}`] : []),
+    ...(Object.keys(tiers).length ? [`tiers: ${inlineJson(tiers)}`] : [])
+  ];
+  const mount = options.length
+    ? `SafetyVizApp.mount('#app', { ${options.join(', ')} })`
+    : `SafetyVizApp.mount('#app')`;
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The study.viz demo app in one file: load a study, map its columns and review it in the safety and biomarker charts. It runs in this browser with no network; nothing is sent anywhere.">
+<title>study.viz demo</title>
+<style>body{margin:0;background:#fafaf8}</style>
+</head>
+<body>
+<div id="app"></div>
+<script>${inline}</script>
+${others}<script>window.__safetyVizApp = ${mount};</script>
+</body>
+</html>
+`;
+}
+
+/** The RBQM tab's options as the test harness page loads them; written by `npm run build:app`. */
+export const RBQM_HARNESS = 'rbqm-tab-options.js';
+
+// The app’s footer names two versions. The app’s own is study.viz’s, from package.json. The
+// chart library’s is the copied safety.viz bundle’s, from its record
+// (scripts/safety-viz-lib.mjs).
+const { version: appVersion } = JSON.parse(
+  readFileSync(path.join(rootDir, 'package.json'), 'utf8')
+);
+const version = chartsVersion();
+
+const bundleOptions = {
+  entryPoints: [path.join(rootDir, 'src/app/main.js')],
+  bundle: true,
+  minify: true,
+  format: 'iife',
+  globalName: 'SafetyVizApp',
+  // The versions shown in the app's footer: the chart library's, and the app's own.
+  define: {
+    __SAFETY_VIZ_VERSION__: JSON.stringify(version),
+    __STUDY_VIZ_VERSION__: JSON.stringify(appVersion)
+  },
+  absWorkingDir: rootDir
+};
+
+/**
+ * Build the app bundle and the single file into a directory.
+ * @param {string} outDir The directory to write `study.viz-app.js` (with its source map) and `study.viz-app.html` into.
+ * @returns {Promise<{file: string, bytes: number, html: {file: string, bytes: number}}>} Each output's path and size.
+ */
+export async function buildApp(outDir) {
+  mkdirSync(outDir, { recursive: true });
+  const file = path.join(outDir, APP_BUNDLE);
+  await build({ ...bundleOptions, sourcemap: true, outfile: file });
+
+  // The single file inlines a build with no source map: a map reference would
+  // be the one thing in the file that points somewhere else.
+  const { outputFiles } = await build({ ...bundleOptions, sourcemap: false, write: false });
+  const htmlFile = path.join(outDir, APP_HTML);
+  const libraries = APP_LIBRARIES.map((library) => ({
+    ...library,
+    script: libraryScript(library)
+  }));
+  // The file has no site beside it, so its charts' pages are the published site's (#246).
+  writeFileSync(
+    htmlFile,
+    renderAppHtml({
+      script: outputFiles[0].text,
+      libraries,
+      chartLinks: chartLinksFor(),
+      tiers: chartTiers()
+    })
+  );
+
+  return {
+    file,
+    bytes: statSync(file).size,
+    html: { file: htmlFile, bytes: statSync(htmlFile).size }
+  };
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const { file, bytes, html } = await buildApp(path.join(rootDir, 'build/app'));
+  const size = (count) => `${count.toLocaleString('en-US')} bytes`;
+  console.log(`Built ${path.relative(rootDir, file)} (${size(bytes)}).`);
+  console.log(`Built ${path.relative(rootDir, html.file)} (${size(html.bytes)}), the single file.`);
+  // The RBQM tab's options for the browser tests' harness page (#235), with
+  // every file where the repository keeps it: the page a test opens is served
+  // from the repository's root, not from a built demo directory.
+  const harness = path.join(rootDir, 'build/app', RBQM_HARNESS);
+  writeFileSync(
+    harness,
+    `window.__rbqmTabOptions = ${JSON.stringify(
+      rbqmTabOptions({
+        fileUrl: (entry) => `/${entry.file}`,
+        repository: `/${RBQM_TAB.repository}`,
+        chartsUrl: `/${RBQM_CHARTS.path}`
+      })
+    )};\n` +
+      // And every chart's and tab's rung of the status ladder (#272), as the
+      // demo page is handed them.
+      `window.__appTiers = ${JSON.stringify(chartTiers())};\n`
+  );
+  console.log(
+    `Wrote ${path.relative(rootDir, harness)}, the RBQM tab's options for the test page.`
+  );
+}

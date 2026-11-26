@@ -86,3 +86,12 @@ jobs:
 
       - name: Run unit tests
         run: npm test
+
+      # The site is the demo app, as its root page. The build fails on a broken
+      # internal link.
+      - name: Build the site (link validation)
+        run: npm run site
+
+      # The app bundle and the single file that opens from disk.
+      - name: Build the app bundle and the single file
+        run: npm run build:app

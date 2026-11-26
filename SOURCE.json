@@ -12,6 +12,11 @@
       "bytes": 42215
     },
     {
+      "file": "scripts/app-libraries.mjs",
+      "sha256": "0576108cdcd27b70454ce15f9580284b6bfeb8c11aa2b7badc27ee98bff7d57c",
+      "bytes": 18962
+    },
+    {
       "file": "scripts/app-statistics-lib.mjs",
       "sha256": "27532de514246cbc5d8fbdeb8754b72d1ffb797f56b079f83c6202d9b7c0b097",
       "bytes": 6198
@@ -25,6 +30,50 @@
       "file": "scripts/build-app-fixture.mjs",
       "sha256": "7f2f9bde90bd6f2c5243c01a5acab5f162b7c58c1f8bbfd7eb3aef1566f2962f",
       "bytes": 5806
+    },
+    {
+      "file": "scripts/build-app.mjs",
+      "sha256": "d2cb9ff5360eea67ebb8934615eddaeb6fa2c66c7453f24cbcefdc192b1f2a9a",
+      "bytes": 7823,
+      "source_sha256": "3f660f34a13b4aebc131b28f8e01b17f7159faa27d852c11c6256c7cf73b82e4",
+      "source_bytes": 7418,
+      "changes": [
+        {
+          "original": "import { RBQM_TAB } from './rbqm-lib.mjs';",
+          "replacement": "import { RBQM_TAB } from './rbqm-lib.mjs';\nimport { chartsVersion } from './safety-viz-lib.mjs';",
+          "reason": "The version of the copied safety.viz bundle, from its record."
+        },
+        {
+          "original": "const { version } = JSON.parse(readFileSync(path.join(rootDir, 'package.json'), 'utf8'));",
+          "replacement": "// The app’s footer names two versions. The app’s own is study.viz’s, from package.json. The\n// chart library’s is the copied safety.viz bundle’s, from its record\n// (scripts/safety-viz-lib.mjs).\nconst { version: appVersion } = JSON.parse(\n  readFileSync(path.join(rootDir, 'package.json'), 'utf8')\n);\nconst version = chartsVersion();",
+          "reason": "The footer says \"study.viz\" and the app’s own version, then \"safety.viz\" and the version of the charts. package.json here is study.viz’s, so its version is the first. The record of the copied bundle names the safety.viz version the charts are."
+        },
+        {
+          "original": "  // The version shown in the app's footer.\n  define: { __SAFETY_VIZ_VERSION__: JSON.stringify(version) },",
+          "replacement": "  // The versions shown in the app's footer: the chart library's, and the app's own.\n  define: {\n    __SAFETY_VIZ_VERSION__: JSON.stringify(version),\n    __STUDY_VIZ_VERSION__: JSON.stringify(appVersion)\n  },",
+          "reason": "A second value built into the bundle: study.viz’s own version, for the footer. The first keeps its name and is still the safety.viz version of the charts."
+        },
+        {
+          "original": "//   safety.viz-app.js     one IIFE script with the global `SafetyVizApp`, for\n//                         the site's demo app page and the browser tests\n//   safety.viz-app.html   the same script inlined into one HTML file that opens",
+          "replacement": "//   study.viz-app.js      one IIFE script with the global `SafetyVizApp`, for\n//                         the site's demo app page and the browser tests\n//   study.viz-app.html    the same script inlined into one HTML file that opens",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "export const APP_BUNDLE = 'safety.viz-app.js';\nexport const APP_HTML = 'safety.viz-app.html';",
+          "replacement": "export const APP_BUNDLE = 'study.viz-app.js';\nexport const APP_HTML = 'study.viz-app.html';",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "<meta name=\"description\" content=\"The safety.viz demo app in one file: load a study, map its columns and review it in the safety and biomarker charts. It runs in this browser with no network; nothing is sent anywhere.\">\n<title>safety.viz demo</title>",
+          "replacement": "<meta name=\"description\" content=\"The study.viz demo app in one file: load a study, map its columns and review it in the safety and biomarker charts. It runs in this browser with no network; nothing is sent anywhere.\">\n<title>study.viz demo</title>",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\". The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        },
+        {
+          "original": " * @param {string} outDir The directory to write `safety.viz-app.js` (with its source map) and `safety.viz-app.html` into.",
+          "replacement": " * @param {string} outDir The directory to write `study.viz-app.js` (with its source map) and `study.viz-app.html` into.",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        }
+      ]
     },
     {
       "file": "scripts/build-demo-data.mjs",
@@ -47,9 +96,28 @@
       "bytes": 14227
     },
     {
+      "file": "scripts/builder-lib.mjs",
+      "sha256": "472ac83c86b7fa7fde951f5cacb5602f9dabfbbdae6be0f7059e57db460f95b4",
+      "bytes": 3040
+    },
+    {
       "file": "scripts/check-demo-data.mjs",
       "sha256": "5b508c88663b04fc5089f9123ec24b23812ef0b73a196def3578bbf170f11cee",
       "bytes": 6431
+    },
+    {
+      "file": "scripts/demo-app.mjs",
+      "sha256": "9fd291c3701ca3f5d14a5de4ee3f2c6818de1b5bab8c51782ceca6811fcac703",
+      "bytes": 7345,
+      "source_sha256": "31ae3f597eb2ad79e7b4391fba12d34a3fa6849231fa480f5f2bd948d5e7b953",
+      "source_bytes": 7345,
+      "changes": [
+        {
+          "original": "//   safety.viz-app.js      the app bundle, with its source map\n//   safety.viz-app.html    the single file, offered as a download",
+          "replacement": "//   study.viz-app.js       the app bundle, with its source map\n//   study.viz-app.html     the single file, offered as a download",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        }
+      ]
     },
     {
       "file": "scripts/demo-data-lib.mjs",
@@ -57,9 +125,102 @@
       "bytes": 31803
     },
     {
+      "file": "scripts/demo-server.mjs",
+      "sha256": "0b69d396ca7b2abb16051ac4eedbcc7f877e45090c9d9fa330326925252b53fb",
+      "bytes": 7504
+    },
+    {
+      "file": "scripts/demo.mjs",
+      "sha256": "ac2ab14aaf6f68a9a7bd8a5ac05cf0e0b113f8712ccc930ad2fae3566077e7f4",
+      "bytes": 5101,
+      "source_sha256": "4d61689b4a170c88cfcb7cb00ca97de53d3b248bfe059a4724dfda129c0b1408",
+      "source_bytes": 5103,
+      "changes": [
+        {
+          "original": "Builds the safety.viz demo app and serves it on this machine.",
+          "replacement": "Builds the study.viz demo app and serves it on this machine.",
+          "reason": "The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        },
+        {
+          "original": "  console.log(`\\nThe safety.viz demo app is running at ${url}`);",
+          "replacement": "  console.log(`\\nThe study.viz demo app is running at ${url}`);",
+          "reason": "The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        }
+      ]
+    },
+    {
       "file": "scripts/derive-app-statistics.mjs",
       "sha256": "2816216699d4e4eea23abd374c03033717abfb250bbb07a162ab75c53ed51f95",
       "bytes": 3543
+    },
+    {
+      "file": "scripts/install-demo.mjs",
+      "sha256": "b28054d3753a0292107b74a2bf4a419c4de0601c8dffb45724aa2cdc21326b0b",
+      "bytes": 13973,
+      "source_sha256": "5074b4e972c70b322fc738a67b54bff6b2e814fbfbfd2e211c9f53d18e375d08",
+      "source_bytes": 14006,
+      "changes": [
+        {
+          "original": "// The safety.viz demo app, installed and started on your own machine (#214).",
+          "replacement": "// The study.viz demo app, installed and started on your own machine (#214).",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "// It checks for Node, git and npm, clones a release of safety.viz into\n// ./safety.viz, installs what the release's lock file names, builds the demo",
+          "replacement": "// It checks for Node, git and npm, clones a release of study.viz into\n// ./study.viz, installs what the release's lock file names, builds the demo",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "//   node install-demo.mjs --ref v1.9.2 --dir my-demo --port 5050 --no-open",
+          "replacement": "//   node install-demo.mjs --ref v0.1.0 --dir my-demo --port 5050 --no-open",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "/** What is installed when nothing is said: the latest release, into ./safety.viz. */\nexport const DEFAULTS = Object.freeze({\n  dir: 'safety.viz',\n  // `main` is the release branch: it holds the latest release.\n  ref: 'main',\n  repo: 'https://github.com/jwildfire/safety.viz.git',",
+          "replacement": "/** What is installed when nothing is said: the latest release, into ./study.viz. */\nexport const DEFAULTS = Object.freeze({\n  dir: 'study.viz',\n  // `main` is the release branch: it holds the latest release.\n  ref: 'main',\n  repo: 'https://github.com/jwildfire/study.viz.git',",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "Installs the safety.viz demo app into a directory and starts it on this machine.",
+          "replacement": "Installs the study.viz demo app into a directory and starts it on this machine.",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": " * @returns {'absent'|'empty'|'checkout'|'other'} Nothing; an empty directory; a safety.viz checkout; or something else, which is left alone.",
+          "replacement": " * @returns {'absent'|'empty'|'checkout'|'other'} Nothing; an empty directory; a study.viz checkout; or something else, which is left alone.",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    return name === 'safety.viz' ? 'checkout' : 'other';",
+          "replacement": "    return name === 'study.viz' ? 'checkout' : 'other';",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "            say: `Downloading safety.viz (${options.ref}) into ${options.dir}…`,",
+          "replacement": "            say: `Downloading study.viz (${options.ref}) into ${options.dir}…`,",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "      `${options.dir} already holds something that is not safety.viz.`,",
+          "replacement": "      `${options.dir} already holds something that is not study.viz.`,",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "        `${options.dir} already holds safety.viz ${held.version}${from}, and it is used as it is.`,",
+          "replacement": "        `${options.dir} already holds study.viz ${held.version}${from}, and it is used as it is.`,",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    console.log(`safety.viz ${held.version} is already in ${options.dir}; using it.`);",
+          "replacement": "    console.log(`study.viz ${held.version} is already in ${options.dir}; using it.`);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "        `safety.viz ${versionIn(options.dir)}, in ${options.dir}, has no demo command: it came in v1.9.2.`,",
+          "replacement": "        `study.viz ${versionIn(options.dir)}, in ${options.dir}, has no demo command.`,",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        }
+      ]
     },
     {
       "file": "scripts/r-wasm-lib.mjs",
@@ -95,6 +256,80 @@
       "file": "scripts/rbqm-reference.mjs",
       "sha256": "e383245e29fa253601a00ce37b727e3789b74a50b25c7b52e2570007519622c4",
       "bytes": 15256
+    },
+    {
+      "file": "scripts/site-lib.mjs",
+      "sha256": "7225e4998c94da8e01094b10612052bfcbda795b033d59af25da0a18d1c94eeb",
+      "bytes": 9752,
+      "source_sha256": "afe93a155ab029d162b88b098e867a61f8d39ad6463088f2fca029a7b9acf66c",
+      "source_bytes": 98093,
+      "changes": [
+        {
+          "original": "// Docs-site generators (#7): pure functions scripts/site.mjs assembles into\n// _site/. Plain Node, no framework, per design #21 — and every internal URL\n// relative, so one build serves the site root, /dev/, and /pr/{N}/ unchanged.",
+          "replacement": "// Site generators: pure functions scripts/site.mjs and scripts/demo-app.mjs\n// assemble into _site/. Plain Node, no framework, and every internal URL\n// relative, so one build serves the site root, /dev/, and /pr/{N}/ unchanged.\n// This is the demo half of safety.viz’s scripts/site-lib.mjs: the docs-site\n// generators stay in safety.viz (scripts/copied-lib.mjs lists what was cut).",
+          "reason": "The file’s opening comment said it held the docs-site generators."
+        },
+        {
+          "cut": {
+            "from": "import { tierNoteOf, tierOf } from '../src/tiers.js';",
+            "to": "import { TIER_MEANINGS, statusHeading, statusLabelHtml } from '../src/status-label.js';",
+            "lines": 2,
+            "sha256": "c4d2de5a367e1999a25b4b1b65c5793f1c095e4090f4af4ef561989671cef533"
+          },
+          "reason": "Read only by the docs-site generators cut below."
+        },
+        {
+          "cut": {
+            "from": "// Minimal inline-markdown renderer for the subset the coverage docs use:",
+            "before": "// A count as a reader would write it in a sentence: a word up to twenty, and",
+            "lines": 841,
+            "sha256": "af238aa9631f0b66fa13ddecff9d37e9274b23919216755aaeb7e6202fe90e25"
+          },
+          "reason": "The markdown renderer, the coverage-table reader and the evidence page: the docs site’s, which stays in safety.viz."
+        },
+        {
+          "cut": {
+            "from": "// The home page's description, for search engines and link previews (#286).",
+            "before": "/**\n * The demo app's typefaces (#165): the font files its page declares, served",
+            "lines": 710,
+            "sha256": "bcfd42992e1d7aaec7122716fb52ff1a24d69eb1a8b2c126489757cb5897b103"
+          },
+          "reason": "The chart gallery, the About and Architecture pages, the API reference, the kit page and each chart’s demo page: the docs site’s, which stays in safety.viz."
+        },
+        {
+          "cut": {
+            "from": "// Build the guide's on-page table of contents from its ## sections and their",
+            "before": "function walkHtmlFiles(dir) {",
+            "lines": 423,
+            "sha256": "77e0ae6792c8c0aa5e82e8b2392a0f72228dd3484add38ef6d29f0baecb72e88"
+          },
+          "reason": "The clinical guide page, the Domains page, the published manifest, the gallery navigation and the docs shell: the docs site’s, which stays in safety.viz."
+        },
+        {
+          "cut": {
+            "from": "\n// Build validation (#7): every screenshot evidence.json references must exist",
+            "before": null,
+            "lines": 14,
+            "sha256": "92b1d64fa1b919abb045ce3bb2e4eebbde56540526970f3c918dcccce2a9743f"
+          },
+          "reason": "The check of evidence screenshots: the evidence pages stay in safety.viz."
+        },
+        {
+          "original": "<meta name=\"description\" content=\"The safety.viz demo app: load a study, check how its columns map, and review it in ${escapeHtml(charts)}. ${libraries.length ? HOSTED_DESCRIPTION : 'It runs in your browser; nothing is uploaded.'}\">\n<title>safety.viz demo</title>",
+          "replacement": "<meta name=\"description\" content=\"The study.viz demo app: load a study, check how its columns map, and review it in ${escapeHtml(charts)}. ${libraries.length ? HOSTED_DESCRIPTION : 'It runs in your browser; nothing is uploaded.'}\">\n<title>study.viz demo</title>",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\". The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        },
+        {
+          "original": "<noscript>The safety.viz demo app needs JavaScript: it reads and draws your data in this browser.</noscript>",
+          "replacement": "<noscript>The study.viz demo app needs JavaScript: it reads and draws your data in this browser.</noscript>",
+          "reason": "The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        }
+      ]
+    },
+    {
+      "file": "scripts/tiers.mjs",
+      "sha256": "23f9e4d6e111158e6daf6b6aa171cb3804e94944d8a6b2c60a74daaa29471d71",
+      "bytes": 6395
     },
     {
       "file": "scripts/vendor-bio-viz.mjs",
@@ -1865,11 +2100,35 @@
     },
     {
       "file": "tests/unit/site/demo-app-page.test.js",
-      "sha256": "86dc3db12a388b55ed714781385c4bbff4b4074bbceac4264d2faf1f9e02fc57",
-      "bytes": 17448,
+      "sha256": "e7ea9980876632c813606015ed395494cbebf438e7c48d74bba2bc6c80119abb",
+      "bytes": 15695,
       "source_sha256": "0f74fc621b761a691007370ab0f7da1c71a5c21891b261ac350476bb6657900e",
       "source_bytes": 17467,
       "changes": [
+        {
+          "original": "import {\n  DEMO_APP_FONTS,\n  publishDemoAppFonts,\n  renderDemoAppPage,\n  renderShell\n} from '../../../scripts/site-lib.mjs';",
+          "replacement": "import {\n  DEMO_APP_FONTS,\n  publishDemoAppFonts,\n  renderDemoAppPage\n} from '../../../scripts/site-lib.mjs';",
+          "reason": "renderShell writes the docs site’s pages, and stays in safety.viz."
+        },
+        {
+          "cut": {
+            "from": "// The docs site's header sets the app's link apart (#172): it is the one entry",
+            "before": "// Each chart's own pages (#246): the footnote under a chart in the app links",
+            "lines": 34,
+            "sha256": "07e34d392344e20024aeeb76bb979a3c690df1ebbb870b1801074b1345fd011c"
+          },
+          "reason": "Two tests, both named APP-PAGE-029, of the Demo app link in the docs site’s header: they read site/shell.html and site/site.css, which stay in safety.viz."
+        },
+        {
+          "original": "  it('APP-PAGE-031: every address of a safety chart is a page the site build writes: its renderer is available, and its guide is a file in docs/guides/ (#246)', () => {",
+          "replacement": "  it('APP-PAGE-031: every address of a safety chart is a page safety.viz’s site build writes: its renderer is available (#246)', () => {",
+          "reason": "The chart pages and the guides in docs/guides/ are safety.viz’s. The name no longer claims the guide file is checked: see the next change."
+        },
+        {
+          "original": "      if (links[module].guide) {\n        expect(existsSync(path.join(rootDir, 'docs/guides', renderer(module).guide)), module).toBe(\n          true\n        );\n      }",
+          "replacement": "      // That a chart’s guide is a file in docs/guides/ is held in safety.viz, where the\n      // guides are.",
+          "reason": "One assertion, that each guide named in site/config.json is a file in docs/guides/. The guides stay in safety.viz, so there is no file here to look for."
+        },
         {
           "original": "    bundle: 'safety.viz-app.js',\n    download: 'safety.viz-app.html',\n    repoUrl: 'https://github.com/jwildfire/safety.viz'",
           "replacement": "    bundle: 'study.viz-app.js',\n    download: 'study.viz-app.html',\n    repoUrl: 'https://github.com/jwildfire/study.viz'",
@@ -1924,11 +2183,53 @@
     },
     {
       "file": "tests/unit/site/favicon.test.js",
-      "sha256": "416809744ba04727745f56fbbc8b4ab4e0c2c3bdcbab77e98b5ef4fdb0ee7c13",
-      "bytes": 1765,
+      "sha256": "15cad4aa0dc50c2bed8368ae5a84922f71f5602c67799c54d2da86b4c8b2158a",
+      "bytes": 1155,
       "source_sha256": "acd104b28460cb7409bfd55b70d479f0b103b04c16e5369ec0033fb4a8402d3b",
       "source_bytes": 1768,
       "changes": [
+        {
+          "cut": {
+            "from": "import { readFileSync } from 'node:fs';",
+            "to": "import { readFileSync } from 'node:fs';",
+            "lines": 1,
+            "sha256": "acdb187297667b502b21af95a1d232ab0b1e8950445003ecaa44631d7d1588b6"
+          },
+          "reason": "It read site/shell.html, the docs shell, which stays in safety.viz."
+        },
+        {
+          "original": "import { renderDemoAppPage, renderShell } from '../../../scripts/site-lib.mjs';",
+          "replacement": "import { renderDemoAppPage } from '../../../scripts/site-lib.mjs';",
+          "reason": "renderShell writes the docs site’s pages, and stays in safety.viz."
+        },
+        {
+          "original": "// One favicon for the docs site and the demo app (#270, obot.roadmap#402): the\n// seven-hex mark the app's header carries.\n\nconst shell = readFileSync(new URL('../../../site/shell.html', import.meta.url), 'utf8');",
+          "replacement": "// The demo app’s favicon (#270, obot.roadmap#402): the seven-hex mark the app’s\n// header carries. That the docs site’s pages serve the same one is held in\n// safety.viz, where the docs shell is.\n",
+          "reason": "The docs shell, site/shell.html, stays in safety.viz."
+        },
+        {
+          "original": "  it('APP-PAGE-039: every docs page and the demo app’s page serve the same favicon, the hex mark, as a data address that asks nothing of another file (#270)', () => {\n    const docs = renderShell({ shell, title: 'Gallery', content: '<p>x</p>' });\n    const deep = renderShell({ shell, title: 'Guide', content: '<p>x</p>', root: '../' });",
+          "replacement": "  it('APP-PAGE-039: the demo app’s page serves the hex mark as its favicon, as a data address that asks nothing of another file (#270)', () => {",
+          "reason": "The two docs pages are written through the docs shell, which stays in safety.viz. The name says what is still held."
+        },
+        {
+          "cut": {
+            "from": "    expect(iconOf(docs)).toBe(LOGO_HREF);",
+            "to": "    expect(iconOf(deep)).toBe(LOGO_HREF);",
+            "lines": 2,
+            "sha256": "66f5a9f2b2eec59c269225b94bfde7a9c4a05452a8442c99e6a78b7937feeb42"
+          },
+          "reason": "Two assertions about the docs pages’ favicon."
+        },
+        {
+          "cut": {
+            "from": "    // The shell names no icon of its own, and no placeholder is left unfilled.",
+            "to": "    expect(docs).not.toContain('f97316');",
+            "lines": 5,
+            "sha256": "48a9e3202fbb24313a464933440e75cdf80b75ebf26f539e2c6f25ab82f97857"
+          },
+          "reason": "Four assertions about the docs shell’s icon placeholder."
+        },
         {
           "original": "      bundle: 'safety.viz-app.js',\n      download: 'safety.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/safety.viz'",
           "replacement": "      bundle: 'study.viz-app.js',\n      download: 'study.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/study.viz'",
@@ -1938,8 +2239,31 @@
     },
     {
       "file": "tests/unit/site/validate.test.js",
-      "sha256": "0973357a7077b386ab265683ee1244c76dc2e0f2867c67cac5ab09bd3a2e7fd1",
-      "bytes": 2573
+      "sha256": "4f40f14fd9cf2ddd4eaa6bd6c00f0abff7269ed93a40fe57d8c457274ed661a6",
+      "bytes": 1681,
+      "source_sha256": "0973357a7077b386ab265683ee1244c76dc2e0f2867c67cac5ab09bd3a2e7fd1",
+      "source_bytes": 2573,
+      "changes": [
+        {
+          "original": "import { validateSiteLinks, validateEvidenceScreenshots } from '../../../scripts/site-lib.mjs';",
+          "replacement": "import { validateSiteLinks } from '../../../scripts/site-lib.mjs';",
+          "reason": "The check of evidence screenshots stays in safety.viz with the evidence pages."
+        },
+        {
+          "original": "// Built-in validation (#7): the site build must fail on broken internal\n// links and on screenshots referenced in evidence.json but missing on disk.",
+          "replacement": "// Built-in validation (#7): the site build must fail on broken internal links.",
+          "reason": "The comment named the check that is cut below."
+        },
+        {
+          "cut": {
+            "from": "\ndescribe('site validation: evidence screenshots', () => {",
+            "before": null,
+            "lines": 25,
+            "sha256": "9a6c5208034d6308e4db2193a05ef89bfc6413120a1299a2e544de30f4b9a7cd"
+          },
+          "reason": "One test of validateEvidenceScreenshots, which stays in safety.viz with the evidence pages."
+        }
+      ]
     }
   ]
 }

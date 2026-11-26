@@ -15,8 +15,8 @@
 //
 // A copied file may differ from its source in two ways, each listed under
 // `changes` with its reason: whole lines swapped for others, listed as they
-// were and as they are; and whole lines cut, listed by the first and the last
-// of them. Both checks then hold the file to its source with those changes
+// were and as they are; and whole lines cut, listed by where the cut starts
+// and where it stops. Both checks then hold the file to its source with those changes
 // made, and to nothing else. A change cannot be passed by writing it into the
 // record: it has to be listed here, where it is reviewed.
 //
@@ -50,9 +50,14 @@ const SCHEMA_FROM_THE_COPY = {
  *   changes   file → what differs here, in the order it is done, each with why:
  *             { original, replacement, reason }   lines swapped for others; each
  *                                                 is one or more whole lines
- *             { cut: { from, to }, reason }       lines cut, from the line
- *                                                 `from` to the first line `to`
- *                                                 at or after it
+ *             { cut: { from, to }, reason }       lines cut, from the first line
+ *                                                 of `from` to the last of `to`
+ *             { cut: { from, before }, reason }   lines cut, from the first line
+ *                                                 of `from` to the line before
+ *                                                 `before`, or to the end of the
+ *                                                 file when `before` is null
+ *             Each of `original`, `from`, `to` and `before` is one or more
+ *             whole lines that stand in the file exactly once.
  */
 export const COPIED = {
   name: 'safety.viz’s demo app, as study.viz began',
@@ -135,7 +140,19 @@ export const COPIED = {
     'scripts/build-app-fixture.mjs',
     'docs/DATA_SOURCES.md',
     // The rung each chart and each tab of the app stands on.
-    'site/config.json'
+    'site/config.json',
+    // The builds: the app bundle and the single file, the libraries they
+    // carry, the app's directory and its page, and the demo on a reader's own
+    // machine.
+    'scripts/build-app.mjs',
+    'scripts/app-libraries.mjs',
+    'scripts/builder-lib.mjs',
+    'scripts/tiers.mjs',
+    'scripts/demo-app.mjs',
+    'scripts/site-lib.mjs',
+    'scripts/demo.mjs',
+    'scripts/demo-server.mjs',
+    'scripts/install-demo.mjs'
   ],
   left: {},
   changes: {
@@ -158,6 +175,238 @@ export const COPIED = {
     ],
     'tests/unit/app/libraries.test.js': [SCHEMA_FROM_THE_COPY],
     'tests/unit/app/biomarkers.test.js': [SCHEMA_FROM_THE_COPY],
+    // The app's footer names two versions: the app's own, which is study.viz's
+    // from package.json, and the safety.viz version of the charts it carries. In
+    // safety.viz one version was both; here the charts' is the copied bundle's.
+    'scripts/build-app.mjs': [
+      {
+        original: "import { RBQM_TAB } from './rbqm-lib.mjs';",
+        replacement:
+          "import { RBQM_TAB } from './rbqm-lib.mjs';\n" +
+          "import { chartsVersion } from './safety-viz-lib.mjs';",
+        reason: 'The version of the copied safety.viz bundle, from its record.'
+      },
+      {
+        original:
+          "const { version } = JSON.parse(readFileSync(path.join(rootDir, 'package.json'), 'utf8'));",
+        replacement:
+          '// The app’s footer names two versions. The app’s own is study.viz’s, from package.json. The\n' +
+          '// chart library’s is the copied safety.viz bundle’s, from its record\n' +
+          '// (scripts/safety-viz-lib.mjs).\n' +
+          'const { version: appVersion } = JSON.parse(\n' +
+          "  readFileSync(path.join(rootDir, 'package.json'), 'utf8')\n" +
+          ');\n' +
+          'const version = chartsVersion();',
+        reason:
+          'The footer says "study.viz" and the app’s own version, then "safety.viz" and the ' +
+          'version of the charts. package.json here is study.viz’s, so its version is the first. ' +
+          'The record of the copied bundle names the safety.viz version the charts are.'
+      },
+      {
+        original:
+          "  // The version shown in the app's footer.\n" +
+          '  define: { __SAFETY_VIZ_VERSION__: JSON.stringify(version) },',
+        replacement:
+          "  // The versions shown in the app's footer: the chart library's, and the app's own.\n" +
+          '  define: {\n' +
+          '    __SAFETY_VIZ_VERSION__: JSON.stringify(version),\n' +
+          '    __STUDY_VIZ_VERSION__: JSON.stringify(appVersion)\n' +
+          '  },',
+        reason:
+          'A second value built into the bundle: study.viz’s own version, for the footer. The ' +
+          'first keeps its name and is still the safety.viz version of the charts.'
+      }
+    ],
+    // The docs-site generators stay in safety.viz with the docs site: the chart
+    // gallery, each chart's pages, the API reference, the evidence pages, the
+    // guides, the Domains page and the shell they are written through. What is
+    // kept is the demo app's page, its typefaces, the count words its
+    // description uses and the check of internal links.
+    'scripts/site-lib.mjs': [
+      {
+        original:
+          '// Docs-site generators (#7): pure functions scripts/site.mjs assembles into\n' +
+          '// _site/. Plain Node, no framework, per design #21 — and every internal URL\n' +
+          '// relative, so one build serves the site root, /dev/, and /pr/{N}/ unchanged.',
+        replacement:
+          '// Site generators: pure functions scripts/site.mjs and scripts/demo-app.mjs\n' +
+          '// assemble into _site/. Plain Node, no framework, and every internal URL\n' +
+          '// relative, so one build serves the site root, /dev/, and /pr/{N}/ unchanged.\n' +
+          '// This is the demo half of safety.viz’s scripts/site-lib.mjs: the docs-site\n' +
+          '// generators stay in safety.viz (scripts/copied-lib.mjs lists what was cut).',
+        reason: 'The file’s opening comment said it held the docs-site generators.'
+      },
+      {
+        cut: {
+          from: "import { tierNoteOf, tierOf } from '../src/tiers.js';",
+          to: "import { TIER_MEANINGS, statusHeading, statusLabelHtml } from '../src/status-label.js';"
+        },
+        reason: 'Read only by the docs-site generators cut below.'
+      },
+      {
+        cut: {
+          from: '// Minimal inline-markdown renderer for the subset the coverage docs use:',
+          before: '// A count as a reader would write it in a sentence: a word up to twenty, and'
+        },
+        reason:
+          'The markdown renderer, the coverage-table reader and the evidence page: the docs ' +
+          'site’s, which stays in safety.viz.'
+      },
+      {
+        cut: {
+          from: "// The home page's description, for search engines and link previews (#286).",
+          before:
+            '/**\n' + " * The demo app's typefaces (#165): the font files its page declares, served"
+        },
+        reason:
+          'The chart gallery, the About and Architecture pages, the API reference, the kit page ' +
+          'and each chart’s demo page: the docs site’s, which stays in safety.viz.'
+      },
+      {
+        cut: {
+          from: "// Build the guide's on-page table of contents from its ## sections and their",
+          before: 'function walkHtmlFiles(dir) {'
+        },
+        reason:
+          'The clinical guide page, the Domains page, the published manifest, the gallery ' +
+          'navigation and the docs shell: the docs site’s, which stays in safety.viz.'
+      },
+      {
+        cut: {
+          from:
+            '\n' + '// Build validation (#7): every screenshot evidence.json references must exist',
+          before: null
+        },
+        reason: 'The check of evidence screenshots: the evidence pages stay in safety.viz.'
+      }
+    ],
+    // The tests of the site build keep what is about the demo app's page and
+    // the link check, and lose what is about the docs site.
+    'tests/unit/site/demo-app-page.test.js': [
+      {
+        original:
+          'import {\n' +
+          '  DEMO_APP_FONTS,\n' +
+          '  publishDemoAppFonts,\n' +
+          '  renderDemoAppPage,\n' +
+          '  renderShell\n' +
+          "} from '../../../scripts/site-lib.mjs';",
+        replacement:
+          'import {\n' +
+          '  DEMO_APP_FONTS,\n' +
+          '  publishDemoAppFonts,\n' +
+          '  renderDemoAppPage\n' +
+          "} from '../../../scripts/site-lib.mjs';",
+        reason: 'renderShell writes the docs site’s pages, and stays in safety.viz.'
+      },
+      {
+        cut: {
+          from: "// The docs site's header sets the app's link apart (#172): it is the one entry",
+          before: "// Each chart's own pages (#246): the footnote under a chart in the app links"
+        },
+        reason:
+          'Two tests, both named APP-PAGE-029, of the Demo app link in the docs site’s header: ' +
+          'they read site/shell.html and site/site.css, which stay in safety.viz.'
+      },
+      {
+        original:
+          "  it('APP-PAGE-031: every address of a safety chart is a page the site build writes: its renderer is available, and its guide is a file in docs/guides/ (#246)', () => {",
+        replacement:
+          "  it('APP-PAGE-031: every address of a safety chart is a page safety.viz’s site build writes: its renderer is available (#246)', () => {",
+        reason:
+          'The chart pages and the guides in docs/guides/ are safety.viz’s. The name no longer ' +
+          'claims the guide file is checked: see the next change.'
+      },
+      {
+        original:
+          '      if (links[module].guide) {\n' +
+          "        expect(existsSync(path.join(rootDir, 'docs/guides', renderer(module).guide)), module).toBe(\n" +
+          '          true\n' +
+          '        );\n' +
+          '      }',
+        replacement:
+          '      // That a chart’s guide is a file in docs/guides/ is held in safety.viz, where the\n' +
+          '      // guides are.',
+        reason:
+          'One assertion, that each guide named in site/config.json is a file in docs/guides/. ' +
+          'The guides stay in safety.viz, so there is no file here to look for.'
+      }
+    ],
+    'tests/unit/site/favicon.test.js': [
+      {
+        cut: {
+          from: "import { readFileSync } from 'node:fs';",
+          to: "import { readFileSync } from 'node:fs';"
+        },
+        reason: 'It read site/shell.html, the docs shell, which stays in safety.viz.'
+      },
+      {
+        original: "import { renderDemoAppPage, renderShell } from '../../../scripts/site-lib.mjs';",
+        replacement: "import { renderDemoAppPage } from '../../../scripts/site-lib.mjs';",
+        reason: 'renderShell writes the docs site’s pages, and stays in safety.viz.'
+      },
+      {
+        original:
+          '// One favicon for the docs site and the demo app (#270, obot.roadmap#402): the\n' +
+          "// seven-hex mark the app's header carries.\n" +
+          '\n' +
+          "const shell = readFileSync(new URL('../../../site/shell.html', import.meta.url), 'utf8');",
+        replacement:
+          '// The demo app’s favicon (#270, obot.roadmap#402): the seven-hex mark the app’s\n' +
+          '// header carries. That the docs site’s pages serve the same one is held in\n' +
+          '// safety.viz, where the docs shell is.\n',
+        reason: 'The docs shell, site/shell.html, stays in safety.viz.'
+      },
+      {
+        original:
+          "  it('APP-PAGE-039: every docs page and the demo app’s page serve the same favicon, the hex mark, as a data address that asks nothing of another file (#270)', () => {\n" +
+          "    const docs = renderShell({ shell, title: 'Gallery', content: '<p>x</p>' });\n" +
+          "    const deep = renderShell({ shell, title: 'Guide', content: '<p>x</p>', root: '../' });",
+        replacement:
+          "  it('APP-PAGE-039: the demo app’s page serves the hex mark as its favicon, as a data address that asks nothing of another file (#270)', () => {",
+        reason:
+          'The two docs pages are written through the docs shell, which stays in safety.viz. The ' +
+          'name says what is still held.'
+      },
+      {
+        cut: {
+          from: '    expect(iconOf(docs)).toBe(LOGO_HREF);',
+          to: '    expect(iconOf(deep)).toBe(LOGO_HREF);'
+        },
+        reason: 'Two assertions about the docs pages’ favicon.'
+      },
+      {
+        cut: {
+          from: '    // The shell names no icon of its own, and no placeholder is left unfilled.',
+          to: "    expect(docs).not.toContain('f97316');"
+        },
+        reason: 'Four assertions about the docs shell’s icon placeholder.'
+      }
+    ],
+    'tests/unit/site/validate.test.js': [
+      {
+        original:
+          "import { validateSiteLinks, validateEvidenceScreenshots } from '../../../scripts/site-lib.mjs';",
+        replacement: "import { validateSiteLinks } from '../../../scripts/site-lib.mjs';",
+        reason: 'The check of evidence screenshots stays in safety.viz with the evidence pages.'
+      },
+      {
+        original:
+          '// Built-in validation (#7): the site build must fail on broken internal\n' +
+          '// links and on screenshots referenced in evidence.json but missing on disk.',
+        replacement:
+          '// Built-in validation (#7): the site build must fail on broken internal links.',
+        reason: 'The comment named the check that is cut below.'
+      },
+      {
+        cut: {
+          from: "\ndescribe('site validation: evidence screenshots', () => {",
+          before: null
+        },
+        reason:
+          'One test of validateEvidenceScreenshots, which stays in safety.viz with the evidence pages.'
+      }
+    ],
     'tests/unit/app/status-label.test.js': [
       {
         cut: {
@@ -222,6 +471,173 @@ const WHY = {
 const why = (...keys) => keys.map((key) => WHY[key]).join(' ');
 
 const RENAMED = {
+  'scripts/build-app.mjs': [
+    {
+      original:
+        '//   safety.viz-app.js     one IIFE script with the global `SafetyVizApp`, for\n' +
+        "//                         the site's demo app page and the browser tests\n" +
+        '//   safety.viz-app.html   the same script inlined into one HTML file that opens',
+      replacement:
+        '//   study.viz-app.js      one IIFE script with the global `SafetyVizApp`, for\n' +
+        "//                         the site's demo app page and the browser tests\n" +
+        '//   study.viz-app.html    the same script inlined into one HTML file that opens',
+      reason: why('files')
+    },
+    {
+      original:
+        "export const APP_BUNDLE = 'safety.viz-app.js';\n" +
+        "export const APP_HTML = 'safety.viz-app.html';",
+      replacement:
+        "export const APP_BUNDLE = 'study.viz-app.js';\n" +
+        "export const APP_HTML = 'study.viz-app.html';",
+      reason: why('files')
+    },
+    {
+      original:
+        '<meta name="description" content="The safety.viz demo app in one file: load a study, map its columns and review it in the safety and biomarker charts. It runs in this browser with no network; nothing is sent anywhere.">\n' +
+        '<title>safety.viz demo</title>',
+      replacement:
+        '<meta name="description" content="The study.viz demo app in one file: load a study, map its columns and review it in the safety and biomarker charts. It runs in this browser with no network; nothing is sent anywhere.">\n' +
+        '<title>study.viz demo</title>',
+      reason: why('title', 'name')
+    },
+    {
+      original:
+        ' * @param {string} outDir The directory to write `safety.viz-app.js` (with its source map) and `safety.viz-app.html` into.',
+      replacement:
+        ' * @param {string} outDir The directory to write `study.viz-app.js` (with its source map) and `study.viz-app.html` into.',
+      reason: why('files')
+    }
+  ],
+  'scripts/demo-app.mjs': [
+    {
+      original:
+        '//   safety.viz-app.js      the app bundle, with its source map\n' +
+        '//   safety.viz-app.html    the single file, offered as a download',
+      replacement:
+        '//   study.viz-app.js       the app bundle, with its source map\n' +
+        '//   study.viz-app.html     the single file, offered as a download',
+      reason: why('files')
+    }
+  ],
+  'scripts/demo.mjs': [
+    {
+      original: 'Builds the safety.viz demo app and serves it on this machine.',
+      replacement: 'Builds the study.viz demo app and serves it on this machine.',
+      reason: why('name')
+    },
+    {
+      original: '  console.log(`\\nThe safety.viz demo app is running at ${url}`);',
+      replacement: '  console.log(`\\nThe study.viz demo app is running at ${url}`);',
+      reason: why('name')
+    }
+  ],
+  'scripts/install-demo.mjs': [
+    {
+      original: '// The safety.viz demo app, installed and started on your own machine (#214).',
+      replacement: '// The study.viz demo app, installed and started on your own machine (#214).',
+      reason: why('installer')
+    },
+    {
+      original:
+        '// It checks for Node, git and npm, clones a release of safety.viz into\n' +
+        "// ./safety.viz, installs what the release's lock file names, builds the demo",
+      replacement:
+        '// It checks for Node, git and npm, clones a release of study.viz into\n' +
+        "// ./study.viz, installs what the release's lock file names, builds the demo",
+      reason: why('installer')
+    },
+    {
+      original: '//   node install-demo.mjs --ref v1.9.2 --dir my-demo --port 5050 --no-open',
+      replacement: '//   node install-demo.mjs --ref v0.1.0 --dir my-demo --port 5050 --no-open',
+      reason: why('installer')
+    },
+    {
+      original:
+        '/** What is installed when nothing is said: the latest release, into ./safety.viz. */\n' +
+        'export const DEFAULTS = Object.freeze({\n' +
+        "  dir: 'safety.viz',\n" +
+        '  // `main` is the release branch: it holds the latest release.\n' +
+        "  ref: 'main',\n" +
+        "  repo: 'https://github.com/jwildfire/safety.viz.git',",
+      replacement:
+        '/** What is installed when nothing is said: the latest release, into ./study.viz. */\n' +
+        'export const DEFAULTS = Object.freeze({\n' +
+        "  dir: 'study.viz',\n" +
+        '  // `main` is the release branch: it holds the latest release.\n' +
+        "  ref: 'main',\n" +
+        "  repo: 'https://github.com/jwildfire/study.viz.git',",
+      reason: why('installer')
+    },
+    {
+      original: 'Installs the safety.viz demo app into a directory and starts it on this machine.',
+      replacement:
+        'Installs the study.viz demo app into a directory and starts it on this machine.',
+      reason: why('installer')
+    },
+    {
+      original:
+        " * @returns {'absent'|'empty'|'checkout'|'other'} Nothing; an empty directory; a safety.viz checkout; or something else, which is left alone.",
+      replacement:
+        " * @returns {'absent'|'empty'|'checkout'|'other'} Nothing; an empty directory; a study.viz checkout; or something else, which is left alone.",
+      reason: why('installer')
+    },
+    {
+      original: "    return name === 'safety.viz' ? 'checkout' : 'other';",
+      replacement: "    return name === 'study.viz' ? 'checkout' : 'other';",
+      reason: why('installer')
+    },
+    {
+      original: '            say: `Downloading safety.viz (${options.ref}) into ${options.dir}…`,',
+      replacement:
+        '            say: `Downloading study.viz (${options.ref}) into ${options.dir}…`,',
+      reason: why('installer')
+    },
+    {
+      original: '      `${options.dir} already holds something that is not safety.viz.`,',
+      replacement: '      `${options.dir} already holds something that is not study.viz.`,',
+      reason: why('installer')
+    },
+    {
+      original:
+        '        `${options.dir} already holds safety.viz ${held.version}${from}, and it is used as it is.`,',
+      replacement:
+        '        `${options.dir} already holds study.viz ${held.version}${from}, and it is used as it is.`,',
+      reason: why('installer')
+    },
+    {
+      original:
+        '    console.log(`safety.viz ${held.version} is already in ${options.dir}; using it.`);',
+      replacement:
+        '    console.log(`study.viz ${held.version} is already in ${options.dir}; using it.`);',
+      reason: why('installer')
+    },
+    {
+      original:
+        '        `safety.viz ${versionIn(options.dir)}, in ${options.dir}, has no demo command: it came in v1.9.2.`,',
+      replacement:
+        '        `study.viz ${versionIn(options.dir)}, in ${options.dir}, has no demo command.`,',
+      reason: why('installer')
+    }
+  ],
+  'scripts/site-lib.mjs': [
+    {
+      original:
+        '<meta name="description" content="The safety.viz demo app: load a study, check how its columns map, and review it in ${escapeHtml(charts)}. ${libraries.length ? HOSTED_DESCRIPTION : \'It runs in your browser; nothing is uploaded.\'}">\n' +
+        '<title>safety.viz demo</title>',
+      replacement:
+        '<meta name="description" content="The study.viz demo app: load a study, check how its columns map, and review it in ${escapeHtml(charts)}. ${libraries.length ? HOSTED_DESCRIPTION : \'It runs in your browser; nothing is uploaded.\'}">\n' +
+        '<title>study.viz demo</title>',
+      reason: why('title', 'name')
+    },
+    {
+      original:
+        '<noscript>The safety.viz demo app needs JavaScript: it reads and draws your data in this browser.</noscript>',
+      replacement:
+        '<noscript>The study.viz demo app needs JavaScript: it reads and draws your data in this browser.</noscript>',
+      reason: why('name')
+    }
+  ],
   'site/config.json': [
     {
       original:
@@ -1110,7 +1526,6 @@ function placeOf(lines, block, said) {
 }
 
 const isText = (value) => typeof value === 'string' && value !== '' && !/\r/.test(value);
-const isLine = (value) => isText(value) && !/\n/.test(value);
 const isSwap = (change) => change && change.cut === undefined;
 
 // A file's listed changes, each checked to be a change that can be held to:
@@ -1122,8 +1537,12 @@ function listedChanges(changes) {
   for (const change of changes) {
     const { original, replacement, cut, reason } = change || {};
     if (cut !== undefined) {
-      if (!cut || !isLine(cut.from) || !isLine(cut.to)) {
-        throw new Error('A listed cut needs its first line and its last, each one whole line.');
+      const ends = cut && ['to', 'before'].filter((end) => cut[end] !== undefined);
+      const end = ends && ends.length === 1 ? cut[ends[0]] : undefined;
+      if (!cut || !isText(cut.from) || !(isText(end) || (ends[0] === 'before' && end === null))) {
+        throw new Error(
+          'A listed cut needs where it starts, and either its last lines or the lines it stops before.'
+        );
       }
     } else if (!isText(original) || !isText(replacement) || original === replacement) {
       throw new Error('A listed change needs the lines as they were, and others as they are.');
@@ -1135,14 +1554,23 @@ function listedChanges(changes) {
   return changes;
 }
 
-// One cut made: the lines from `from`, which must be there once, to the first
-// `to` at or after it, taken out. Returns what was taken, for the record.
-function cutLines(lines, { from, to }) {
-  const { at } = placeOf(lines, from, 'the line');
-  const end = lines.indexOf(byteText(to), at);
-  if (end === -1)
-    throw new Error(`the line ${JSON.stringify(to)} does not follow its cut's first.`);
-  return lines.splice(at, end - at + 1);
+// One cut made: the lines from the first of `from`, which must be there once,
+// to the last of `to`, or to the line before `before`, or to the end of the
+// file, taken out. The file's last line feed is never taken. Returns what was
+// taken, for the record.
+function cutLines(lines, { from, to, before }) {
+  const { at } = placeOf(lines, from, 'the lines');
+  let stop;
+  if (to !== undefined) {
+    const last = placeOf(lines, to, 'the lines');
+    stop = last.at + last.length;
+  } else if (before === null) {
+    stop = lines[lines.length - 1] === '' ? lines.length - 1 : lines.length;
+  } else {
+    stop = placeOf(lines, before, 'the lines').at;
+  }
+  if (stop <= at) throw new Error(`the cut from ${JSON.stringify(from)} stops before it starts.`);
+  return lines.splice(at, stop - at);
 }
 
 /**
@@ -1165,6 +1593,7 @@ export function applyChanges(bytes, changes) {
       return change;
     }
     const taken = cutLines(lines, change.cut);
+    if (!taken.length) throw new Error('a listed cut takes nothing.');
     return {
       cut: { ...change.cut, lines: taken.length, sha256: sha256(bytesOf(taken)) },
       reason: change.reason
@@ -1202,11 +1631,11 @@ export function undoChanges(bytes, changes) {
  */
 export const asListed = (changes) =>
   Array.isArray(changes)
-    ? changes.map((change) =>
-        isSwap(change)
-          ? change
-          : { cut: { from: change.cut.from, to: change.cut.to }, reason: change.reason }
-      )
+    ? changes.map((change) => {
+        if (isSwap(change)) return change;
+        const { lines: _lines, sha256: _sha256, ...cut } = change.cut;
+        return { cut, reason: change.reason };
+      })
     : changes;
 
 /**
