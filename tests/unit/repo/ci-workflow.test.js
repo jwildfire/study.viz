@@ -8,23 +8,33 @@ import { parse } from 'yaml';
 // its name, what starts it, a read-only token, a time limit, a named runner
 // image, and every command the check rests on, each the whole of one step that
 // cannot be skipped or allowed to fail. Adding a check adds a line to REQUIRED.
+//
+// The checks of a copy come in two kinds, and the job runs both (#24). A
+// `:check` compares the copy with its record and reads no network; a file
+// changed together with its record passes it. A `:check-source` reads the
+// source repository, and is the one that catches that.
 
 const read = (file) =>
   parse(readFileSync(new URL(`../../../.github/workflows/${file}`, import.meta.url), 'utf8'));
 
 const CHECK_NAME = 'Build, format, and test';
+const COPIES = [
+  'copied',
+  'safety-viz',
+  'bio-viz',
+  'statistics',
+  'r-wasm',
+  'gsm-workflows',
+  'gsm-viz',
+  'rbqm-study',
+  'study-builder'
+];
+const SOURCE_CHECKS = COPIES.map((copy) => `npm run ${copy}:check-source`);
 const REQUIRED = [
   'npm ci',
   'npm run format:check',
-  'npm run copied:check',
-  'npm run safety-viz:check',
-  'npm run bio-viz:check',
-  'npm run statistics:check',
-  'npm run r-wasm:check',
-  'npm run gsm-workflows:check',
-  'npm run gsm-viz:check',
-  'npm run rbqm-study:check',
-  'npm run study-builder:check',
+  ...COPIES.map((copy) => `npm run ${copy}:check`),
+  ...SOURCE_CHECKS,
   'npm test',
   'npm run site',
   'npm run build:app',
@@ -78,14 +88,49 @@ describe('the required check', () => {
       expect(step.if, step.name).toBeUndefined();
     }
   });
+
+  it('REPO-CI-009: runs the source check of every copy that has one, and gives a step no token but the job’s own read-only one', () => {
+    // Every `:check-source` script in package.json is a step: a copy added with one cannot be left out.
+    const scripts = JSON.parse(
+      readFileSync(new URL('../../../package.json', import.meta.url), 'utf8')
+    ).scripts;
+    const sourceScripts = Object.keys(scripts).filter((name) => name.endsWith(':check-source'));
+    expect(sourceScripts.map((name) => `npm run ${name}`).sort()).toEqual(
+      [...SOURCE_CHECKS].sort()
+    );
+    const commands = jobs[0].steps.filter((step) => step.run).map((step) => step.run.trim());
+    for (const command of SOURCE_CHECKS) expect(commands).toContain(command);
+    // The sources are public. The one thing a step may be handed is the job's
+    // own token, which `permissions` makes read-only, and only a source check
+    // is handed it; the workflow names no secret anywhere.
+    const text = readFileSync(
+      new URL('../../../.github/workflows/ci.yml', import.meta.url),
+      'utf8'
+    );
+    expect(text).not.toMatch(/\bsecrets\s*\./);
+    expect(workflow.env).toBeUndefined();
+    expect(jobs[0].env).toBeUndefined();
+    for (const step of jobs[0].steps) {
+      if (step.env === undefined) continue;
+      expect(step.env, step.name).toEqual({ GITHUB_TOKEN: '${{ github.token }}' });
+      expect(SOURCE_CHECKS, step.name).toContain(String(step.run).trim());
+    }
+    // The checks that ask GitHub's API for safety.viz are handed it: unauthenticated, the API's limit is per address.
+    for (const copy of ['copied', 'safety-viz']) {
+      const step = jobs[0].steps.find(
+        (one) => String(one.run).trim() === `npm run ${copy}:check-source`
+      );
+      expect(step.env, step.name).toEqual({ GITHUB_TOKEN: '${{ github.token }}' });
+    }
+  });
 });
 
 // The evidence refresh (.github/workflows/evidence-update.yml) is not part of
 // the check. It makes the pictures the browser tests are compared with again,
 // and commits them to a branch, so these tests hold what makes that safe: the
 // same runner image as the check, a start only by hand or by its own event, a
-// refusal of the branches a pull request guards, and a commit of nothing but
-// the pictures.
+// refusal of the branches a pull request guards, and a commit that stages
+// nothing outside docs/evidence, where the pictures are.
 describe('the evidence refresh', () => {
   const refresh = read('evidence-update.yml');
   const refreshJobs = Object.values(refresh.jobs);
@@ -109,7 +154,7 @@ describe('the evidence refresh', () => {
     for (const command of commands) expect(command).not.toContain('${{');
   });
 
-  it('REPO-CI-008: runs the browser tests as the check runs them, with --update-snapshots, and commits only the pictures', () => {
+  it('REPO-CI-008: runs the browser tests as the check runs them, with --update-snapshots, and stages nothing but docs/evidence for its commit', () => {
     expect(commands).toContain('npm ci');
     expect(commands).toContain('npx playwright install --with-deps chromium');
     expect(commands).toContain('npm run test:e2e -- --project=chromium --update-snapshots');

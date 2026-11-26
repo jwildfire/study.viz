@@ -21,13 +21,14 @@ npm run bio-viz:check      # each copied library matches its record; likewise st
 
 ## Rules that are easy to break
 
+- No statistical test, estimate, interval or model is computed in study.viz's own JavaScript: R computes them and the browser draws the result. The copied chart bundles keep their own repositories' rules.
 - No chart's source is in study.viz. The charts are safety.viz's built bundle, copied byte for byte into `site/vendor/safety.viz/` by `node scripts/vendor-safety-viz.mjs`. Never edit anything under `site/vendor/`. `src/main.js`, `src/tiers.js` and `src/status-label.js` only hand the copy on, and `src/data/portfolio.json` is written by that script from the bundle: never edit it.
-- The other libraries under `site/vendor/` and the RBQM study in `site/data/rbqm/` are copied by the `scripts/vendor-*.mjs` scripts, each with a `SOURCE.json`. Copy one again with its script; do not edit the copy or its record.
+- The other libraries under `site/vendor/` and the RBQM study in `site/data/rbqm/` are copied by the `scripts/vendor-*.mjs` scripts, each with a `SOURCE.json`. Do not edit a copy or its record. These copies and their scripts came from safety.viz with the app and are in the root `SOURCE.json` too, so copying one again here with its script alone fails `npm run copied:check`: safety.viz moves its copy first, then study.viz takes that commit of safety.viz (CONTRIBUTING.md, "The record of the copy").
 - `site/data/*.csv` are generated (`docs/DATA_SOURCES.md`): never edit a cell. `tests/fixtures/` holds desktop R's answers, written by `scripts/rbqm-reference.mjs` and `scripts/app-statistics.R`: never type a number into it.
 - Screenshot baselines (`docs/evidence/basic-app/*.png`) are made only on the Linux CI runner, by the `Update evidence baselines` workflow (`.github/workflows/evidence-update.yml`). Never commit a capture from another system.
 - The browser tests tagged `@real-r` run real R from its public hosts and need the network. They fail when it is unreachable; do not make them skip or retry.
 - Public or synthetic data only.
-- `src/app/`, its tests and what they read were copied from safety.viz at the commit `SOURCE.json` names. Change a copied file only by listing the change, with its reason, in `scripts/copied-lib.mjs`, then run `node scripts/copied.mjs --from <safety.viz clone>`; `npm test` fails otherwise. Never edit `SOURCE.json` by hand.
+- `src/app/`, its tests and what they read were copied from safety.viz at the commit `SOURCE.json` names. Change a copied file only by listing the change, with its reason, in `scripts/copied-lib.mjs`, then run `node scripts/copied.mjs --from <safety.viz clone>`; `npm test` fails otherwise. Never edit `SOURCE.json` by hand. A file of study.viz's own added under a copied folder is listed under `own` there, or `npm test` fails and names it.
 - The app's name is study.viz wherever a reader sees it: the wordmark, the page titles, the files it writes, its console warnings and its GitHub link. safety.viz names the chart library and its site. The global `SafetyVizApp`, `window.__safetyVizApp`, the `sva-` classes and the `safetyVizMapping` key of a saved mapping file are internal and keep their names.
 
 ## Branches

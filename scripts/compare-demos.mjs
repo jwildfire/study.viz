@@ -12,7 +12,7 @@
 //
 // Nothing is asserted: the numbers are written exactly as each page shows
 // them, to <folder>/counts.json, and the two sites are set side by side in
-// <folder>/comparison.md. The RBQM metrics are run by real R in the browser,
+// <folder>/table.md. The RBQM metrics are run by real R in the browser,
 // which each page downloads from R's public hosts when its Start R is pressed;
 // --no-r leaves that out and writes down only what needs no R.
 //

@@ -4,3 +4,10 @@ test-results/
 _site/
 _site.build-*/
 build/
+# The demo-path walk's screenshots: `npm run demo-path` writes them on every
+# walk, and they are never committed (scripts/copied-lib.mjs lists them as left
+# behind in safety.viz).
+docs/evidence/basic-app/demo-path/
+# Finder's own file, which it writes into any folder it has shown. Untracked
+# and not ignored under a copied folder, it would fail `npm run copied:check`.
+.DS_Store
