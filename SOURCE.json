@@ -1,0 +1,987 @@
+{
+  "copy": "safety.viz’s demo app, as study.viz began",
+  "repository": "https://github.com/jwildfire/safety.viz",
+  "commit": "f94fea414c888b0ad1d628598bf023b24a659038",
+  "version": "1.12.0",
+  "merged_to_dev": true,
+  "left": [],
+  "files": [
+    {
+      "file": "src/app/builder-view.js",
+      "sha256": "45081ae30a34cd93bf543cf85b23c41912f9e8b7a1c5877952f5fdd4c13ad2d1",
+      "bytes": 13230
+    },
+    {
+      "file": "src/app/charts.js",
+      "sha256": "a1594cb551d3e622325af7b02e1d24f801938bb7dc4e8ae2478688066845548c",
+      "bytes": 10773
+    },
+    {
+      "file": "src/app/data-panel.js",
+      "sha256": "5823459b237383b99938a058acbf0a6f336dbffc4d64e8755757c9a502e144bd",
+      "bytes": 32665
+    },
+    {
+      "file": "src/app/detect.js",
+      "sha256": "809f7af72964bbad2f3cae6bfb52bcfb9421a70a7f3d2f37bf5ae36f027887a6",
+      "bytes": 3359
+    },
+    {
+      "file": "src/app/dom.js",
+      "sha256": "45366be1d39bb5f8357ec6d7ab95e5e9902a71ed62c1ab812b39733c11672368",
+      "bytes": 921
+    },
+    {
+      "file": "src/app/file-details.js",
+      "sha256": "78b4ab74f734907246cc48906a5f6f6813539509ada91ba755b1c2dc3044db3f",
+      "bytes": 6125
+    },
+    {
+      "file": "src/app/header.js",
+      "sha256": "f2de762a92942e7c0ef3ed3aa2e91f10fa278198fa3b61977ba9e707b9c26253",
+      "bytes": 3372
+    },
+    {
+      "file": "src/app/icons.js",
+      "sha256": "c63a1fc632da744ffb3c830b5265f93f3bd4f6fafd0d1e17eef793f2d4e905f8",
+      "bytes": 3713
+    },
+    {
+      "file": "src/app/libraries.js",
+      "sha256": "8bc8a4a8d6cf6b6141193658f67f62a00fc1e6200acf6d3beaefc31e1f4cce8f",
+      "bytes": 29772,
+      "source_sha256": "8b34bedea811cbcb262eb5074216318a7442b6449409312cbff58081110b8b42",
+      "source_bytes": 29778,
+      "changes": [
+        {
+          "original": "  const warn = (message) => console.warn(`safety.viz app: ${message}`);",
+          "replacement": "  const warn = (message) => console.warn(`study.viz app: ${message}`);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "          `safety.viz app: ${name} names a tab colour that is not a six-digit hex colour; the app chose one.`",
+          "replacement": "          `study.viz app: ${name} names a tab colour that is not a six-digit hex colour; the app chose one.`",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "    console.warn('safety.viz app: a library’s control could not say its state.', error);",
+          "replacement": "    console.warn('study.viz app: a library’s control could not say its state.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "    console.warn('safety.viz app: a library could not say its note.', error);",
+          "replacement": "    console.warn('study.viz app: a library could not say its note.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "    console.warn('safety.viz app: a view could not say whether a file is its own.', error);",
+          "replacement": "    console.warn('study.viz app: a view could not say whether a file is its own.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "    console.warn('safety.viz app: a view could not say what the loaded data supports.', error);",
+          "replacement": "    console.warn('study.viz app: a view could not say what the loaded data supports.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        }
+      ]
+    },
+    {
+      "file": "src/app/main.js",
+      "sha256": "105277145bffd3002bf09b6f2720bda26a136f3afe259feb9cfc6299566967cc",
+      "bytes": 3863,
+      "source_sha256": "8dac7bca8a8c05ed0c44ddc1aaa9a999cac70e1dc6824f59c959aacca08ed75b",
+      "source_bytes": 3665,
+      "changes": [
+        {
+          "original": "/* global __SAFETY_VIZ_VERSION__ */",
+          "replacement": "/* global __SAFETY_VIZ_VERSION__, __STUDY_VIZ_VERSION__ */",
+          "reason": "The footer names the app’s own version, study.viz’s, and beside it the safety.viz version of the charts it carries."
+        },
+        {
+          "original": " * Where the footer's links go when the host page does not say: the published\n * site. The single-file build keeps these, since it has no site around it.",
+          "replacement": " * Where the footer's links go when the host page does not say: the charts'\n * docs and the Domains page on safety.viz's published site, and study.viz's\n * own repository. The single-file build keeps these, since it has no site\n * around it.",
+          "reason": "The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        },
+        {
+          "original": "  github: 'https://github.com/jwildfire/safety.viz'",
+          "replacement": "  github: 'https://github.com/jwildfire/study.viz'",
+          "reason": "The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "    ...options,",
+          "replacement": "    appVersion: typeof __STUDY_VIZ_VERSION__ === 'string' ? __STUDY_VIZ_VERSION__ : '',\n    ...options,",
+          "reason": "The footer names the app’s own version, study.viz’s, and beside it the safety.viz version of the charts it carries."
+        }
+      ]
+    },
+    {
+      "file": "src/app/mapping.js",
+      "sha256": "e2ed748f32c2bb0b77bdc7a35de5d3bb843a45915223bc5f38bf5225a12a3200",
+      "bytes": 14777,
+      "source_sha256": "6ace4cad4707a31da71826ffd8186bea5a1d444077b703a71e7d9e6c82a96049",
+      "source_bytes": 14778,
+      "changes": [
+        {
+          "original": "      'Provisional format, written by the safety.viz demo app. Drop this file on the app ' +",
+          "replacement": "      'Provisional format, written by the study.viz demo app. Drop this file on the app ' +",
+          "reason": "The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        }
+      ]
+    },
+    {
+      "file": "src/app/note.js",
+      "sha256": "30335a5fbaadc231ad10f7e2a3cc9cad91755f3fed7ba325537bedc08259667b",
+      "bytes": 2725
+    },
+    {
+      "file": "src/app/page.js",
+      "sha256": "02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6",
+      "bytes": 78606,
+      "source_sha256": "ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997",
+      "source_bytes": 78012,
+      "changes": [
+        {
+          "original": "export const MAPPING_FILE_NAME = 'safety-viz-mapping.json';",
+          "replacement": "export const MAPPING_FILE_NAME = 'study-viz-mapping.json';",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": " * @param {{docs?: string, domains?: string, download?: string, github?: string}} [options.links] Where the footer's links go; a link with no address is left out. The wordmark is a link to `docs` too (#270).\n * @param {Object<string, {guide?: string, evidence?: string}>} [options.chartLinks] Each chart's own pages, keyed by module name: its clinical guide and its test evidence. A chart's view carries a footnote linking those it was given an address for (#246).\n * @param {Object<string, {tier: string, note?: string}>} [options.tiers] The rung of the status ladder each chart and each view stands on, keyed by module name or view id, with the sentence that says why where there is one (#272). A chart the page is told nothing of stands where its own entry says, by `tier` and `tierNote`, and on Exploratory when that names none.\n * @param {string} [options.version] The safety.viz version, shown in the footer.\n * @param {string} [options.title] The app's name in the browser tab's title, which names the open view before it: \"RBQM · safety.viz demo\" (#270).",
+          "replacement": " * @param {{home?: string, docs?: string, domains?: string, download?: string, github?: string}} [options.links] Where the footer's links go; a link with no address is left out. `docs` is the charts' docs, on safety.viz's site. The wordmark is a link to `home` when the page gives one, and plain words when it gives none.\n * @param {Object<string, {guide?: string, evidence?: string}>} [options.chartLinks] Each chart's own pages, keyed by module name: its clinical guide and its test evidence. A chart's view carries a footnote linking those it was given an address for (#246).\n * @param {Object<string, {tier: string, note?: string}>} [options.tiers] The rung of the status ladder each chart and each view stands on, keyed by module name or view id, with the sentence that says why where there is one (#272). A chart the page is told nothing of stands where its own entry says, by `tier` and `tierNote`, and on Exploratory when that names none.\n * @param {string} [options.version] The version of safety.viz, the chart library the app carries, shown in the footer.\n * @param {string} [options.appVersion] The app's own version, study.viz's, shown in the footer before the chart library's, on the same line.\n * @param {string} [options.title] The app's name in the browser tab's title, which names the open view before it: \"RBQM · study.viz demo\" (#270).",
+          "reason": "The footer names the app’s own version, study.viz’s, and beside it the safety.viz version of the charts it carries. The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’. The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        },
+        {
+          "original": "    title: appName = 'safety.viz demo',",
+          "replacement": "    appVersion = '',\n    title: appName = 'study.viz demo',",
+          "reason": "The footer names the app’s own version, study.viz’s, and beside it the safety.viz version of the charts it carries. The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        },
+        {
+          "original": "        `safety.viz app: a source was handed in with no id or an id already used (${id}); it was left out.`",
+          "replacement": "        `study.viz app: a source was handed in with no id or an id already used (${id}); it was left out.`",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "        `safety.viz app: a view was handed in with no id or an id already used (${id}); it was left out.`",
+          "replacement": "        `study.viz app: a view was handed in with no id or an id already used (${id}); it was left out.`",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "  // The wordmark leads to the docs home when the page says where that is (#270).\n  const brand = el(links.docs ? 'a' : 'div', 'sva-brand');\n  if (links.docs) {\n    brand.href = links.docs;\n    brand.title = 'safety.viz: docs and chart gallery';",
+          "replacement": "  // The wordmark is plain words, and a link only where the page says where the\n  // app's own home is. The charts' docs, on safety.viz's site, are a link in the\n  // footer.\n  const brand = el(links.home ? 'a' : 'div', 'sva-brand');\n  if (links.home) {\n    brand.href = links.home;\n    brand.title = 'study.viz: home';",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
+        },
+        {
+          "original": "  brand.append(\n    logo,\n    el('span', 'sva-wordmark', 'safety.viz'),\n    el('span', 'sva-kicker', 'Demo app')\n  );",
+          "replacement": "  brand.append(logo, el('span', 'sva-wordmark', 'study.viz'), el('span', 'sva-kicker', 'Demo app'));",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
+        },
+        {
+          "original": "    ['docs', 'Docs and chart gallery'],",
+          "replacement": "    ['docs', 'safety.viz chart docs and gallery'],",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
+        },
+        {
+          "original": "  if (version) railLinks.append(el('li', 'sva-version', `safety.viz ${version}`));",
+          "replacement": "  // The app's own version, and beside it the version of the chart library it carries.\n  const versions = [appVersion && `study.viz ${appVersion}`, version && `safety.viz ${version}`];\n  if (versions.some(Boolean)) {\n    railLinks.append(el('li', 'sva-version', versions.filter(Boolean).join(' · ')));\n  }",
+          "reason": "The footer names the app’s own version, study.viz’s, and beside it the safety.viz version of the charts it carries."
+        },
+        {
+          "original": "        console.warn('safety.viz app: a chart did not tear down cleanly.', error);",
+          "replacement": "        console.warn('study.viz app: a chart did not tear down cleanly.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "      console.warn('safety.viz app: a view could not list its items.', error);",
+          "replacement": "      console.warn('study.viz app: a view could not list its items.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "        console.warn('safety.viz app: a view’s control could not be read.', error);",
+          "replacement": "        console.warn('study.viz app: a view’s control could not be read.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "      console.warn('safety.viz app: a view could not say its tag.', error);",
+          "replacement": "      console.warn('study.viz app: a view could not say its tag.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "        'safety.viz app: a chart did not take its new settings; it is drawn again.',",
+          "replacement": "        'study.viz app: a chart did not take its new settings; it is drawn again.',",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "      console.warn('safety.viz app: a library’s control failed when pressed.', error);",
+          "replacement": "      console.warn('study.viz app: a library’s control failed when pressed.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "          'safety.viz app: a view could not say whether it shows the load’s notes.',",
+          "replacement": "          'study.viz app: a view could not say whether it shows the load’s notes.',",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "          console.warn('safety.viz app: a source could not list its studies.', error);",
+          "replacement": "          console.warn('study.viz app: a source could not list its studies.', error);",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        }
+      ]
+    },
+    {
+      "file": "src/app/parse.js",
+      "sha256": "26158b2c99410ad3adff567bd882beddee214a06664af4562c085c16edc20790",
+      "bytes": 5171
+    },
+    {
+      "file": "src/app/portfolio.js",
+      "sha256": "6eaa099d1d235bdc3ee49fe1c8b8ccadea1496abdfec8a3261be2891544a42ba",
+      "bytes": 9790
+    },
+    {
+      "file": "src/app/r-browser.js",
+      "sha256": "d7cc3aa380c804985327a434b62e0524cf39b608b29e0dbbbf03b40fa9541e33",
+      "bytes": 17021
+    },
+    {
+      "file": "src/app/r-control.js",
+      "sha256": "8fe005b9e0d46850a7bf123fff2500570f8ce8e25be4d6b1b162d2740a9e5c43",
+      "bytes": 9537
+    },
+    {
+      "file": "src/app/r-on-request.js",
+      "sha256": "bcaf96f09555edb3b7cd516bc81e1b758d205c3be255adba1a1c2e4bf276d7fc",
+      "bytes": 12328
+    },
+    {
+      "file": "src/app/r-words.js",
+      "sha256": "89b58459055afcf35e1fa0b2ed9270517d0754ae7e7ec768bb0244ae36821060",
+      "bytes": 6727
+    },
+    {
+      "file": "src/app/rbqm-files.js",
+      "sha256": "16709edee1cc14eb25782b3ee69b64899c509604b1639967e809428b5a640030",
+      "bytes": 17728
+    },
+    {
+      "file": "src/app/rbqm-view.js",
+      "sha256": "41fef5839465f788c55a1660bc8e247228f71ddcb6fa610ad4ab3c14a0406804",
+      "bytes": 40562
+    },
+    {
+      "file": "src/app/rbqm.js",
+      "sha256": "585d7cf74bac5e73f4028e6db6570760e8df7cb4fea78e5519c85173e89ccf16",
+      "bytes": 22579
+    },
+    {
+      "file": "src/app/site.js",
+      "sha256": "e0c7a8507dd67633b68b472dbfc94b853a3f60abe83ff32ffab4849b79246855",
+      "bytes": 344
+    },
+    {
+      "file": "src/app/status.js",
+      "sha256": "904b07d81037247306d4b7791fa325e3d8a18816266f7125ccdf297d664efe41",
+      "bytes": 8300
+    },
+    {
+      "file": "src/app/studies.js",
+      "sha256": "5c40b910fca8c292c001362e645cf970834bb4aa4d58818a2f883b7b47b73594",
+      "bytes": 3073
+    },
+    {
+      "file": "src/app/styles.js",
+      "sha256": "2e74d1d0ba370f2a0dc0ea48105218e3dc18107e91be0af2065bb6ca66165945",
+      "bytes": 34574
+    },
+    {
+      "file": "src/app/viewer-view.js",
+      "sha256": "21a7d28cf3aaa0ea6d6dda964bc7160b05f5128963dfa71ead5c38f55c4d0320",
+      "bytes": 7519
+    },
+    {
+      "file": "tests/e2e/fixtures/app/ae.csv",
+      "sha256": "d0401aa762bcd17790cc67c19c913460edcf2a71e2e1cccefc96de4b76eeaf0d",
+      "bytes": 16691
+    },
+    {
+      "file": "tests/e2e/fixtures/app/dm.csv",
+      "sha256": "6bce41f6fd61569283f4a7b5ff9b3c3908101a6f7de5d54781221f467c631bfa",
+      "bytes": 1421
+    },
+    {
+      "file": "tests/e2e/fixtures/app/ecg.json",
+      "sha256": "f802410605bde305d3d073382c36c4c653cdd43f9736340e373c74e14e2039a4",
+      "bytes": 120617
+    },
+    {
+      "file": "tests/e2e/fixtures/app/labs_final.csv",
+      "sha256": "df0e1ba92035fc9bd578da94180990690e8d3c430df54d9ee589e92ecae379ba",
+      "bytes": 183721
+    },
+    {
+      "file": "tests/e2e/fixtures/app/site_notes.csv",
+      "sha256": "2319e39a7457e3447a643b943da5feec60e58a589183e87d9b85f818cb4c2576",
+      "bytes": 234
+    },
+    {
+      "file": "tests/e2e/fixtures/stand-in-library.js",
+      "sha256": "23b3926d542128f1977d68df0223a1365fc42ed1b1d8094acba3f40ae8147bed",
+      "bytes": 4348
+    },
+    {
+      "file": "tests/fixtures/app-statistics/expected.json",
+      "sha256": "a5b68977b853f821b0b784072fa190a194396c91f1f231ba37afda3bc4fd3211",
+      "bytes": 12337,
+      "source_sha256": "5c47fcdbf7ab6fd8862ece5fc7ec40d5992f8c0ac36008195ad498ec74e58284",
+      "source_bytes": 12337,
+      "changes": [
+        {
+          "original": "   \"sha256\": \"6ace4cad4707a31da71826ffd8186bea5a1d444077b703a71e7d9e6c82a96049\"",
+          "replacement": "   \"sha256\": \"e2ed748f32c2bb0b77bdc7a35de5d3bb843a45915223bc5f38bf5225a12a3200\"",
+          "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
+        },
+        {
+          "original": "   \"sha256\": \"8b34bedea811cbcb262eb5074216318a7442b6449409312cbff58081110b8b42\"",
+          "replacement": "   \"sha256\": \"8bc8a4a8d6cf6b6141193658f67f62a00fc1e6200acf6d3beaefc31e1f4cce8f\"",
+          "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
+        },
+        {
+          "original": "   \"sha256\": \"ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997\"",
+          "replacement": "   \"sha256\": \"02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6\"",
+          "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
+        }
+      ]
+    },
+    {
+      "file": "tests/fixtures/app-statistics/requests.json",
+      "sha256": "9148a6a2c1cc9dea360be52ccb3be1ec78f1d175214e624a5764e5e791965089",
+      "bytes": 224662,
+      "source_sha256": "8cadd12174b4c3d2f1a259bb5d52c713c36c136291784f89a2a9f791fdfedc38",
+      "source_bytes": 224662,
+      "changes": [
+        {
+          "original": "   \"sha256\": \"6ace4cad4707a31da71826ffd8186bea5a1d444077b703a71e7d9e6c82a96049\"",
+          "replacement": "   \"sha256\": \"e2ed748f32c2bb0b77bdc7a35de5d3bb843a45915223bc5f38bf5225a12a3200\"",
+          "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
+        },
+        {
+          "original": "   \"sha256\": \"8b34bedea811cbcb262eb5074216318a7442b6449409312cbff58081110b8b42\"",
+          "replacement": "   \"sha256\": \"8bc8a4a8d6cf6b6141193658f67f62a00fc1e6200acf6d3beaefc31e1f4cce8f\"",
+          "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
+        },
+        {
+          "original": "   \"sha256\": \"ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997\"",
+          "replacement": "   \"sha256\": \"02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6\"",
+          "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
+        }
+      ]
+    },
+    {
+      "file": "tests/fixtures/rbqm/expected-standard.json",
+      "sha256": "c5101cccafe7f5eaa4a05afd572564b2e00a4207515cdb4798b279b51336c735",
+      "bytes": 620764
+    },
+    {
+      "file": "tests/fixtures/rbqm/expected-tab.json",
+      "sha256": "47a9db380a01ef39843ef891ceaf3d22f225c0f4956c916b6c3c4ad766be4725",
+      "bytes": 2086821
+    },
+    {
+      "file": "tests/fixtures/rbqm/expected.json",
+      "sha256": "462d20dfd700a0e2c247dcf4dbcffd4c32b70bcfd5905421688180e63790d117",
+      "bytes": 567732
+    },
+    {
+      "file": "tests/unit/app/biomarkers.test.js",
+      "sha256": "dc1df623414025fbdd6632b7829a9a56cd54a868a9d9109c4177be26fa34ff26",
+      "bytes": 14629
+    },
+    {
+      "file": "tests/unit/app/builder-view.test.js",
+      "sha256": "5cf8d20c8ba470160b157d67874c712ec00aabbdb9b501cc5e5b5706d9185b7e",
+      "bytes": 14599
+    },
+    {
+      "file": "tests/unit/app/charts.test.js",
+      "sha256": "51e4d863ef09979d2669177e02c6fd23b37f6207011728af9b6aa005d813829f",
+      "bytes": 22369
+    },
+    {
+      "file": "tests/unit/app/data-panel.test.js",
+      "sha256": "5bdaa6d6934c2c9c9ac178ac9fb97e20c695a5416b99984157de731e6f8f80b6",
+      "bytes": 59344,
+      "source_sha256": "7e88009aad1c8b5dbf9b85653c2d0008363f991b89def13e4405ab2f1efc5aaf",
+      "source_bytes": 59346,
+      "changes": [
+        {
+          "original": "      name: 'safety-viz-mapping.json',",
+          "replacement": "      name: 'study-viz-mapping.json',",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": "      'safety-viz-mapping.json is a saved mapping for: Subject-level (dm.csv), ' +",
+          "replacement": "      'study-viz-mapping.json is a saved mapping for: Subject-level (dm.csv), ' +",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/app/detect.test.js",
+      "sha256": "b7290046c506c141197399715e7be3d59956cdccc75e23e78f5a5ac359257eac",
+      "bytes": 5129
+    },
+    {
+      "file": "tests/unit/app/first-screen.test.js",
+      "sha256": "55ad819d1a3eb3379cadabae9f8091557075c86d1314496b4a03cea397ce9309",
+      "bytes": 7905
+    },
+    {
+      "file": "tests/unit/app/fixture.test.js",
+      "sha256": "50c129b72548f2e2a8d98c16720a9ed819df950cba9945d728cd9c2c6d7270e3",
+      "bytes": 1554
+    },
+    {
+      "file": "tests/unit/app/gsm-viz.test.js",
+      "sha256": "9bd2fb90d9ffe8fa7a8458dbf3b5e2aab78d14a077835fd4c7b79fe6ad9a5959",
+      "bytes": 6851
+    },
+    {
+      "file": "tests/unit/app/gsm-workflows.test.js",
+      "sha256": "98d1f138ceafeaee56dfc6a7cbb02b093cd2844a9a5da73ec84b4623739b5c30",
+      "bytes": 25596
+    },
+    {
+      "file": "tests/unit/app/icons.test.js",
+      "sha256": "4f9a10472aa3c3c7e3f64686b56451f1fe9a3180018a5733e3279ebaabf162fb",
+      "bytes": 4164
+    },
+    {
+      "file": "tests/unit/app/libraries.test.js",
+      "sha256": "13151dc9fbe046ed4296ca349574f084783d61808e29cadfc28319fd28c6383f",
+      "bytes": 30757
+    },
+    {
+      "file": "tests/unit/app/mapping.test.js",
+      "sha256": "ee0f9e514633ebdb47cc709f84880631d5dafd60bbd89102260987a189087667",
+      "bytes": 10983
+    },
+    {
+      "file": "tests/unit/app/note.test.js",
+      "sha256": "ed33b5199b551c2fd543eccf5bcdc87ef32131430dc83e05bec7e757022e16d8",
+      "bytes": 4865
+    },
+    {
+      "file": "tests/unit/app/page.test.js",
+      "sha256": "61e3fd1af43ed9518cc76711a4799a26cdb3a8f4fc92501acff9cb7ec8421dfd",
+      "bytes": 31900,
+      "source_sha256": "a686b39693a7a21551cc70f4f7d6088d2c8849c2975086bdbec3ee6c80b23a3e",
+      "source_bytes": 31495,
+      "changes": [
+        {
+          "original": "    expect(root.querySelector('.sva-header .sva-wordmark').textContent).toBe('safety.viz');",
+          "replacement": "    expect(root.querySelector('.sva-header .sva-wordmark').textContent).toBe('study.viz');",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
+        },
+        {
+          "original": "    // The app's own parts are a header and a footer; nothing sits beside the view.",
+          "replacement": "    // Given its own version too, the footer names the app's first and the chart\n    // library's beside it.\n    mountApp(root, { charts, manifest, version: '1.2.3', appVersion: '0.4.5' });\n    expect(root.querySelector('.sva-footer .sva-version').textContent).toBe(\n      'study.viz 0.4.5 · safety.viz 1.2.3'\n    );\n    expect(root.querySelectorAll('.sva-footer .sva-version')).toHaveLength(1);\n    // The app's own parts are a header and a footer; nothing sits beside the view.",
+          "reason": "The footer names the app’s own version, study.viz’s, and beside it the safety.viz version of the charts it carries."
+        },
+        {
+          "original": "      links: { docs: '../index.html', download: './safety.viz-app.html' }",
+          "replacement": "      links: { docs: '../index.html', download: './study.viz-app.html' }",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "      ['docs', '../index.html', 'Docs and chart gallery'],\n      ['download', './safety.viz-app.html', 'Download as one file']",
+          "replacement": "      ['docs', '../index.html', 'safety.viz chart docs and gallery'],\n      ['download', './study.viz-app.html', 'Download as one file']",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’. The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/app/parse.test.js",
+      "sha256": "a6e33c85bfefbf6ee44ca154e4e24d23765412582a7567d25e5d64d4ddc36ce0",
+      "bytes": 4601
+    },
+    {
+      "file": "tests/unit/app/portfolio.test.js",
+      "sha256": "3e8455c8fca3ea92874a751fe329cbb7e7b7a3fb974456402cd509eba50b0550",
+      "bytes": 11519
+    },
+    {
+      "file": "tests/unit/app/r-browser.test.js",
+      "sha256": "f5c9e09632b8bfdc9244f88152fc3157b53d7746ba0a3057855ee3d9b380ed33",
+      "bytes": 21806
+    },
+    {
+      "file": "tests/unit/app/r-control.test.js",
+      "sha256": "5348d8773efafad4b8aa680f0c4de9e0cf28de8a7c303f9ed33e9cf95db01bf9",
+      "bytes": 27962
+    },
+    {
+      "file": "tests/unit/app/r-on-request.test.js",
+      "sha256": "871969f39981dc90d0e4a95d1376216c13aef6a450ea5e563f9602b0400b36ce",
+      "bytes": 34062,
+      "source_sha256": "8e1fe3cfb4d98bd6a0447279b0618bd3637609277e56d6fa744e092ec54ef548",
+      "source_bytes": 34064,
+      "changes": [
+        {
+          "original": "      'safety.viz app: a library could not say its note.',",
+          "replacement": "      'study.viz app: a library could not say its note.',",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "      'safety.viz app: a library’s control failed when pressed.',",
+          "replacement": "      'study.viz app: a library’s control failed when pressed.',",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/app/r-wasm.test.js",
+      "sha256": "2248bf381db1f596c1de62a670209c72032007435414cc6d04236c71ab88c42b",
+      "bytes": 11153
+    },
+    {
+      "file": "tests/unit/app/r-wiring.test.js",
+      "sha256": "caab67c6c2e347eb4615137d78cc3938fc6f5d0a3127a8425380ab35d66b72a9",
+      "bytes": 10942,
+      "source_sha256": "4b15bb317849e1ccfe3237c2cf863c44f575828b1135eeb17414f07005bfc11f",
+      "source_bytes": 10948,
+      "changes": [
+        {
+          "original": "  it('APP-R-012: the hosted page hands bio.viz’s charts R on request with the statistics file beside it, and says what the app now promises (#183)', () => {\n    const html = renderDemoAppPage({\n      bundle: 'safety.viz-app.js',\n      download: 'safety.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/safety.viz',",
+          "replacement": "  it('APP-R-012: the hosted page hands bio.viz’s charts R on request with the statistics file beside it, and says what the app now promises (#183)', () => {\n    const html = renderDemoAppPage({\n      bundle: 'study.viz-app.js',\n      download: 'study.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/study.viz',",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "    );\n    const html = renderDemoAppPage({\n      bundle: 'safety.viz-app.js',\n      download: 'safety.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/safety.viz',",
+          "replacement": "    );\n    const html = renderDemoAppPage({\n      bundle: 'study.viz-app.js',\n      download: 'study.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/study.viz',",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/app/rbqm-files.test.js",
+      "sha256": "c5f218e14ec7ba6de37e33d0163945c561d6719537d1e4656d2a6196dfd2cdc8",
+      "bytes": 23491
+    },
+    {
+      "file": "tests/unit/app/rbqm-pipeline.test.js",
+      "sha256": "c3415fe89c7e9b810487b967f958b5ceb863b034d783059b4329b799f9cc2f12",
+      "bytes": 8022
+    },
+    {
+      "file": "tests/unit/app/rbqm-study.test.js",
+      "sha256": "c8b53a89fd1a56ecf694aee050334ac1c05653c8bb3edf98b32956d78f379114",
+      "bytes": 10698
+    },
+    {
+      "file": "tests/unit/app/rbqm-tab-run.test.js",
+      "sha256": "691d18c0ccf1a61d0dc42e47b9a53ec246e91ff69890519c0b1d902b2bfb1271",
+      "bytes": 23760
+    },
+    {
+      "file": "tests/unit/app/rbqm-view.test.js",
+      "sha256": "40335f1b01ea40a9d24c11c8e249e188834bc5e47f8bdf0c148f8e8c78ac2556",
+      "bytes": 141371
+    },
+    {
+      "file": "tests/unit/app/rbqm.test.js",
+      "sha256": "9aaf6c7a7155575b6994f23cbd89be89b2badb2fa5e86051b479ef90bdd4588f",
+      "bytes": 29072
+    },
+    {
+      "file": "tests/unit/app/single-file.test.js",
+      "sha256": "11f7965323b642fcfeaa084a59d8490071a1df6b25824df9dd16c929a89ef1a3",
+      "bytes": 3177,
+      "source_sha256": "eaf3a8f530e22514d3abd7a792b3d5c22bee9c56619b41e5d19bb6e80e5c1455",
+      "source_bytes": 3179,
+      "changes": [
+        {
+          "original": "      script: 'var a=1;\\n//# sourceMappingURL=safety.viz-app.js.map\\n'",
+          "replacement": "      script: 'var a=1;\\n//# sourceMappingURL=study.viz-app.js.map\\n'",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    expect(html).toContain('<title>safety.viz demo</title>');",
+          "replacement": "    expect(html).toContain('<title>study.viz demo</title>');",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/app/status-label.test.js",
+      "sha256": "bc760457f9cb19bb57c32c427f9cade1501e217c7f25b16b38f15493cbb9d1c4",
+      "bytes": 22639
+    },
+    {
+      "file": "tests/unit/app/status.test.js",
+      "sha256": "7456b0a7627079dba2f1b9178df76cb4157f40e6e2cffb70ea16b7e06d1ca0c1",
+      "bytes": 7558
+    },
+    {
+      "file": "tests/unit/app/studies.test.js",
+      "sha256": "ec65d2246e1975613510a60ccede45839959dfc55f09699d16484ac5d98ce0ef",
+      "bytes": 9024
+    },
+    {
+      "file": "tests/unit/app/tab-colours.test.js",
+      "sha256": "29cadd67987fe26db6adb76d7e2082de802322dd5194bb5beefc8c735e37a15d",
+      "bytes": 9068
+    },
+    {
+      "file": "tests/unit/app/tiers-page.test.js",
+      "sha256": "228458dd11a27e43b2b1b90928d91ec881b652adf257c3b0dc2bbe667e07dd75",
+      "bytes": 2962
+    },
+    {
+      "file": "tests/unit/app/tiers.test.js",
+      "sha256": "069f7bec0514c5ed9775a2db59e586e67689d16bd9b0814530d18ff4027b8175",
+      "bytes": 10274
+    },
+    {
+      "file": "tests/unit/app/view-items.test.js",
+      "sha256": "98e90c27f46944f1ee0d061cb13fda389bcbb5a7a00b8953064b7ee1eab02934",
+      "bytes": 18169,
+      "source_sha256": "10bea3c09765b494b59c101f0d1466fcf1f8c76b5264642a73b6e916e8d1fb11",
+      "source_bytes": 18173,
+      "changes": [
+        {
+          "original": "    expect(warn.mock.calls[0][0]).toBe('safety.viz app: a view could not list its items.');",
+          "replacement": "    expect(warn.mock.calls[0][0]).toBe('study.viz app: a view could not list its items.');",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "      'safety.viz app: a view’s control could not be read.'",
+          "replacement": "      'study.viz app: a view’s control could not be read.'",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "      'safety.viz app: a view could not say its tag.'",
+          "replacement": "      'study.viz app: a view could not say its tag.'",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "      'safety.viz app: a view could not say whether it shows the load’s notes.'",
+          "replacement": "      'study.viz app: a view could not say whether it shows the load’s notes.'",
+          "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/app/wordmark-title.test.js",
+      "sha256": "8b92572b5267830c671b4641f9bde2341190040ad590f84c6a83f196c14f2d44",
+      "bytes": 4224,
+      "source_sha256": "31d094634cf46145e216a5e9c1f7bebf95bef7616987462132f587c2d2bbfcca",
+      "source_bytes": 3456,
+      "changes": [
+        {
+          "original": "// The header leads back to the docs, and the browser tab says where the reader\n// is (#270, obot.roadmap#402).",
+          "replacement": "// The header names the app, study.viz, and the browser tab says where the\n// reader is (#270, obot.roadmap#402). The charts' docs, on safety.viz's site,\n// are a link in the footer.",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
+        },
+        {
+          "original": "    document.title = 'safety.viz demo';\n  });\n\n  it('APP-PAGE-037: the wordmark is a link to the docs home, with the mark and the words \"Demo app\" inside it; a page given no docs address has no link (#270)', () => {\n    const app = mountApp(root, { charts, manifest, links: { docs: '../index.html' } });\n    const brand = root.querySelector('.sva-brand');\n    expect(brand.tagName).toBe('A');\n    expect(brand.getAttribute('href')).toBe('../index.html');\n    expect(brand.title).toBe('safety.viz: docs and chart gallery');\n    expect(brand.querySelector('.sva-logo svg')).not.toBeNull();\n    expect(brand.querySelector('.sva-wordmark').textContent).toBe('safety.viz');\n    expect(brand.querySelector('.sva-kicker').textContent).toBe('Demo app');\n    // The footer's link is as before.\n    expect(root.querySelector('.sva-links a[data-link=\"docs\"]').getAttribute('href')).toBe(\n      '../index.html'\n    );\n    app.destroy();\n    // The app's own default is the published site, which the single file keeps.\n    expect(DEFAULT_LINKS.docs).toBe('https://jwildfire.github.io/safety.viz/');\n    const plain = mountApp(root, { charts, manifest });\n    expect(root.querySelector('.sva-brand').tagName).toBe('DIV');\n    expect(root.querySelector('a.sva-brand')).toBeNull();\n    plain.destroy();",
+          "replacement": "    document.title = 'study.viz demo';\n  });\n\n  it('APP-PAGE-037: the wordmark reads study.viz, with the mark and the words \"Demo app\" beside it, and is not a link to the charts’ docs: it is a link only where the page gives the app’s own home, and the docs link is in the footer, named as safety.viz’s (#270)', () => {\n    // A page that gives the docs' address and no home: plain words in the header.\n    const app = mountApp(root, { charts, manifest, links: { docs: '../index.html' } });\n    const brand = root.querySelector('.sva-brand');\n    expect(brand.tagName).toBe('DIV');\n    expect(root.querySelector('a.sva-brand')).toBeNull();\n    expect(brand.querySelector('.sva-logo svg')).not.toBeNull();\n    expect(brand.querySelector('.sva-wordmark').textContent).toBe('study.viz');\n    expect(brand.querySelector('.sva-kicker').textContent).toBe('Demo app');\n    // The docs link is the footer's, and its words say whose docs they are.\n    const docs = root.querySelector('.sva-links a[data-link=\"docs\"]');\n    expect(docs.getAttribute('href')).toBe('../index.html');\n    expect(docs.textContent).toBe('safety.viz chart docs and gallery');\n    app.destroy();\n    // The app's own defaults: the charts' docs on safety.viz's published site,\n    // which the single file keeps, study.viz's own repository, and no home.\n    expect(DEFAULT_LINKS.docs).toBe('https://jwildfire.github.io/safety.viz/');\n    expect(DEFAULT_LINKS.github).toBe('https://github.com/jwildfire/study.viz');\n    expect(DEFAULT_LINKS.home).toBeUndefined();\n    // A page that gives the app's own home: the wordmark leads there.\n    const linked = mountApp(root, { charts, manifest, links: { home: './index.html' } });\n    const home = root.querySelector('.sva-brand');\n    expect(home.tagName).toBe('A');\n    expect(home.getAttribute('href')).toBe('./index.html');\n    expect(home.title).toBe('study.viz: home');\n    expect(home.querySelector('.sva-wordmark').textContent).toBe('study.viz');\n    linked.destroy();",
+          "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’. The app’s source link leads to study.viz’s own repository. The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        },
+        {
+          "original": "    expect(document.title).toBe('Overview · safety.viz demo');\n    app.select('histogram');\n    expect(document.title).toBe('Histogram · safety.viz demo');\n    app.select('ae-explorer');\n    expect(document.title).toBe('Adverse Event Explorer · safety.viz demo');\n    app.select('rbqm');\n    expect(document.title).toBe('RBQM · safety.viz demo');\n    // An address that names no view opens the Overview tab, and the title says so.\n    app.select('constructor');\n    expect(document.title).toBe('Overview · safety.viz demo');\n    // A page may name the app itself; a destroyed app leaves the tab its name.\n    app.destroy();\n    expect(document.title).toBe('safety.viz demo');",
+          "replacement": "    expect(document.title).toBe('Overview · study.viz demo');\n    app.select('histogram');\n    expect(document.title).toBe('Histogram · study.viz demo');\n    app.select('ae-explorer');\n    expect(document.title).toBe('Adverse Event Explorer · study.viz demo');\n    app.select('rbqm');\n    expect(document.title).toBe('RBQM · study.viz demo');\n    // An address that names no view opens the Overview tab, and the title says so.\n    app.select('constructor');\n    expect(document.title).toBe('Overview · study.viz demo');\n    // A page may name the app itself; a destroyed app leaves the tab its name.\n    app.destroy();\n    expect(document.title).toBe('study.viz demo');",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/demo-data/adsl.test.js",
+      "sha256": "1f269aab228f680645e93a55e0bc7649b1754fe7f944608453e882d92df675f6",
+      "bytes": 4504
+    },
+    {
+      "file": "tests/unit/demo-data/drift.test.js",
+      "sha256": "43f26bb648eb7fd5b37cc991e81aa65d9efdaf8074863735ee040d6b95a30217",
+      "bytes": 3746
+    },
+    {
+      "file": "tests/unit/demo-data/ecg.test.js",
+      "sha256": "c29b0d4f50d6e7ff1cc8addad7228c7f2c5739b60016197c2bfb3babf40c4a7e",
+      "bytes": 6264
+    },
+    {
+      "file": "tests/unit/demo-data/visits.test.js",
+      "sha256": "49839e3670b519819e90b61ae907aeef90a0642da5c1e70184c386fbe324cfb8",
+      "bytes": 4283
+    },
+    {
+      "file": "tests/unit/local-demo/demo-app-dir.test.js",
+      "sha256": "661cff02a2c7bfc301b9edaf18a2467f6498f3387fc4d88ccf8e26d8973dee3a",
+      "bytes": 8156,
+      "source_sha256": "b4daa5f45d8eb0725abe26f00f6e37bf0634b61b72e0ad32a2ef1bdfd4ef3434",
+      "source_bytes": 8166,
+      "changes": [
+        {
+          "original": "        'safety.viz-app.js',\n        'safety.viz-app.js.map',\n        'safety.viz-app.html'",
+          "replacement": "        'study.viz-app.js',\n        'study.viz-app.js.map',\n        'study.viz-app.html'",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    const single = readFileSync(path.join(hosted, 'safety.viz-app.html'), 'utf8');",
+          "replacement": "    const single = readFileSync(path.join(hosted, 'study.viz-app.html'), 'utf8');",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    expect(localPage).toContain(\"download: './safety.viz-app.html'\");\n    expect(localPage).toContain(\"github: 'https://github.com/jwildfire/safety.viz'\");",
+          "replacement": "    expect(localPage).toContain(\"download: './study.viz-app.html'\");\n    expect(localPage).toContain(\"github: 'https://github.com/jwildfire/study.viz'\");",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "      const single = readFileSync(path.join(dir, 'safety.viz-app.html'), 'utf8');",
+          "replacement": "      const single = readFileSync(path.join(dir, 'study.viz-app.html'), 'utf8');",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    bundle: 'safety.viz-app.js',\n    download: 'safety.viz-app.html',\n    repoUrl: 'https://github.com/jwildfire/safety.viz'",
+          "replacement": "    bundle: 'study.viz-app.js',\n    download: 'study.viz-app.html',\n    repoUrl: 'https://github.com/jwildfire/study.viz'",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/local-demo/demo-cli.test.js",
+      "sha256": "ffec509f2482ea7f8388fac1a02b876bf50250dfa427cab18295fadb814b01bc",
+      "bytes": 2009
+    },
+    {
+      "file": "tests/unit/local-demo/demo-server.test.js",
+      "sha256": "2bccba73f9d8faeb8f6a6bc56411f3861c735602f1568422fd0e66d6bbaebe05",
+      "bytes": 11609,
+      "source_sha256": "9cbb95f04581cf6daa1f9ede5c937891db861c27d3b2c34a44e343a2e52e9528",
+      "source_bytes": 11613,
+      "changes": [
+        {
+          "original": "    writeFileSync(path.join(served, 'safety.viz-app.js'), 'var SafetyVizApp = {};');",
+          "replacement": "    writeFileSync(path.join(served, 'study.viz-app.js'), 'var SafetyVizApp = {};');",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "      '/safety.viz-app.js': 'text/javascript; charset=utf-8',",
+          "replacement": "      '/study.viz-app.js': 'text/javascript; charset=utf-8',",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    const response = await raw(port, '/safety.viz-app.js');",
+          "replacement": "    const response = await raw(port, '/study.viz-app.js');",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    expect(contentType('safety.viz-app.js.map')).toBe('application/json; charset=utf-8');",
+          "replacement": "    expect(contentType('study.viz-app.js.map')).toBe('application/json; charset=utf-8');",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/local-demo/install-demo.test.js",
+      "sha256": "5ac068cb5892af729e1f5feab237600176f62afee7ef70f199ef6c56bae365b7",
+      "bytes": 23367,
+      "source_sha256": "15d21ba3f68e9efa65b50451a49792b54db3007e5a77aad8cb0e765d5a313a32",
+      "source_bytes": 23401,
+      "changes": [
+        {
+          "original": "  writeFileSync(path.join(dir, 'package.json'), '{\"name\":\"safety.viz\",\"version\":\"9.9.9\"}');",
+          "replacement": "  writeFileSync(path.join(dir, 'package.json'), '{\"name\":\"study.viz\",\"version\":\"9.9.9\"}');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "  const pkg = { name: 'safety.viz', version: '9.9.9' };",
+          "replacement": "  const pkg = { name: 'study.viz', version: '9.9.9' };",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "  it('APP-LOCAL-008: with no arguments it installs the latest release into ./safety.viz (#214)', () => {\n    expect(parseInstallArgs([])).toEqual({ ...DEFAULTS, refGiven: false, help: false });\n    expect(DEFAULTS).toEqual({\n      dir: 'safety.viz',\n      ref: 'main',\n      repo: 'https://github.com/jwildfire/safety.viz.git',",
+          "replacement": "  it('APP-LOCAL-008: with no arguments it installs the latest release into ./study.viz (#214)', () => {\n    expect(parseInstallArgs([])).toEqual({ ...DEFAULTS, refGiven: false, help: false });\n    expect(DEFAULTS).toEqual({\n      dir: 'study.viz',\n      ref: 'main',\n      repo: 'https://github.com/jwildfire/study.viz.git',",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(parseInstallArgs(['--repo', 'elsewhere/safety.viz']).repo).toBe('elsewhere/safety.viz');",
+          "replacement": "    expect(parseInstallArgs(['--repo', 'elsewhere/study.viz']).repo).toBe('elsewhere/study.viz');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "  it('APP-LOCAL-007: tells a directory that is not there, an empty one, a safety.viz checkout and anything else apart (#214)', () => {",
+          "replacement": "  it('APP-LOCAL-007: tells a directory that is not there, an empty one, a study.viz checkout and anything else apart (#214)', () => {",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    mkdirSync(path.join(cwd, 'safety.viz'));\n    writeFileSync(path.join(cwd, 'safety.viz', 'notes.txt'), 'mine');\n    const result = run([], { cwd });\n    expect(result.status).toBe(1);\n    expect(result.stderr).toContain(path.join(cwd, 'safety.viz'));\n    expect(result.stderr).toContain('--dir');\n    expect(result.stderr).toContain('Nothing was changed');\n    expect(readdirSync(path.join(cwd, 'safety.viz'))).toEqual(['notes.txt']);\n    expect(readFileSync(path.join(cwd, 'safety.viz', 'notes.txt'), 'utf8')).toBe('mine');",
+          "replacement": "    mkdirSync(path.join(cwd, 'study.viz'));\n    writeFileSync(path.join(cwd, 'study.viz', 'notes.txt'), 'mine');\n    const result = run([], { cwd });\n    expect(result.status).toBe(1);\n    expect(result.stderr).toContain(path.join(cwd, 'study.viz'));\n    expect(result.stderr).toContain('--dir');\n    expect(result.stderr).toContain('Nothing was changed');\n    expect(readdirSync(path.join(cwd, 'study.viz'))).toEqual(['notes.txt']);\n    expect(readFileSync(path.join(cwd, 'study.viz', 'notes.txt'), 'utf8')).toBe('mine');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(result.stdout).toContain('Downloading safety.viz (main)');",
+          "replacement": "    expect(result.stdout).toContain('Downloading study.viz (main)');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    const clone = path.join(cwd, 'safety.viz');",
+          "replacement": "    const clone = path.join(cwd, 'study.viz');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(existsSync(path.join(cwd, 'safety.viz'))).toBe(false);",
+          "replacement": "    expect(existsSync(path.join(cwd, 'study.viz'))).toBe(false);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(result.stderr).toContain('safety.viz 9.9.9');",
+          "replacement": "    expect(result.stderr).toContain('study.viz 9.9.9');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(existsSync(path.join(cwd, 'safety.viz', 'node_modules'))).toBe(false);",
+          "replacement": "    expect(existsSync(path.join(cwd, 'study.viz', 'node_modules'))).toBe(false);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    checkout(path.join(cwd, 'safety.viz'));\n    const before = readdirSync(path.join(cwd, 'safety.viz', 'node_modules'));\n    const result = run(['--no-open'], { cwd });\n    expect(result.stdout).toContain('safety.viz 9.9.9 is already in');",
+          "replacement": "    checkout(path.join(cwd, 'study.viz'));\n    const before = readdirSync(path.join(cwd, 'study.viz', 'node_modules'));\n    const result = run(['--no-open'], { cwd });\n    expect(result.stdout).toContain('study.viz 9.9.9 is already in');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(readdirSync(path.join(cwd, 'safety.viz', 'node_modules'))).toEqual(before);",
+          "replacement": "    expect(readdirSync(path.join(cwd, 'study.viz', 'node_modules'))).toEqual(before);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    checkout(path.join(cwd, 'safety.viz'));\n    const before = readdirSync(path.join(cwd, 'safety.viz'));",
+          "replacement": "    checkout(path.join(cwd, 'study.viz'));\n    const before = readdirSync(path.join(cwd, 'study.viz'));",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "      `${path.join(realpathSync(cwd), 'safety.viz')} already holds safety.viz 9.9.9, and it is used as it is.\\n` +",
+          "replacement": "      `${path.join(realpathSync(cwd), 'study.viz')} already holds study.viz 9.9.9, and it is used as it is.\\n` +",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(branch.stderr).toContain('already holds safety.viz 9.9.9, and it is used as it is.');\n    expect(branch.stderr).toContain('To install dev, name another directory with --dir');\n    expect(branch.stdout).not.toContain('demo started');\n    expect(readdirSync(path.join(cwd, 'safety.viz'))).toEqual(before);",
+          "replacement": "    expect(branch.stderr).toContain('already holds study.viz 9.9.9, and it is used as it is.');\n    expect(branch.stderr).toContain('To install dev, name another directory with --dir');\n    expect(branch.stdout).not.toContain('demo started');\n    expect(readdirSync(path.join(cwd, 'study.viz'))).toEqual(before);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "      expect(first.stdout).toContain(`Downloading safety.viz (${ref})`);",
+          "replacement": "      expect(first.stdout).toContain(`Downloading study.viz (${ref})`);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "      expect(again.stdout).toContain('safety.viz 9.9.9 is already in');",
+          "replacement": "      expect(again.stdout).toContain('study.viz 9.9.9 is already in');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "      expect(branchIn(path.join(cwd, 'safety.viz'))).toBe(ref === 'dev' ? 'dev' : null);",
+          "replacement": "      expect(branchIn(path.join(cwd, 'study.viz'))).toBe(ref === 'dev' ? 'dev' : null);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(result.stderr).toContain('already holds safety.viz 9.9.9 from the dev branch');",
+          "replacement": "    expect(result.stderr).toContain('already holds study.viz 9.9.9 from the dev branch');",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "    expect(branchIn(checkout(path.join(scratch('norecord'), 'safety.viz')))).toBe(null);",
+          "replacement": "    expect(branchIn(checkout(path.join(scratch('norecord'), 'study.viz')))).toBe(null);",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        },
+        {
+          "original": "      checkout(path.join(cwd, 'safety.viz'), {",
+          "replacement": "      checkout(path.join(cwd, 'study.viz'), {",
+          "reason": "The installer installs study.viz: it clones study.viz’s repository into ./study.viz and knows a checkout by that name. Its message for a release with no demo command no longer names v1.9.2, which was a release of safety.viz."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/no-absolute-paths.test.js",
+      "sha256": "679852f3b756c671e01dc9fc1f3bc3233fd2c09ae57e510b5a9aca14e0da328f",
+      "bytes": 1937
+    },
+    {
+      "file": "tests/unit/site/demo-app-page.test.js",
+      "sha256": "86dc3db12a388b55ed714781385c4bbff4b4074bbceac4264d2faf1f9e02fc57",
+      "bytes": 17448,
+      "source_sha256": "0f74fc621b761a691007370ab0f7da1c71a5c21891b261ac350476bb6657900e",
+      "source_bytes": 17467,
+      "changes": [
+        {
+          "original": "    bundle: 'safety.viz-app.js',\n    download: 'safety.viz-app.html',\n    repoUrl: 'https://github.com/jwildfire/safety.viz'",
+          "replacement": "    bundle: 'study.viz-app.js',\n    download: 'study.viz-app.html',\n    repoUrl: 'https://github.com/jwildfire/study.viz'",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "    expect(html).toContain('<title>safety.viz demo</title>');",
+          "replacement": "    expect(html).toContain('<title>study.viz demo</title>');",
+          "reason": "The app’s name in the browser tab and in a page’s title is \"study.viz demo\"."
+        },
+        {
+          "original": "    expect(html).toContain('<script src=\"./safety.viz-app.js\"></script>');\n    expect(html).toContain(\"demo: { base: './' }\");\n    expect(html.indexOf('safety.viz-app.js')).toBeLessThan(html.indexOf('SafetyVizApp.mount'));",
+          "replacement": "    expect(html).toContain('<script src=\"./study.viz-app.js\"></script>');\n    expect(html).toContain(\"demo: { base: './' }\");\n    expect(html.indexOf('study.viz-app.js')).toBeLessThan(html.indexOf('SafetyVizApp.mount'));",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    expect(html).toContain(\"github: 'https://github.com/jwildfire/safety.viz'\");",
+          "replacement": "    expect(html).toContain(\"github: 'https://github.com/jwildfire/study.viz'\");",
+          "reason": "The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "      'https://github.com/jwildfire/safety.viz'",
+          "replacement": "      'https://github.com/jwildfire/study.viz'",
+          "reason": "The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "      bundle: 'safety.viz-app.js',\n      download: 'safety.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/safety.viz',\n      libraries: APP_LIBRARIES,",
+          "replacement": "      bundle: 'study.viz-app.js',\n      download: 'study.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/study.viz',\n      libraries: APP_LIBRARIES,",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "      bundle: 'safety.viz-app.js',\n      download: 'safety.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/safety.viz',\n      libraries: [{ name: 'bio.viz', global: 'BioViz', file: 'bio.viz.js' }],",
+          "replacement": "      bundle: 'study.viz-app.js',\n      download: 'study.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/study.viz',\n      libraries: [{ name: 'bio.viz', global: 'BioViz', file: 'bio.viz.js' }],",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        },
+        {
+          "original": "    const app = page.indexOf('<script src=\"./safety.viz-app.js\"></script>');",
+          "replacement": "    const app = page.indexOf('<script src=\"./study.viz-app.js\"></script>');",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "    expect(html).toContain(\"download: './safety.viz-app.html'\");",
+          "replacement": "    expect(html).toContain(\"download: './study.viz-app.html'\");",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html."
+        },
+        {
+          "original": "      bundle: 'safety.viz-app.js',\n      download: 'safety.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/safety.viz'",
+          "replacement": "      bundle: 'study.viz-app.js',\n      download: 'study.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/study.viz'",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/site/favicon.test.js",
+      "sha256": "416809744ba04727745f56fbbc8b4ab4e0c2c3bdcbab77e98b5ef4fdb0ee7c13",
+      "bytes": 1765,
+      "source_sha256": "acd104b28460cb7409bfd55b70d479f0b103b04c16e5369ec0033fb4a8402d3b",
+      "source_bytes": 1768,
+      "changes": [
+        {
+          "original": "      bundle: 'safety.viz-app.js',\n      download: 'safety.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/safety.viz'",
+          "replacement": "      bundle: 'study.viz-app.js',\n      download: 'study.viz-app.html',\n      repoUrl: 'https://github.com/jwildfire/study.viz'",
+          "reason": "The bundle and the single file carry the app’s name: study.viz-app.js and study.viz-app.html. The app’s source link leads to study.viz’s own repository."
+        }
+      ]
+    },
+    {
+      "file": "tests/unit/site/validate.test.js",
+      "sha256": "0973357a7077b386ab265683ee1244c76dc2e0f2867c67cac5ab09bd3a2e7fd1",
+      "bytes": 2573
+    }
+  ]
+}

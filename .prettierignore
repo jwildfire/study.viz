@@ -5,3 +5,20 @@ package-lock.json
 _site/
 _site.build-*/
 build/
+
+# The record of the copy from safety.viz: written by scripts/copied.mjs, one
+# file to an entry, and held to the files by a test.
+SOURCE.json
+
+# The renamed-column study for the demo app's tests: written by
+# scripts/build-app-fixture.mjs, and a test pins the files to its output.
+tests/e2e/fixtures/app/
+
+# The desktop-R comparison for R on request: written by
+# scripts/derive-app-statistics.mjs and scripts/app-statistics.R, and held to
+# what they are derived from by a test.
+tests/fixtures/app-statistics/
+
+# Desktop R's rows for the RBQM pipeline: written by scripts/rbqm-reference.mjs,
+# and held to what they are derived from by a test.
+tests/fixtures/rbqm/
