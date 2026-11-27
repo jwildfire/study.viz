@@ -71,9 +71,11 @@ export const COPIED = {
   label: 'copy',
   repository: 'https://github.com/jwildfire/safety.viz',
   // The head of safety.viz's dev branch when the copy was last made: the commit
-  // that points safety.viz's copy of study.builder at its v0.5.0 release
-  // (safety.viz#399, after the move from v0.4.0 in safety.viz#398; study.viz#16).
-  commit: 'b0c9385142e88cc106236f4d3e37a69b860640d4',
+  // that redrew safety.viz's stored pictures (safety.viz#420) after the fixes
+  // the review of study.viz's v0.1.0 release candidate asked for
+  // (safety.viz#411, #413, #414, #415 and #419; study.viz#26). It prepares
+  // safety.viz 1.13.0, which is not released there yet.
+  commit: '9e49f5f886eb85261ee24b969846415e2a28af76',
   folders: [
     // The app.
     'src/app',
@@ -766,39 +768,6 @@ export const COPIED = {
         reason: 'The server over _site/ for a walk of this checkout’s own site build.'
       }
     ],
-    // The walk's seventh step looked for the study menu on the Overview tab. The
-    // app now chooses a study through the study chip in its header, and the
-    // Overview tab opens on the study looked through, so the step is rewritten
-    // to open the RBQM demo study through the chip (study.viz#8). The other
-    // seven steps, their order and their screenshots are as safety.viz has them.
-    'tests/demo-path/demo-path.spec.js': [
-      {
-        original:
-          "  await test.step('7. the RBQM demo study is chosen on the Overview tab', async () => {\n" +
-          "    await chart('data').click();\n" +
-          "    await page.locator('.sva-side select.sva-study').selectOption('rbqm');\n" +
-          "    await expect(page.locator('.sva-loaded-name')).toHaveCount(9);",
-        replacement:
-          "  await test.step('7. the RBQM demo study is chosen through the study chip', async () => {\n" +
-          "    await chart('data').click();\n" +
-          '    // A study is chosen through the study chip in the header. The Overview tab\n' +
-          '    // opens on the study looked through: its study menu and its list of loaded\n' +
-          '    // files are on its other face, Files.\n' +
-          '    await page.locator(\'[data-action="study-chip"]\').click();\n' +
-          '    const study = page.locator(\'.sva-chip-item[data-study="demo:rbqm"]\');\n' +
-          "    await expect(study.locator('small')).toHaveText('9 files');\n" +
-          '    await study.click();\n' +
-          "    await expect(page.locator('.sva-chip-name')).toHaveText('RBQM study');",
-        reason:
-          'The walk stopped at this step: on a page that serves study.viewer the Overview tab ' +
-          'opens on the study looked through, and the study menu the step pressed, with the ' +
-          'list of loaded files it counted, is on the tab’s other face. A study is chosen ' +
-          'through the study chip in the header, so the step opens the RBQM demo study there, ' +
-          'reads its nine files from the chip’s list and the study’s name from the chip. What ' +
-          'the data supports and the step’s screenshot are held as before. safety.viz’s walk ' +
-          'has the same step to fix (safety.viz#396); until it does, this is a listed change.'
-      }
-    ],
     'tests/unit/app/status-label.test.js': [
       {
         cut: {
@@ -1308,6 +1277,9 @@ const RENAMED = {
         "    await expect(brand).toHaveAttribute('title', 'safety.viz: docs and chart gallery');\n" +
         "    await expect(brand.locator('.sva-wordmark')).toHaveText('safety.viz');\n" +
         "    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n" +
+        '    // This page has no study chip, so the words are drawn at 1,280 pixels (#416).\n' +
+        "    await expect(page.locator('.sva-chip-slot')).toHaveCount(0);\n" +
+        "    await expect(brand.locator('.sva-kicker')).toBeVisible();\n" +
         "    // It reads as the wordmark it was: the header's ink, not a link's underline.",
       replacement:
         '    // The harness page gives the app no home of its own, so the wordmark is plain words.\n' +
@@ -1315,6 +1287,9 @@ const RENAMED = {
         "    await expect(page.locator('.sva-header a.sva-brand')).toHaveCount(0);\n" +
         "    await expect(brand.locator('.sva-wordmark')).toHaveText('study.viz');\n" +
         "    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n" +
+        '    // This page has no study chip, so the words are drawn at 1,280 pixels (#416).\n' +
+        "    await expect(page.locator('.sva-chip-slot')).toHaveCount(0);\n" +
+        "    await expect(brand.locator('.sva-kicker')).toBeVisible();\n" +
         "    // The charts' docs are the footer's link. The harness page gives no address\n" +
         "    // for them, so the app's own default stands: safety.viz's published site.\n" +
         '    const docs = page.locator(\'.sva-links a[data-link="docs"]\');\n' +
@@ -1451,9 +1426,9 @@ const RENAMED = {
       reason: why('checksums')
     },
     {
-      original: '   "sha256": "ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997"',
+      original: '   "sha256": "d7251922739111b8eff6c6f000641285fe87a98b53c8b2117762aa40dbb828df"',
       replacement:
-        '   "sha256": "02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6"',
+        '   "sha256": "c3ea4b815e8192e7270e10303a4523c61eceb7dc179cb5b581cf924195846c6b"',
       reason: why('checksums')
     }
   ],
@@ -1471,9 +1446,9 @@ const RENAMED = {
       reason: why('checksums')
     },
     {
-      original: '   "sha256": "ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997"',
+      original: '   "sha256": "d7251922739111b8eff6c6f000641285fe87a98b53c8b2117762aa40dbb828df"',
       replacement:
-        '   "sha256": "02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6"',
+        '   "sha256": "c3ea4b815e8192e7270e10303a4523c61eceb7dc179cb5b581cf924195846c6b"',
       reason: why('checksums')
     }
   ],
@@ -1526,6 +1501,13 @@ const RENAMED = {
         "      ['docs', '../index.html', 'safety.viz chart docs and gallery'],\n" +
         "      ['download', './study.viz-app.html', 'Download as one file']",
       reason: why('wordmark', 'files')
+    }
+  ],
+  'tests/unit/app/portfolio.test.js': [
+    {
+      original: "    name: 'safety-viz-mapping.json',",
+      replacement: "    name: 'study-viz-mapping.json',",
+      reason: why('mapping')
     }
   ],
   'tests/unit/app/r-on-request.test.js': [

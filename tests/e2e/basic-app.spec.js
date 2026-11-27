@@ -744,6 +744,9 @@ test.describe('demo app: the first screen', () => {
     await expect(page.locator('.sva-header a.sva-brand')).toHaveCount(0);
     await expect(brand.locator('.sva-wordmark')).toHaveText('study.viz');
     await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');
+    // This page has no study chip, so the words are drawn at 1,280 pixels (#416).
+    await expect(page.locator('.sva-chip-slot')).toHaveCount(0);
+    await expect(brand.locator('.sva-kicker')).toBeVisible();
     // The charts' docs are the footer's link. The harness page gives no address
     // for them, so the app's own default stands: safety.viz's published site.
     const docs = page.locator('.sva-links a[data-link="docs"]');
