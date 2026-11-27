@@ -1,8 +1,8 @@
 {
   "copy": "safety.viz’s demo app, as study.viz began",
   "repository": "https://github.com/jwildfire/safety.viz",
-  "commit": "b0c9385142e88cc106236f4d3e37a69b860640d4",
-  "version": "1.12.0",
+  "commit": "9e49f5f886eb85261ee24b969846415e2a28af76",
+  "version": "1.13.0",
   "merged_to_dev": true,
   "left": [
     {
@@ -357,10 +357,10 @@
     },
     {
       "file": "requirements/demo-app.md",
-      "sha256": "08aa4d4f91cbfa75fd0ff726aa15c06580151af65663175dd6d7d4799d5d3528",
-      "bytes": 222527,
-      "source_sha256": "266d8a7a9e63e08cb68164b75e71870910800dd8b5a518ce569acb0495a80ee6",
-      "source_bytes": 221717,
+      "sha256": "d117a447f1f9cc8d51a619aae0c35b56b5fa85a428b57f6b97111f22c3354204",
+      "bytes": 236437,
+      "source_sha256": "fafd61d0a0eb28fd84bd9f8e046b5293fe3961d647c5a8da33ed2154da16016b",
+      "source_bytes": 235627,
       "changes": [
         {
           "original": "| APP-PAGE-018 | PAGE | The app's own parts on every view are a header and a footer; the data view alone adds a sidebar (APP-LOAD-021). The header carries the safety.viz wordmark and hex mark and says it is the demo app; the footer says what the page that mounts it does with a study, and carries the version: by default that everything runs in the browser and nothing is sent anywhere; on the hosted page that the study's data never leaves the browser and no request leaves the page unless the reader starts R; in the single file that it loads nothing. The view's name is the page's one heading, kept for screen readers and not shown. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | A header and a footer, not a sidebar (@jwildfire, 2026-10-02): beside the chart's own controls and the participant profile, a sidebar left the chart a fifth of the screen. Amended at @jwildfire's word (#183): his choice of 2026-10-02, \"R on request\", changes what this row promised that day, and the row now says what is true. |\n| APP-PAGE-019 | PAGE | The footer links to the docs site, the Domains page, the single file and the repository, each only where it was given an address; the single file is offered as a download. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. |  |",
@@ -1560,8 +1560,8 @@
     },
     {
       "file": "src/app/builder-view.js",
-      "sha256": "4ba22727169d968e4130d21ff44139b8b0ff72206805ce10ef6909d43251ce40",
-      "bytes": 13403
+      "sha256": "ccc0b7c1f3c11b25eb30427b729d8767570b07ca5658ff845f283ac753e8802a",
+      "bytes": 15085
     },
     {
       "file": "src/app/charts.js",
@@ -1570,8 +1570,8 @@
     },
     {
       "file": "src/app/data-panel.js",
-      "sha256": "5823459b237383b99938a058acbf0a6f336dbffc4d64e8755757c9a502e144bd",
-      "bytes": 32665
+      "sha256": "9b03282d2cef5e162cf3bdcb38d9dd8be7deb56a603e50cdf23ce9b25527fce5",
+      "bytes": 32904
     },
     {
       "file": "src/app/detect.js",
@@ -1687,10 +1687,10 @@
     },
     {
       "file": "src/app/page.js",
-      "sha256": "02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6",
-      "bytes": 78606,
-      "source_sha256": "ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997",
-      "source_bytes": 78012,
+      "sha256": "c3ea4b815e8192e7270e10303a4523c61eceb7dc179cb5b581cf924195846c6b",
+      "bytes": 79948,
+      "source_sha256": "d7251922739111b8eff6c6f000641285fe87a98b53c8b2117762aa40dbb828df",
+      "source_bytes": 79354,
       "changes": [
         {
           "original": "export const MAPPING_FILE_NAME = 'safety-viz-mapping.json';",
@@ -1786,8 +1786,8 @@
     },
     {
       "file": "src/app/portfolio.js",
-      "sha256": "6eaa099d1d235bdc3ee49fe1c8b8ccadea1496abdfec8a3261be2891544a42ba",
-      "bytes": 9790
+      "sha256": "65a51accf02db3366bcdcf1b9005d6adad3008376772437519e6d98ff071c152",
+      "bytes": 14732
     },
     {
       "file": "src/app/r-browser.js",
@@ -1841,34 +1841,25 @@
     },
     {
       "file": "src/app/styles.js",
-      "sha256": "2e74d1d0ba370f2a0dc0ea48105218e3dc18107e91be0af2065bb6ca66165945",
-      "bytes": 34574
+      "sha256": "9da53492f61862c0ac0d48724711bae9ab16f4adf7f7e7a219668bd2bde81bf2",
+      "bytes": 36235
     },
     {
       "file": "src/app/viewer-view.js",
-      "sha256": "1e78c1dc6d5e724081f27ea45802dcf695b065f7292b8d537296897565aebd8c",
-      "bytes": 7729
+      "sha256": "789689c87727c2e05ee2d887d29d70a713a91476497fea9576fb1fa82ba19c56",
+      "bytes": 11295
     },
     {
       "file": "tests/demo-path/demo-path.spec.js",
       "sha256": "4758e826ee7ce72c6f57d4e05bd83ee22bd005ec58bebc333a9229a0c0568074",
-      "bytes": 7498,
-      "source_sha256": "13687365f84b4f8258dd6d2bf97428dedeccb50152ff5bbb12f0130bf0ff5041",
-      "source_bytes": 7134,
-      "changes": [
-        {
-          "original": "  await test.step('7. the RBQM demo study is chosen on the Overview tab', async () => {\n    await chart('data').click();\n    await page.locator('.sva-side select.sva-study').selectOption('rbqm');\n    await expect(page.locator('.sva-loaded-name')).toHaveCount(9);",
-          "replacement": "  await test.step('7. the RBQM demo study is chosen through the study chip', async () => {\n    await chart('data').click();\n    // A study is chosen through the study chip in the header. The Overview tab\n    // opens on the study looked through: its study menu and its list of loaded\n    // files are on its other face, Files.\n    await page.locator('[data-action=\"study-chip\"]').click();\n    const study = page.locator('.sva-chip-item[data-study=\"demo:rbqm\"]');\n    await expect(study.locator('small')).toHaveText('9 files');\n    await study.click();\n    await expect(page.locator('.sva-chip-name')).toHaveText('RBQM study');",
-          "reason": "The walk stopped at this step: on a page that serves study.viewer the Overview tab opens on the study looked through, and the study menu the step pressed, with the list of loaded files it counted, is on the tab’s other face. A study is chosen through the study chip in the header, so the step opens the RBQM demo study there, reads its nine files from the chip’s list and the study’s name from the chip. What the data supports and the step’s screenshot are held as before. safety.viz’s walk has the same step to fix (safety.viz#396); until it does, this is a listed change."
-        }
-      ]
+      "bytes": 7498
     },
     {
       "file": "tests/e2e/basic-app.spec.js",
-      "sha256": "9a159af3041d0f7d6dae5a9891972374dc6e3be21611420d57699563629275ff",
-      "bytes": 307486,
-      "source_sha256": "6c788865bebc87eb235ae76621635ef50391cd0298f7f16beae3417350d24380",
-      "source_bytes": 307015,
+      "sha256": "06bf17178980591717d207950f3742970711f82272c895baf1368aaeb60208b9",
+      "bytes": 307696,
+      "source_sha256": "093dca2819be82a4d9bdddc5f156d93c2b192b2fff29f10b389270e80a05610c",
+      "source_bytes": 307225,
       "changes": [
         {
           "original": "  test('APP-PAGE-037: the wordmark is a link to the docs home, the mark and the words \"Demo app\" inside it, and nothing else in the header moves (#270)', async ({",
@@ -1876,8 +1867,8 @@
           "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
         },
         {
-          "original": "    const brand = page.locator('.sva-header a.sva-brand');\n    // The harness page gives the app no addresses, so the app's own default stands: the published site.\n    await expect(brand).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n    await expect(brand).toHaveAttribute('title', 'safety.viz: docs and chart gallery');\n    await expect(brand.locator('.sva-wordmark')).toHaveText('safety.viz');\n    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n    // It reads as the wordmark it was: the header's ink, not a link's underline.",
-          "replacement": "    // The harness page gives the app no home of its own, so the wordmark is plain words.\n    const brand = page.locator('.sva-header .sva-brand');\n    await expect(page.locator('.sva-header a.sva-brand')).toHaveCount(0);\n    await expect(brand.locator('.sva-wordmark')).toHaveText('study.viz');\n    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n    // The charts' docs are the footer's link. The harness page gives no address\n    // for them, so the app's own default stands: safety.viz's published site.\n    const docs = page.locator('.sva-links a[data-link=\"docs\"]');\n    await expect(docs).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n    await expect(docs).toHaveText('safety.viz chart docs and gallery');\n    // The wordmark is in the header's ink, with no underline.",
+          "original": "    const brand = page.locator('.sva-header a.sva-brand');\n    // The harness page gives the app no addresses, so the app's own default stands: the published site.\n    await expect(brand).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n    await expect(brand).toHaveAttribute('title', 'safety.viz: docs and chart gallery');\n    await expect(brand.locator('.sva-wordmark')).toHaveText('safety.viz');\n    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n    // This page has no study chip, so the words are drawn at 1,280 pixels (#416).\n    await expect(page.locator('.sva-chip-slot')).toHaveCount(0);\n    await expect(brand.locator('.sva-kicker')).toBeVisible();\n    // It reads as the wordmark it was: the header's ink, not a link's underline.",
+          "replacement": "    // The harness page gives the app no home of its own, so the wordmark is plain words.\n    const brand = page.locator('.sva-header .sva-brand');\n    await expect(page.locator('.sva-header a.sva-brand')).toHaveCount(0);\n    await expect(brand.locator('.sva-wordmark')).toHaveText('study.viz');\n    await expect(brand.locator('.sva-kicker')).toHaveText('Demo app');\n    // This page has no study chip, so the words are drawn at 1,280 pixels (#416).\n    await expect(page.locator('.sva-chip-slot')).toHaveCount(0);\n    await expect(brand.locator('.sva-kicker')).toBeVisible();\n    // The charts' docs are the footer's link. The harness page gives no address\n    // for them, so the app's own default stands: safety.viz's published site.\n    const docs = page.locator('.sva-links a[data-link=\"docs\"]');\n    await expect(docs).toHaveAttribute('href', 'https://jwildfire.github.io/safety.viz/');\n    await expect(docs).toHaveText('safety.viz chart docs and gallery');\n    // The wordmark is in the header's ink, with no underline.",
           "reason": "The header’s wordmark reads study.viz and is not a link to safety.viz’s docs: it is plain words, and a link only where the page gives the app’s own home. The docs link is the footer’s, and its words say the docs are safety.viz’s charts’."
         },
         {
@@ -2040,9 +2031,9 @@
     },
     {
       "file": "tests/fixtures/app-statistics/expected.json",
-      "sha256": "a5b68977b853f821b0b784072fa190a194396c91f1f231ba37afda3bc4fd3211",
+      "sha256": "ced8dca2b8e668f446880bf1a15cf6a61de4fdd0b91369a752d30ea90d7c81f4",
       "bytes": 12337,
-      "source_sha256": "5c47fcdbf7ab6fd8862ece5fc7ec40d5992f8c0ac36008195ad498ec74e58284",
+      "source_sha256": "b7b60d4d6a2ca590aa3d07f20d83cba88ab719ba9255d3f012530472030b0724",
       "source_bytes": 12337,
       "changes": [
         {
@@ -2056,17 +2047,17 @@
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
-          "original": "   \"sha256\": \"ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997\"",
-          "replacement": "   \"sha256\": \"02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6\"",
+          "original": "   \"sha256\": \"d7251922739111b8eff6c6f000641285fe87a98b53c8b2117762aa40dbb828df\"",
+          "replacement": "   \"sha256\": \"c3ea4b815e8192e7270e10303a4523c61eceb7dc179cb5b581cf924195846c6b\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         }
       ]
     },
     {
       "file": "tests/fixtures/app-statistics/requests.json",
-      "sha256": "9148a6a2c1cc9dea360be52ccb3be1ec78f1d175214e624a5764e5e791965089",
+      "sha256": "220c3cea687c4faf75c9700e4a7b0997b70cf496cdda6f558a54491e9744c291",
       "bytes": 224662,
-      "source_sha256": "8cadd12174b4c3d2f1a259bb5d52c713c36c136291784f89a2a9f791fdfedc38",
+      "source_sha256": "f2378a8d038a3e27b7008dc469dc68be2fa58a483df958a22ec8274fd3a63fa7",
       "source_bytes": 224662,
       "changes": [
         {
@@ -2080,8 +2071,8 @@
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
-          "original": "   \"sha256\": \"ff84b2b314f9abd0f706356b3ecbf3637ddc329364c698d18706af5ca232c997\"",
-          "replacement": "   \"sha256\": \"02ce0ebabc3d7eb7a6cd889dba4dd5d4202bca1140fad0ae90ab5b21bd0c57b6\"",
+          "original": "   \"sha256\": \"d7251922739111b8eff6c6f000641285fe87a98b53c8b2117762aa40dbb828df\"",
+          "replacement": "   \"sha256\": \"c3ea4b815e8192e7270e10303a4523c61eceb7dc179cb5b581cf924195846c6b\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         }
       ]
@@ -2117,8 +2108,8 @@
     },
     {
       "file": "tests/unit/app/builder-view.test.js",
-      "sha256": "d9db2ebd7ee36170f87672053cda117d1c9433eea7f6e8abf1b48b22566f89bd",
-      "bytes": 15691
+      "sha256": "384d419e7bd2694a035bd39e3c5f9c321e175124f8ea4959f4700abadf864540",
+      "bytes": 25350
     },
     {
       "file": "tests/unit/app/charts.test.js",
@@ -2243,8 +2234,17 @@
     },
     {
       "file": "tests/unit/app/portfolio.test.js",
-      "sha256": "28e5b6cf6fc00b75bf1d6753a18ea2a8a9285b9418c69df16821d4cc5d6538b7",
-      "bytes": 13029
+      "sha256": "c459d3cf99b801f76f6fa9b7ea796e1c24bd6121e9b4e1e7e3e44c572e6fe792",
+      "bytes": 38112,
+      "source_sha256": "d142aba21057c322dbb2831cdfeeb9eb9893fad7ff6adf5a3578f3f91eb30fd6",
+      "source_bytes": 38113,
+      "changes": [
+        {
+          "original": "    name: 'safety-viz-mapping.json',",
+          "replacement": "    name: 'study-viz-mapping.json',",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        }
+      ]
     },
     {
       "file": "tests/unit/app/r-browser.test.js",

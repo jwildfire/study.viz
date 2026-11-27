@@ -2,16 +2,16 @@
   "bundle": "safety.viz chart bundle, and three source files the app reads beside it",
   "repository": "https://github.com/jwildfire/safety.viz",
   "ref": "dev",
-  "commit": "f94fea414c888b0ad1d628598bf023b24a659038",
-  "version": "1.12.0",
+  "commit": "9e49f5f886eb85261ee24b969846415e2a28af76",
+  "version": "1.13.0",
   "license": "Apache-2.0",
   "merged_to_dev": true,
   "files": [
     {
       "file": "safety.viz.esm.js",
-      "source": "dist/safety.viz-1.12.0/safety.viz.esm.js",
-      "sha256": "4376a4f0e50737df869ae63c5c588b74d77ec3233b9bdc8a07a139a0b34e5ac7",
-      "bytes": 1567717
+      "source": "dist/safety.viz-1.13.0/safety.viz.esm.js",
+      "sha256": "eaf57ccedb4343039e93e3a06768f27979c613b87bacec68941173792a54b754",
+      "bytes": 1567666
     },
     {
       "file": "src/tiers.js",

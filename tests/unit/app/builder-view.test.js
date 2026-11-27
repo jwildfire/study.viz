@@ -83,7 +83,7 @@ const createConnection = () => ({ run: async () => ({ status: 'ok', value: {} })
 const button = () => document.querySelector('[data-action="source-build"]');
 
 describe('Build a study, on the data view', () => {
-  it('is a way to load data in step one, not a tab; it fetches study.builder’s script when first opened, and nothing before', async () => {
+  it('is a way to load data in step one, not a tab; on a page with no study chip it fetches study.builder’s script when first opened, and nothing before', async () => {
     mounted(builderSource({ createConnection, ...OPTIONS }));
     expect(document.querySelector('[data-tab="build"]')).toBeNull();
     expect(button().textContent).toBe('Build a study');
@@ -164,6 +164,36 @@ describe('Build a study, on the data view', () => {
     ).toEqual(['Raw_SITE.csv', 'Raw_SUBJ.csv', 'adsl.csv', 'advs.csv']);
   });
 
+  it('APP-LOAD-029: a study handed over replaces the one handed over before it: the raw files and the placed files the next study does not have are gone, and a file of the same name has the next study’s rows (#405)', async () => {
+    const builder = fakeBuilder();
+    globalThis.StudyBuilder = builder;
+    const handle = mounted(builderSource({ createConnection, ...OPTIONS }));
+    handle.openSource(BUILDER_SOURCE_ID);
+    await settle();
+    builder.mounts[0].options.onStudy(STUDY);
+    // The next study was built with vital signs turned off, and has two participants.
+    builder.mounts[0].options.onStudy({
+      id: 'BUILT-002',
+      said: 'BUILT-002 is a simulated Phase 1 Oncology study.',
+      files: () => ({
+        raw: [{ name: 'Raw_SUBJ.csv', text: 'studyid,subjid,invid\nBUILT-002,S1,SITE1\n' }],
+        standard: [
+          {
+            name: 'adsl.csv',
+            text:
+              'USUBJID,ARM,SITEID,SEX,RACE,EOSDY\n' +
+              'S1,All participants,SITE1,F,Other,90\nS2,All participants,SITE1,M,Other,90\n'
+          }
+        ]
+      })
+    });
+    expect(handle.state.raw.map((file) => file.name)).toEqual(['Raw_SUBJ.csv']);
+    expect(Object.keys(handle.state.files)).toEqual(['subject']);
+    expect(handle.state.files.subject.rows).toHaveLength(2);
+    expect(handle.state.unplaced).toEqual([]);
+    expect(handle.state.named.name).toBe('BUILT-002');
+  });
+
   it('leaves a study’s efficacy scores out of the files it places, so they do not take the labs’ place', async () => {
     const builder = fakeBuilder();
     globalThis.StudyBuilder = builder;
@@ -202,18 +232,132 @@ describe('Build a study, on the data view', () => {
     expect(document.querySelector('.sva-source')).toBeNull();
   });
 
+  const scripts = () => [...document.head.querySelectorAll('script')];
+  const alertSaid = () => {
+    const box = document.querySelector('.sva-source [role="alert"]');
+    return box ? box.textContent : null;
+  };
+  const NOT_LOADED =
+    'The builder cannot be shown: ./study.builder/study.builder.js did not load on this page.';
+
   it('says so when study.builder’s script does not load, and tries again when it is opened again', async () => {
     const source = builderSource({ createConnection, ...OPTIONS });
     const handle = mounted(source);
     handle.openSource(BUILDER_SOURCE_ID);
-    document.head.querySelector('script').onerror();
+    const [first] = scripts();
+    first.onerror();
     await settle();
-    expect(document.querySelector('.sva-source [role="alert"]').textContent).toBe(
-      'The builder cannot be shown: ./study.builder/study.builder.js did not load on this page.'
-    );
+    expect(alertSaid()).toBe(NOT_LOADED);
     expect(source.state().mounted).toBe(false);
+    // The script that did not load is taken off the page, and nothing asks
+    // for another while the source stays as it is, or once it is closed.
+    expect(scripts()).toHaveLength(0);
+    handle.redrawView('data');
     handle.openSource(null);
-    expect(document.head.querySelectorAll('script')).toHaveLength(1);
+    expect(scripts()).toHaveLength(0);
+    // Opened again, it asks for the script again (#408).
+    handle.openSource(BUILDER_SOURCE_ID);
+    const [again] = scripts();
+    expect(scripts()).toHaveLength(1);
+    expect(again).not.toBe(first);
+    expect(again.getAttribute('src')).toBe('./study.builder/study.builder.js');
+    expect(alertSaid()).toBeNull();
+    expect(document.querySelector('.sva-source').textContent).toContain('Loading the builder');
+    // It fails again: the page says so again, after one request.
+    again.onerror();
+    await settle();
+    expect(alertSaid()).toBe(NOT_LOADED);
+    expect(scripts()).toHaveLength(0);
+    // The third time the script loads, and the builder is shown.
+    handle.openSource(null);
+    handle.openSource(BUILDER_SOURCE_ID);
+    const builder = fakeBuilder();
+    globalThis.StudyBuilder = builder;
+    scripts()[0].onload();
+    await settle();
+    expect(alertSaid()).toBeNull();
+    expect(builder.mount).toHaveBeenCalledTimes(1);
+    expect(source.state().mounted).toBe(true);
+    expect(document.querySelector('.sva-source .sva-build-widget').textContent).toBe('the widget');
+  });
+
+  /** The app with the study chip, whose list asks the source what studies it has as the page opens. */
+  function withChip(source) {
+    document.body.innerHTML = '<div id="app"></div>';
+    app = mountApp('#app', {
+      charts: {},
+      manifest,
+      portfolio: true,
+      libraries: [{ name: 'study.builder', source }]
+    });
+    return app;
+  }
+
+  it('APP-LIB-038: on a page with the study chip, where study.builder’s script is asked for as the page opens, a script that did not load then is asked for again when Build a study is first opened (#408)', async () => {
+    const source = builderSource({ createConnection, ...OPTIONS });
+    const handle = withChip(source);
+    const [first] = scripts();
+    expect(first.getAttribute('src')).toBe('./study.builder/study.builder.js');
+    first.onerror();
+    await settle();
+    expect(scripts()).toHaveLength(0);
+    expect(handle.portfolio().problem).toContain('studies could not be listed');
+    handle.openSource(BUILDER_SOURCE_ID);
+    expect(scripts()).toHaveLength(1);
+    expect(alertSaid()).toBeNull();
+    const builder = fakeBuilder();
+    globalThis.StudyBuilder = builder;
+    scripts()[0].onload();
+    await settle();
+    expect(builder.mount).toHaveBeenCalledTimes(1);
+    expect(document.querySelector('.sva-source .sva-build-widget').textContent).toBe('the widget');
+  });
+
+  it('APP-LIB-040: on a page with the study chip, study.builder’s script is fetched as the page opens, for the chip’s list, then its list of ready-made studies and the studies saved in this browser, and no study until the reader opens one (#408)', async () => {
+    const source = builderSource({ createConnection, ...OPTIONS });
+    const fetchPresets = vi.fn(async () => [
+      {
+        id: 'ready',
+        name: 'Ready-made',
+        study: './study.builder/presets/ready.study.json.gz',
+        settings: { name: 'READY', participants: 40, sites: 4 }
+      }
+    ]);
+    const openPreset = vi.fn(async () => ({ study: { ...STUDY, id: 'READY' } }));
+    const list = vi.fn(async () => []);
+    const handle = withChip(source);
+    // As the page opens, with nothing pressed: the script, and nothing else yet.
+    expect(scripts().map((script) => script.getAttribute('src'))).toEqual([
+      './study.builder/study.builder.js'
+    ]);
+    expect(handle.portfolio().busy).toBe('Looking for study.builder’s studies…');
+    globalThis.StudyBuilder = {
+      ...fakeBuilder(),
+      fetchPresets,
+      openPreset,
+      createShelf: () => ({ available: true, list })
+    };
+    scripts()[0].onload();
+    await settle();
+    // Once it has loaded: the list of ready-made studies, from beside the script, and the shelf.
+    expect(fetchPresets.mock.calls).toEqual([['./study.builder/presets/index.json']]);
+    expect(list).toHaveBeenCalledTimes(1);
+    const { studies, busy } = handle.portfolio();
+    expect(busy).toBe('');
+    expect(studies.map((entry) => entry.id)).toEqual(['preset:ready']);
+    // The widget is not mounted, and no study is fetched, until the reader asks.
+    expect(source.state().mounted).toBe(false);
+    expect(openPreset).not.toHaveBeenCalled();
+    // However many times the page is drawn, each is asked for once.
+    handle.select('data');
+    handle.retag();
+    await settle();
+    expect(scripts()).toHaveLength(1);
+    expect(fetchPresets).toHaveBeenCalledTimes(1);
+    studies[0].open();
+    await settle();
+    expect(openPreset).toHaveBeenCalledTimes(1);
+    expect(handle.state.named.name).toBe('READY');
   });
 
   it('offers no builder on a page that cannot start R, and says why', () => {
@@ -225,6 +369,92 @@ describe('Build a study, on the data view', () => {
     expect(document.querySelector('.sva-source').textContent).toContain(
       'Building a study needs R, and this file cannot start R.'
     );
+  });
+});
+
+describe('study.builder’s studies, opened from the app’s list', () => {
+  const PRESETS = ['SLOW', 'FAST'].map((name) => ({
+    id: name.toLowerCase(),
+    name: `Ready-made ${name}`,
+    study: `${name.toLowerCase()}.study.json.gz`,
+    settings: { name, participants: 10, sites: 2 }
+  }));
+  const DEMO = [{ id: 'one', label: 'Study one', description: '', files: ['dm.csv'], dir: '' }];
+
+  /** The app with a study chip, one demo study, and a study.builder whose ready-made studies arrive when the test says. */
+  async function listed() {
+    const arrivals = {};
+    globalThis.StudyBuilder = {
+      fetchPresets: async () => PRESETS,
+      openPreset: (preset) =>
+        new Promise((resolve, reject) => {
+          arrivals[preset.id] = {
+            arrive: () => resolve({ study: { ...STUDY, id: preset.settings.name } }),
+            fail: () => reject(new Error(`${preset.settings.name} could not be fetched`))
+          };
+        })
+    };
+    document.body.innerHTML = '<div id="app"></div>';
+    app = mountApp('#app', {
+      charts: {},
+      manifest,
+      portfolio: true,
+      demo: { base: './', studies: DEMO },
+      fetchText: async () => 'USUBJID,ARM,SEX\nS1,A,F\n',
+      libraries: [
+        { name: 'study.builder', source: builderSource({ createConnection, ...OPTIONS }) }
+      ]
+    });
+    await app.ready;
+    await settle();
+    const open = (id) =>
+      app
+        .portfolio()
+        .studies.find((entry) => entry.id === `preset:${id}`)
+        .open();
+    return { arrivals, open };
+  }
+  const chip = () => document.querySelector('.sva-chip-name').textContent;
+
+  it('APP-PAGE-046: the study in use is the last one chosen: a study still on its way when another is chosen is dropped when it arrives, and so is one a demo study was chosen after; a dropped study that fails says nothing (#407)', async () => {
+    const { arrivals, open } = await listed();
+    expect(chip()).toBe('Study one');
+    // Two of study.builder's studies: the first is slow, the second arrives first.
+    open('slow');
+    open('fast');
+    arrivals.fast.arrive();
+    await settle();
+    expect(chip()).toBe('FAST');
+    arrivals.slow.arrive();
+    await settle();
+    expect(chip()).toBe('FAST');
+    expect(app.state.named.id).toBe('preset:fast');
+    expect(app.portfolio().busy).toBe('');
+    // A demo study chosen after a slow one outranks it too.
+    open('slow');
+    await app.loadDemo('one');
+    expect(chip()).toBe('Study one');
+    arrivals.slow.arrive();
+    await settle();
+    expect(chip()).toBe('Study one');
+    expect(app.state.named).toBeNull();
+    expect(app.portfolio().busy).toBe('');
+    // A study that was dropped and then fails is not reported.
+    open('slow');
+    open('fast');
+    arrivals.slow.fail();
+    await settle();
+    expect(app.portfolio()).toMatchObject({ busy: 'Opening FAST…', problem: '' });
+    arrivals.fast.arrive();
+    await settle();
+    expect(chip()).toBe('FAST');
+    expect(app.portfolio()).toMatchObject({ busy: '', problem: '' });
+    // The one in use, when it fails, is.
+    open('slow');
+    arrivals.slow.fail();
+    await settle();
+    expect(app.portfolio().problem).toBe('SLOW could not be fetched');
+    expect(chip()).toBe('FAST');
   });
 });
 
