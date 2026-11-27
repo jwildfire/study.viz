@@ -71,11 +71,11 @@ export const COPIED = {
   label: 'copy',
   repository: 'https://github.com/jwildfire/safety.viz',
   // The head of safety.viz's dev branch when the copy was last made: the commit
-  // that redrew safety.viz's stored pictures (safety.viz#420) after the fixes
-  // the review of study.viz's v0.1.0 release candidate asked for
-  // (safety.viz#411, #413, #414, #415 and #419; study.viz#26). It prepares
-  // safety.viz 1.13.0, which is not released there yet.
-  commit: '9e49f5f886eb85261ee24b969846415e2a28af76',
+  // that made the words of safety.viz's v1.13.0 true (safety.viz#424 and #426),
+  // on top of the one that moved its copy of study.builder to v0.5.1
+  // (safety.viz#423 and #425; study.viz#29). It prepares safety.viz 1.13.0,
+  // which is not released there yet.
+  commit: '7d1066d0a46298b88f2667c62491d79356e4761e',
   folders: [
     // The app.
     'src/app',
@@ -1426,9 +1426,9 @@ const RENAMED = {
       reason: why('checksums')
     },
     {
-      original: '   "sha256": "d7251922739111b8eff6c6f000641285fe87a98b53c8b2117762aa40dbb828df"',
+      original: '   "sha256": "68df35c7f7c9bce0635742c5cc19fd180687139b2552257f4e8c22fb95fa4f6b"',
       replacement:
-        '   "sha256": "c3ea4b815e8192e7270e10303a4523c61eceb7dc179cb5b581cf924195846c6b"',
+        '   "sha256": "48bb793f56ad0ffcea25fa487d3fdfcca41e17c339bc619d6f8018485b8a63fa"',
       reason: why('checksums')
     }
   ],
@@ -1446,9 +1446,9 @@ const RENAMED = {
       reason: why('checksums')
     },
     {
-      original: '   "sha256": "d7251922739111b8eff6c6f000641285fe87a98b53c8b2117762aa40dbb828df"',
+      original: '   "sha256": "68df35c7f7c9bce0635742c5cc19fd180687139b2552257f4e8c22fb95fa4f6b"',
       replacement:
-        '   "sha256": "c3ea4b815e8192e7270e10303a4523c61eceb7dc179cb5b581cf924195846c6b"',
+        '   "sha256": "48bb793f56ad0ffcea25fa487d3fdfcca41e17c339bc619d6f8018485b8a63fa"',
       reason: why('checksums')
     }
   ],
@@ -1547,6 +1547,21 @@ const RENAMED = {
         "      repoUrl: 'https://github.com/jwildfire/safety.viz',",
       replacement:
         '    );\n' +
+        '    const html = renderDemoAppPage({\n' +
+        "      bundle: 'study.viz-app.js',\n" +
+        "      download: 'study.viz-app.html',\n" +
+        "      repoUrl: 'https://github.com/jwildfire/study.viz',",
+      reason: why('files', 'repo')
+    },
+    {
+      original:
+        '    // The page as built carries both.\n' +
+        '    const html = renderDemoAppPage({\n' +
+        "      bundle: 'safety.viz-app.js',\n" +
+        "      download: 'safety.viz-app.html',\n" +
+        "      repoUrl: 'https://github.com/jwildfire/safety.viz',",
+      replacement:
+        '    // The page as built carries both.\n' +
         '    const html = renderDemoAppPage({\n' +
         "      bundle: 'study.viz-app.js',\n" +
         "      download: 'study.viz-app.html',\n" +
