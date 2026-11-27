@@ -2,8 +2,11 @@
 // one commit with a record (obot.roadmap#440). The record, SOURCE.json at the
 // root of the repository, names that commit and lists every copied file with
 // its checksum and size. `verifyCopied` is the check that fails when a file and
-// the record no longer agree; `verifyAgainstSource` compares each file with the
-// commit itself.
+// the record no longer agree, `verifyDeclared` when the record and this script
+// do not, and `verifyNothingElse` when a file under a copied folder is in
+// neither. None of the three reads safety.viz: a file changed together with
+// its entry in the record passes them. `verifyAgainstSource` compares each
+// file with the commit itself, and is the check that catches that.
 //
 // The model is safety.viz's own scripts/vendor-lib.mjs, which keeps a record
 // of the same shape beside each library it copies. Two things differ. A copied
@@ -23,8 +26,9 @@
 // Pure functions over bytes and a folder; scripts/copied.mjs is the command
 // line.
 
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 export const RECORD_FILE = 'SOURCE.json';
@@ -47,6 +51,9 @@ const SCHEMA_FROM_THE_COPY = {
  *   folders   copied whole: every file under the folder at the commit
  *   files     single files
  *   left      files under a copied folder that stay in safety.viz, each with why
+ *   own       files under a copied folder that are study.viz's own and were
+ *             never in safety.viz at the commit, each with why: the only
+ *             other files a copied folder may hold
  *   changes   file → what differs here, in the order it is done, each with why:
  *             { original, replacement, reason }   lines swapped for others; each
  *                                                 is one or more whole lines
@@ -194,10 +201,12 @@ export const COPIED = {
       ])
     ),
     // The pictures the app's browser tests are compared with on the Linux
-    // runner. Each shows the app's header and footer, which name study.viz
-    // here, so study.viz's own run on that runner draws them (the "Refresh
-    // baselines" workflow) and a copy would change under the record at the
-    // first refresh. The three files of measurements beside them stay copied.
+    // runner. They are study.viz's own from the start: study.viz's own run on
+    // that runner draws them (the "Update evidence baselines" workflow), so a
+    // copy would change under the record at the first redraw. Most show the
+    // app's name, which is study.viz here; a few do not, and were the same
+    // bytes as safety.viz's when the copy was made. The three files of
+    // measurements beside them stay copied.
     ...Object.fromEntries(
       [
         'APP-BIO-015-trend-tiles',
@@ -269,12 +278,19 @@ export const COPIED = {
         'APP-TIER-022-phone-chart-label-panel'
       ].map((picture) => [
         `docs/evidence/basic-app/${picture}.png`,
-        'A picture the browser tests are compared with on the Linux runner. It shows the ' +
-          'app under its own name, so study.viz draws its own (the “Refresh baselines” ' +
-          'workflow), and a copy would change under the record at the first refresh.'
+        'A picture the browser tests are compared with on the Linux runner. study.viz’s own ' +
+          'run on that runner draws it (the “Update evidence baselines” workflow), so it is ' +
+          'study.viz’s own from the start and a copy would change under the record at the ' +
+          'first redraw. Most of these pictures show the app’s name, which is study.viz here.'
       ])
     )
   },
+  // No file under a copied folder is study.viz's own today: its own files sit
+  // beside the copied ones (scripts/, tests/unit/repo/, src/main.js and the
+  // rest), not among them. A file added under a copied folder is listed here by
+  // its path, with why it is study.viz's and not safety.viz's; a pattern would
+  // let in a file nobody listed.
+  own: {},
   changes: {
     // The charts are safety.viz's built bundle here, and no chart's source is
     // in study.viz: a test that read a source file of the chart library reads
@@ -2200,7 +2216,7 @@ export const asListed = (changes) =>
  * @param {Object} copied What is copied: COPIED.
  * @param {(folder: string) => string[]} list Every file under a folder at the commit, as paths from the repository's root.
  * @returns {string[]} The paths.
- * @throws {Error} When a folder has no files, or a file left behind or changed is not one of the folders' files.
+ * @throws {Error} When a folder has no files, a file left behind or changed is not one of the folders' files, or a file listed as study.viz's own is one of them.
  */
 export function filesToCopy(copied, list) {
   const all = new Set();
@@ -2208,6 +2224,11 @@ export function filesToCopy(copied, list) {
     const found = list(folder);
     if (!found.length) throw new Error(`${folder}: the commit has no files under it.`);
     found.forEach((file) => all.add(file));
+  }
+  for (const file of Object.keys(copied.own || {})) {
+    if (all.has(file) || copied.files.includes(file)) {
+      throw new Error(`${file}: listed as study.viz’s own, but the commit holds it.`);
+    }
   }
   for (const file of Object.keys(copied.left)) {
     if (!all.delete(file)) throw new Error(`${file}: left behind, but no copied folder holds it.`);
@@ -2417,6 +2438,76 @@ export function verifyDeclared(record, copied) {
   const left = Object.entries(copied.left).map(([file, reason]) => ({ file, reason }));
   if (!same(record.left || [], left)) {
     problems.push(`${RECORD_FILE} does not list the files left behind as the script lists them.`);
+  }
+  return problems;
+}
+
+// Every file under a folder on disk, as paths from the root.
+const walk = (rootDir, folder) =>
+  existsSync(path.join(rootDir, folder))
+    ? readdirSync(path.join(rootDir, folder), { withFileTypes: true }).flatMap((item) =>
+        item.isDirectory() ? walk(rootDir, `${folder}/${item.name}`) : [`${folder}/${item.name}`]
+      )
+    : [];
+
+/**
+ * The files that are there under the given folders: every file git tracks,
+ * and every file it does not track and does not ignore, that is on disk. A
+ * file git ignores is one a tool wrote (.gitignore), and is not counted. Where
+ * the root is not in a git checkout, or git cannot be run, every file on disk
+ * under the folders is counted, since nothing says which a tool wrote.
+ * @param {string} rootDir The repository's root.
+ * @param {string[]} folders The folders, as paths from the root.
+ * @returns {string[]} The paths from the root, sorted.
+ */
+export function filesPresent(rootDir, folders) {
+  let listed;
+  try {
+    listed = execFileSync(
+      'git',
+      ['ls-files', '-z', '--cached', '--others', '--exclude-standard', '--', ...folders],
+      { cwd: rootDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 2 ** 26 }
+    )
+      .split('\0')
+      .filter((file) => file && existsSync(path.join(rootDir, file)));
+  } catch {
+    listed = folders.flatMap((folder) => walk(rootDir, folder));
+  }
+  return [...new Set(listed)].sort();
+}
+
+/**
+ * The check that a copied folder holds nothing nobody listed: every file there
+ * is in the record, or listed in the script as left behind, or listed in it as
+ * study.viz's own. So a file safety.viz later deletes cannot stay here
+ * unnoticed, and a file whose entry is taken out of the record is named. A
+ * file listed as study.viz's own must be under a copied folder, be there, have
+ * its reason, and be listed nowhere else.
+ * @param {Object} record The record.
+ * @param {Object} copied What is copied, as the script declares it: COPIED.
+ * @param {string[]} present The files that are there under the copied folders, as filesPresent gives them.
+ * @returns {string[]} The problems, each a sentence.
+ */
+export function verifyNothingElse(record, copied, present) {
+  const problems = [];
+  const recorded = new Set((Array.isArray(record.files) ? record.files : []).map((e) => e.file));
+  const own = copied.own || {};
+  const folderOf = (file) => copied.folders.find((folder) => file.startsWith(`${folder}/`));
+  for (const file of present) {
+    if (folderOf(file) && !recorded.has(file) && !(file in copied.left) && !(file in own)) {
+      problems.push(
+        `${file}: under ${folderOf(file)}/, which is copied whole, and neither in ${RECORD_FILE} ` +
+          'nor listed in the script as left behind or as study.viz’s own.'
+      );
+    }
+  }
+  for (const [file, reason] of Object.entries(own)) {
+    const said = `${file}: listed as study.viz’s own, `;
+    if (!folderOf(file)) problems.push(`${said}but no copied folder holds it.`);
+    else if (recorded.has(file)) problems.push(`${said}and ${RECORD_FILE} lists it as copied.`);
+    else if (file in copied.left) problems.push(`${said}and as left behind.`);
+    else if (typeof reason !== 'string' || !reason.trim()) problems.push(`${said}with no reason.`);
+    else if (!present.includes(file)) problems.push(`${said}and it is not there.`);
   }
   return problems;
 }

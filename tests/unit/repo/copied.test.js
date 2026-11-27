@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,6 +9,7 @@ import {
   RECORD_FILE,
   applyChanges,
   buildRecord,
+  filesPresent,
   filesToCopy,
   readRecord,
   sha256,
@@ -15,13 +17,18 @@ import {
   verifyAgainstSource,
   verifyCopied,
   verifyDeclared,
+  verifyNothingElse,
   writeCopied
 } from '../../../scripts/copied-lib.mjs';
 
 // The copy study.viz began as (obot.roadmap#440): the files copied from one
 // commit of safety.viz, and the record that names the commit and each file's
 // checksum. These tests hold the record to the files in this checkout, and
-// hold the check itself: it must fail when a file and the record disagree.
+// hold the check itself: it must fail when a file and the record disagree, and
+// when a copied folder holds a file nobody listed. No test here reads
+// safety.viz: a file changed together with its entry in the record is caught
+// by `npm run copied:check-source`, which CI runs (COPY-010 holds how it
+// compares, on a made-up source).
 
 const rootDir = fileURLToPath(new URL('../../../', import.meta.url));
 
@@ -51,6 +58,13 @@ function made(what = copied()) {
   writeCopied(dir, copy);
   return dir;
 }
+// What is there under the small copy's folders, and what the check says of it.
+const nothingElse = (dir, what = copied()) =>
+  verifyNothingElse(readRecord(dir), what, filesPresent(dir, what.folders));
+const write = (dir, file, text = 'x\n') => {
+  mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
+  writeFileSync(path.join(dir, file), text);
+};
 const SWAP = {
   original: "import x from './x.js';",
   replacement: "import x from '../vendor/x.js';\nimport y from './y.js';",
@@ -59,10 +73,11 @@ const SWAP = {
 const CUT = { cut: { from: 'line two', to: 'line three' }, reason: 'Those lines stay behind.' };
 
 describe('the record of the copy from safety.viz', () => {
-  it('COPY-001: every copied file in this checkout matches the record, and the record is the one the script declares', () => {
+  it('COPY-001: every copied file in this checkout matches the record, the record is the one the script declares, and the copied folders hold no other file', () => {
     expect(verifyCopied(rootDir)).toEqual([]);
     const record = readRecord(rootDir);
     expect(verifyDeclared(record, COPIED)).toEqual([]);
+    expect(verifyNothingElse(record, COPIED, filesPresent(rootDir, COPIED.folders))).toEqual([]);
     expect(record.repository).toBe('https://github.com/jwildfire/safety.viz');
     expect(record.commit).toBe(COPIED.commit);
     expect(record.commit).toMatch(/^[0-9a-f]{40}$/);
@@ -265,5 +280,98 @@ describe('the record of the copy from safety.viz', () => {
     expect(await verifyAgainstSource(dir, what, { list, read })).toEqual([
       expect.stringMatching(/^c\/extra\.js: in SOURCE\.json, and not among the files copied/)
     ]);
+  });
+
+  it('COPY-011: a file under a copied folder that is in neither the record nor the script’s lists is named', () => {
+    const dir = made();
+    expect(nothingElse(dir)).toEqual([]);
+
+    // A file nobody listed, in the folder and in a folder under it.
+    write(dir, 'a/zzz-unrecorded.js');
+    write(dir, 'a/deeper/zzz.csv');
+    expect(nothingElse(dir)).toEqual([
+      'a/deeper/zzz.csv: under a/, which is copied whole, and neither in SOURCE.json nor listed in the script as left behind or as study.viz’s own.',
+      'a/zzz-unrecorded.js: under a/, which is copied whole, and neither in SOURCE.json nor listed in the script as left behind or as study.viz’s own.'
+    ]);
+    // The other two checks do not see it, and a file outside the copied folders is not asked about.
+    write(dir, 'elsewhere/own.js');
+    expect(verifyCopied(dir)).toEqual([]);
+    expect(verifyDeclared(readRecord(dir), copied())).toEqual([]);
+    expect(nothingElse(dir)).toHaveLength(2);
+
+    // A file whose entry is taken out of the record, the file staying where it was.
+    const cut = made();
+    const record = readRecord(cut);
+    record.files = record.files.filter((entry) => entry.file !== 'a/two.js');
+    writeFileSync(path.join(cut, RECORD_FILE), JSON.stringify(record));
+    expect(verifyCopied(cut)).toEqual([]);
+    expect(verifyDeclared(readRecord(cut), copied())).toEqual([]);
+    expect(nothingElse(cut)).toEqual([
+      expect.stringMatching(/^a\/two\.js: under a\/, which is copied whole, and neither in/)
+    ]);
+  });
+
+  it('COPY-012: a copied folder may also hold a file left behind, and a file listed as study.viz’s own with its reason', () => {
+    // A file left behind may be there, as the stored pictures are, or not, as the walk’s screenshots are not.
+    const dir = made();
+    write(dir, 'a/stays.js', SOURCE['a/stays.js']);
+    expect(nothingElse(dir)).toEqual([]);
+
+    // study.viz’s own file is listed by its path, with why.
+    write(dir, 'a/ours.js');
+    expect(nothingElse(dir)).toHaveLength(1);
+    const ours = copied({ own: { 'a/ours.js': 'A test study.viz added.' } });
+    expect(nothingElse(dir, ours)).toEqual([]);
+    expect(filesToCopy(ours, list)).toEqual(['a/one.js', 'a/two.js', 'b.txt']);
+
+    // The list is held too: each entry is under a copied folder, there, with its reason, and listed nowhere else.
+    const said = (own) => nothingElse(dir, copied({ own }));
+    expect(said({ 'a/ours.js': ' ' })).toEqual([
+      'a/ours.js: listed as study.viz’s own, with no reason.'
+    ]);
+    expect(said({ 'a/ours.js': 'r', 'a/gone.js': 'r' })).toEqual([
+      'a/gone.js: listed as study.viz’s own, and it is not there.'
+    ]);
+    expect(said({ 'a/ours.js': 'r', 'c/ours.js': 'r' })).toEqual([
+      'c/ours.js: listed as study.viz’s own, but no copied folder holds it.'
+    ]);
+    expect(said({ 'a/ours.js': 'r', 'a/one.js': 'r' })).toEqual([
+      'a/one.js: listed as study.viz’s own, and SOURCE.json lists it as copied.'
+    ]);
+    expect(said({ 'a/ours.js': 'r', 'a/stays.js': 'r' })).toEqual([
+      'a/stays.js: listed as study.viz’s own, and as left behind.'
+    ]);
+    // A file the commit holds is safety.viz’s, and is copied or left behind: never listed as study.viz’s own.
+    expect(() => filesToCopy(copied({ own: { 'a/one.js': 'r' } }), list)).toThrow(
+      /a\/one\.js: listed as study\.viz’s own, but the commit holds it/
+    );
+    expect(() => filesToCopy(copied({ own: { 'b.txt': 'r' } }), list)).toThrow(
+      /b\.txt: listed as study\.viz’s own, but the commit holds it/
+    );
+  });
+
+  it('COPY-013: what is there is every file git tracks or does not ignore; a file a tool wrote and git ignores is not counted', () => {
+    // Outside a git checkout, every file on disk under the folders.
+    const dir = made();
+    write(dir, 'a/build/out.js');
+    write(dir, 'elsewhere/own.js');
+    expect(filesPresent(dir, ['a'])).toEqual(['a/build/out.js', 'a/one.js', 'a/two.js']);
+    expect(filesPresent(dir, ['none'])).toEqual([]);
+
+    // In one: an ignored file is not counted unless it is tracked, and a file
+    // that is tracked or untracked is, while it is on disk.
+    const git = (...args) => execFileSync('git', args, { cwd: dir, stdio: 'pipe' });
+    git('init', '--quiet');
+    write(dir, '.gitignore', 'build/\nscreenshots/\n');
+    write(dir, 'a/screenshots/kept.png');
+    write(dir, 'a/screenshots/loose.png');
+    git('add', 'a/one.js');
+    git('add', '--force', 'a/screenshots/kept.png');
+    expect(filesPresent(dir, ['a'])).toEqual(['a/one.js', 'a/screenshots/kept.png', 'a/two.js']);
+    expect(nothingElse(dir)).toEqual([
+      expect.stringMatching(/^a\/screenshots\/kept\.png: under a\/, which is copied whole/)
+    ]);
+    rmSync(path.join(dir, 'a/one.js'));
+    expect(filesPresent(dir, ['a'])).toEqual(['a/screenshots/kept.png', 'a/two.js']);
   });
 });

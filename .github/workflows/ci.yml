@@ -64,7 +64,7 @@ jobs:
       # The libraries the app carries are copied from their own repositories,
       # each with a record beside it. Each step fails if a copy and its record
       # disagree; none needs the network. The `:check-source` script of the
-      # same name also reads the source repository, and is run by hand.
+      # same name also reads the source repository, and is run further down.
       - name: Copied bio.viz bundle matches its record
         run: npm run bio-viz:check
 
@@ -85,6 +85,58 @@ jobs:
 
       - name: Copied study.builder matches its record
         run: npm run study-builder:check
+
+      # The nine steps above compare each copy with its record and never read
+      # its source, so a copied file changed together with its record passes
+      # them (#24). The nine below read each source repository, at the commit
+      # or the tag the record names, and fail on a difference, as safety.viz's
+      # check does for the libraries it carries. They need the network. Every
+      # source is public and is only read.
+      #
+      # A step that may ask GitHub's API is given this job's own token, which
+      # is read-only (`permissions`, above): without one the API answers sixty
+      # requests an hour to an address, and runners share theirs. No secret is
+      # used. The files themselves are read without a token.
+      - name: Files copied from safety.viz equal the commit their record names
+        run: npm run copied:check-source
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      # Also that the commit is on safety.viz's dev branch, as the record says.
+      - name: Copied safety.viz bundle equals its source
+        run: npm run safety-viz:check-source
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      # bio.viz and gsm.bio are copied from a release tag today, which is
+      # checked with git alone; copied from `dev`, their checks ask the API.
+      - name: Copied bio.viz bundle equals its source
+        run: npm run bio-viz:check-source
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Copied gsm.bio statistics file equals its source
+        run: npm run statistics:check-source
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      # Each pin's tag must still name its pinned commit, and the package's own
+      # DESCRIPTION there must give the pinned version. The built packages
+      # themselves are compared with nothing but their record.
+      - name: Pins for the gsm packages built for R in the browser match their source
+        run: npm run r-wasm:check-source
+
+      - name: Copied gsm workflows equal their source tags
+        run: npm run gsm-workflows:check-source
+
+      - name: Copied gsm.viz bundle equals its source tag
+        run: npm run gsm-viz:check-source
+
+      - name: Copied RBQM demo study equals its source
+        run: npm run rbqm-study:check-source
+
+      - name: Copied study.builder equals its source tag
+        run: npm run study-builder:check-source
 
       - name: Run unit tests
         run: npm test
