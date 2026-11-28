@@ -63,7 +63,7 @@ import {
 } from './header.js';
 import { icon } from './icons.js';
 import { note } from './note.js';
-import { el, plural } from './dom.js';
+import { el, oneStop, plural } from './dom.js';
 import { isBelow, tierNoteOf, tierOf } from '../tiers.js';
 import { statusHeading, statusLabel } from '../status-label.js';
 import { rControl } from './r-control.js';
@@ -332,7 +332,7 @@ export function mountApp(
     focus: null, // the mapping row to return the keyboard focus to after a re-render
     selected: 'data',
     source: null, // the id of the source open on the data view, when one is
-    named: null, // what the loaded study is called, when what loaded it said: { name, kind, facts, about, viewer }
+    named: null, // what the loaded study is called, when what loaded it said: { name, kind, facts, about, viewer, rung }
     chip: null, // what is open under the study chip: 'menu', 'info' or nothing
     // Whether the data view shows the viewer in place of the files: it does,
     // from the start, on a page that serves the viewer.
@@ -347,7 +347,20 @@ export function mountApp(
   let noteSlot = null;
   let dataShown = null; // what the data view returned, while it is the view on the page
   const studies = demo ? demo.studies || DEMO_STUDIES : [];
-  let demoRun = 0; // the latest demo study asked for; an earlier one still loading is dropped
+  // Every way of choosing what the page shows takes a turn in one ordering
+  // (#427): a demo study, files of the reader's own, Reset, and a study a
+  // source hands over or is asked to open (`choose`). Whatever is still on its
+  // way when a later choice is made is dropped when it arrives, so the last
+  // thing the reader chose is what the page shows.
+  let turn = 0;
+  // A demo study the reader chose that could not be fetched, said under the
+  // study chip until the next choice (#427).
+  let demoProblem = '';
+  const takeTurn = () => {
+    turn += 1;
+    demoProblem = '';
+    return turn;
+  };
 
   /** How many files are loaded: placed, set aside, or kept as gsm's raw files. */
   const loadedCount = () =>
@@ -983,7 +996,7 @@ export function mountApp(
   // The label on the corner of the open card (#274): a chart or a tab that
   // stands below the app's rung says so there, with its reason. One that is
   // Exploratory, as the app is, shows no second label.
-  function cornerLabel(id, name, what) {
+  function cornerLabel(id, name, what, mark = `This ${what}`) {
     const { tier, note } = rungOf(id);
     if (!isBelow(tier)) return;
     // A chart's label sits on its card's top edge. A tab's view has no card,
@@ -994,10 +1007,29 @@ export function mountApp(
         tier,
         heading: statusHeading(name, tier),
         text: note ? [note] : [],
-        marks: { exploratory: ['This app'], [tier]: [`This ${what}`] }
+        marks: { exploratory: ['This app'], [tier]: [mark] }
       })
     );
     content.append(corner);
+  }
+
+  // The Overview tab is the app's own and carries no label. Two things drawn
+  // on it are not the app's own and stand below its rung (#427): a way to
+  // load data a library brought, while it is open, and the view of a study
+  // that says which rung it stands on (`named.rung`), as a simulated study
+  // does. Each carries the label on the corner, with its reason, as a tab does.
+  function dataLabel() {
+    const source = sources.find((one) => one.id === state.source);
+    if (source) {
+      const name = typeof source.label === 'string' && source.label ? source.label : source.id;
+      cornerLabel(source.id, name, 'tab', name);
+      return;
+    }
+    const named = loadedCount() ? state.named : null;
+    if (named && typeof named.rung === 'string') {
+      const kind = String(named.kind || 'Simulated').toLowerCase();
+      cornerLabel(named.rung, `The view of this ${kind} study`, 'tab', 'This study’s view');
+    }
   }
 
   function renderMain(current) {
@@ -1011,6 +1043,7 @@ export function mountApp(
     if (state.selected === 'data') {
       title.textContent = 'Overview';
       renderNotes(content);
+      dataLabel();
       const container = el('div', 'sva-data');
       content.append(container);
       dataShown = dataView(container, handle) || null;
@@ -1281,21 +1314,33 @@ export function mountApp(
   async function runDemo(id, open) {
     const study = studies.find((item) => item.id === id) || studies[0];
     if (!study) return;
-    const run = ++demoRun;
+    const run = takeTurn();
     state.busy = 'Loading the demo study…';
     render();
     let texts;
     try {
       texts = await Promise.all(studyUrls(study, demo.base).map((url) => fetchText(url)));
     } catch (error) {
-      if (run !== demoRun) return;
+      if (run !== turn) return;
       state.busy = '';
+      // A study the reader chose from the chip, the Studies view or the Files
+      // face is said under the chip, as a ready-made study that did not open
+      // is, and the reader stays on the tab they are on (#427). The study the
+      // page opens on has no tab to stay on and no chip to have pressed: it
+      // is said on the Overview, as on a page with no chip.
+      if (withPortfolio && !open) {
+        demoProblem = `${oneStop(`${study.label} could not be opened: ${error.message}`)} ${
+          loadedCount() ? 'The study in use is unchanged.' : 'No study is in use.'
+        }`;
+        render();
+        return;
+      }
       state.notes = [`The demo study could not be loaded: ${error.message}`];
       state.selected = 'data';
       render();
       return;
     }
-    if (run !== demoRun) return;
+    if (run !== turn) return;
     state.busy = '';
     clear();
     const list = study.files.map((name, index) => ({ name, text: texts[index] }));
@@ -1342,6 +1387,24 @@ export function mountApp(
       URL.revokeObjectURL(link.href);
     },
 
+    /**
+     * The name the app's own buttons offer a file for download under (#431).
+     * With a simulated study in use, ready-made, saved or built, the name
+     * says so: `simulated-adsl.csv`, `simulated-study-viz-mapping.json`. A
+     * file read back out of the page could otherwise be taken for a real
+     * study's, since a simulated study's files carry the standard names. A
+     * demo study's files and a reader's own keep their names.
+     * @param {string} name The file's name on the page.
+     * @returns {string} The name to save it under.
+     */
+    downloadName(name) {
+      const simulated =
+        loadedCount() > 0 &&
+        isRecord(state.named) &&
+        (state.named.kind || 'Simulated') === 'Simulated';
+      return simulated && !/^simulated-/i.test(name) ? `simulated-${name}` : name;
+    },
+
     /** The first chart the loaded data supports, or null. */
     firstReady: () => firstReady(),
 
@@ -1386,7 +1449,7 @@ export function mountApp(
         });
       }
       let busy = '';
-      let problem = '';
+      let problem = demoProblem;
       let namedListed = false;
       for (const source of sources) {
         if (!isRecord(source.studies) || typeof source.studies.list !== 'function') continue;
@@ -1461,6 +1524,23 @@ export function mountApp(
         }
       }
       return { studies: list, add, busy, problem };
+    },
+
+    /**
+     * Take a turn in the one ordering of what the page shows (#427), for a
+     * study that will arrive later: a source calls this when the reader asks
+     * it to open one, and asks the answer when the study arrives. A demo study
+     * still loading is dropped, as it is when files of the reader's own are
+     * loaded.
+     * @returns {() => boolean} Whether this is still the last choice made: false once a demo study, files of the reader's own, Reset or another study was chosen after it.
+     */
+    choose() {
+      const mine = takeTurn();
+      if (state.busy) {
+        state.busy = '';
+        render();
+      }
+      return () => mine === turn;
     },
 
     /** The ways to load data that libraries brought: each an id, a label and one sentence. */
@@ -1546,7 +1626,7 @@ export function mountApp(
       // Files of the user's own outrank a demo study still on its way: it is
       // dropped when it arrives, instead of replacing them.
       if (!study) {
-        demoRun += 1;
+        takeTurn();
         state.busy = '';
       }
       state.notes = [...notes];
@@ -1613,7 +1693,7 @@ export function mountApp(
      */
     loadRaw(list, { notes = [], study = null, as = null } = {}) {
       if (!study) {
-        demoRun += 1;
+        takeTurn();
         state.busy = '';
       }
       state.notes = [...notes];
@@ -1677,7 +1757,9 @@ export function mountApp(
         delete state.placements[source.domain];
       }
       if (domain) handle.setFile(domain, item.file, item.placement);
-      else state.unplaced.push(item);
+      // A file taken out of a domain by hand is marked (#431), so another
+      // snapshot of the same study keeps it aside (viewer-view.js).
+      else state.unplaced.push('unplaced' in source ? item : { ...item, byHand: true });
       state.failed = {};
       render();
     },
@@ -1769,14 +1851,14 @@ export function mountApp(
       return serializeMappings(state.files, state.mappings);
     },
 
-    /** Offer the mapping file as a download; nothing leaves the browser. */
+    /** Offer the mapping file as a download, under a name that says a simulated study is one (#431); nothing leaves the browser. */
     downloadMapping() {
       const blob = new Blob([`${JSON.stringify(handle.mappingFile(), null, 2)}\n`], {
         type: 'application/json'
       });
       const link = el('a');
       link.href = URL.createObjectURL(blob);
-      link.download = MAPPING_FILE_NAME;
+      link.download = handle.downloadName(MAPPING_FILE_NAME);
       document.body.append(link);
       link.click();
       link.remove();
@@ -1801,7 +1883,7 @@ export function mountApp(
      * @returns {void}
      */
     reset() {
-      demoRun += 1;
+      takeTurn();
       state.busy = '';
       clear();
       handle.select('data');

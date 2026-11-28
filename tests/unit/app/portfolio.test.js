@@ -83,7 +83,8 @@ describe('the study chip', () => {
     app.loadFiles([DM], {
       as: { id: 'x', name: 'READY-P2', kind: 'Simulated', facts: [{ label: 'Phase', value: 'P2' }] }
     });
-    expect(q('[data-action="study-chip"]').textContent).toBe('READY-P2▾');
+    // A simulated study says so under its name (#427).
+    expect(q('[data-action="study-chip"]').textContent).toBe('READY-P2Simulated▾');
     // The tab beside the chip does not say the study's name again.
     expect(q('.sva-item[data-view="data"]').textContent).toBe('Overview');
     // Files of the reader's own are no longer that study.
@@ -233,7 +234,8 @@ describe('the study chip', () => {
     const long = 'A study whose name is longer than its chip';
     app.loadFiles([DM], { as: { id: 'x', name: long, kind: 'Simulated' } });
     expect(q('.sva-chip-name').textContent).toBe(long);
-    expect(chip().title).toBe(long);
+    // A simulated study's hover line says so after the name (#427).
+    expect(chip().title).toBe(`${long}, a simulated study`);
     // The name is also in the list and in the i's card, as before.
     chip().click();
     expect(q('.sva-chip-item[aria-current="true"] .sva-chip-study').textContent).toBe(long);
@@ -693,6 +695,225 @@ describe('the data view’s second face', () => {
     expect(app.state.unplaced.map((item) => item.file.name)).toEqual([]);
   });
 
+  it('APP-STUDY-012: a mapping row the reader set by hand is kept when another snapshot of the same study is chosen, wherever that snapshot has the same file with the column the row names; a row whose file the snapshot does not have is cleared, and a note on the page names it; rows the reader did not set are filled again from the snapshot’s own file (#427)', async () => {
+    const mountStudy = vi.fn(() => ({ destroy() {} }));
+    globalThis.StudyViewer = { mount: vi.fn() };
+    globalThis.StudyBuilder = { mountStudy };
+    mounted({ demo: null, viewer });
+    const built = keptStudy('KEPT', ['2012-01-31', '2012-02-29', '2012-03-31']);
+    handOver(built, 'preset:kept');
+    await settle();
+    const choose = async (snapshot) => {
+      mountStudy.mock.calls.at(-1)[1].onView({ view: 'overview', snapshot });
+      await settle();
+    };
+    const row = (domain, column) => app.state.mappings[domain].columns[column];
+    // Filled by the app: the arm is the column called ARM.
+    expect(row('subject', 'ARM')).toEqual({ value: 'ARM', source: 'same name' });
+    // The reader sets two rows by hand: the participants file's arm, and the adverse events file's term.
+    app.setColumn('subject', 'ARM', 'SEX');
+    app.setColumn('ae', 'AEDECOD', 'AEBODSYS');
+    expect(row('subject', 'ARM')).toEqual({ value: 'SEX', source: 'chosen' });
+    // The second snapshot has both files: both rows are as the reader set them, and nothing is said.
+    await choose('2012-02-29');
+    expect(app.state.files.subject.rows).toHaveLength(2);
+    expect(row('subject', 'ARM')).toEqual({ value: 'SEX', source: 'chosen' });
+    expect(row('ae', 'AEDECOD')).toEqual({ value: 'AEBODSYS', source: 'chosen' });
+    expect(row('subject', 'SEX')).toEqual({ value: 'SEX', source: 'same name' });
+    expect(app.state.notes).toEqual([]);
+    // The first snapshot has no adverse events file: the participants file's row is kept,
+    // and the page says which row was cleared, and why.
+    await choose('2012-01-31');
+    expect(app.state.files.subject.rows).toHaveLength(1);
+    expect(app.state.files.ae).toBeUndefined();
+    expect(row('subject', 'ARM')).toEqual({ value: 'SEX', source: 'chosen' });
+    expect(app.state.notes).toEqual([
+      'Mapping rows set by hand were cleared, because this snapshot’s files do not have them: AEBODSYS (adae.csv).'
+    ]);
+    app.state.exploring = false;
+    app.select('data');
+    expect(q('.sva-notes').textContent).toContain('AEBODSYS (adae.csv)');
+    // Back at the last snapshot the cleared row is the app's own guess again, and the kept one is still the reader's.
+    await choose('2012-03-31');
+    expect(row('subject', 'ARM')).toEqual({ value: 'SEX', source: 'chosen' });
+    expect(row('ae', 'AEDECOD')).toEqual({ value: 'AEDECOD', source: 'same name' });
+    expect(app.state.notes).toEqual([]);
+  });
+
+  it('APP-STUDY-012: a mapping row the reader cleared by hand, and a file the reader set aside by hand, are kept when another snapshot of the same study is chosen: the row stays empty where the app would fill it again, at that snapshot and at the ones after it, and the file stays set aside; a row nothing matched is not one of these; and where the snapshot does not have the file, a note on the page names what was not kept (#431)', async () => {
+    const mountStudy = vi.fn(() => ({ destroy() {} }));
+    globalThis.StudyViewer = { mount: vi.fn() };
+    globalThis.StudyBuilder = { mountStudy };
+    mounted({ demo: null, viewer });
+    const built = keptStudy('KEPT', ['2012-01-31', '2012-02-29', '2012-03-31', '2012-04-30']);
+    // At the third snapshot the participants file has no column for the arm,
+    // so the app itself leaves that row empty there.
+    const third = built.at('2012-03-31');
+    const whole = third.files();
+    third.files = () => ({
+      raw: whole.raw,
+      standard: whole.standard.map((file) =>
+        file.name === 'adsl.csv'
+          ? { name: file.name, text: 'USUBJID,SEX,RACE,SITEID\nS1,F,Other,01\n' }
+          : file
+      )
+    });
+    handOver(built, 'preset:kept');
+    await settle();
+    const choose = async (snapshot) => {
+      mountStudy.mock.calls.at(-1)[1].onView({ view: 'overview', snapshot });
+      await settle();
+    };
+    const row = (domain, column) => app.state.mappings[domain].columns[column];
+    const cleared = { value: null, source: null, cleared: true };
+    // The reader clears two rows the app had filled: the participants file's arm, and the adverse events file's term.
+    expect(row('subject', 'ARM')).toEqual({ value: 'ARM', source: 'same name' });
+    app.setColumn('subject', 'ARM', null);
+    app.setColumn('ae', 'AEDECOD', null);
+    expect(row('subject', 'ARM')).toEqual(cleared);
+    // A row nothing matched is empty too, and carries no mark.
+    expect(row('subject', 'SITEID')).toEqual({ value: null, source: null });
+    // Another snapshot with both files: both rows are still cleared, and nothing is said.
+    await choose('2012-02-29');
+    expect(app.state.files.subject.rows).toHaveLength(2);
+    expect(row('subject', 'ARM')).toEqual(cleared);
+    expect(row('ae', 'AEDECOD')).toEqual(cleared);
+    expect(row('subject', 'SEX')).toEqual({ value: 'SEX', source: 'same name' });
+    expect(row('subject', 'SITEID')).toEqual({ value: null, source: null });
+    expect(app.state.notes).toEqual([]);
+    // A snapshot whose file would not have filled the row: it is still the reader's, so at
+    // the snapshot after it, whose file has the column again, the row is still cleared.
+    await choose('2012-03-31');
+    expect(app.state.files.subject.columns).toEqual(['USUBJID', 'SEX', 'RACE', 'SITEID']);
+    expect(row('subject', 'ARM')).toEqual(cleared);
+    await choose('2012-04-30');
+    expect(app.state.files.subject.columns).toEqual(['USUBJID', 'ARM', 'SEX']);
+    expect(row('subject', 'ARM')).toEqual(cleared);
+    expect(row('ae', 'AEDECOD')).toEqual(cleared);
+    expect(app.state.notes).toEqual([]);
+    // The first snapshot has no adverse events file: the participants file's row is kept,
+    // and the page names the row that was not, by the name the Files face gives it.
+    await choose('2012-01-31');
+    expect(app.state.files.ae).toBeUndefined();
+    expect(row('subject', 'ARM')).toEqual(cleared);
+    expect(app.state.notes).toEqual([
+      'Mapping rows cleared by hand were not kept, because this snapshot does not have their file in the same place: Preferred term (adae.csv).'
+    ]);
+    app.state.exploring = false;
+    app.select('data');
+    expect(q('.sva-notes').textContent).toContain('Preferred term (adae.csv)');
+    // Back at the last snapshot that row is the app's own again, as the note said.
+    await choose('2012-04-30');
+    expect(row('ae', 'AEDECOD')).toEqual({ value: 'AEDECOD', source: 'same name' });
+    expect(row('subject', 'ARM')).toEqual(cleared);
+    expect(app.state.notes).toEqual([]);
+
+    // A file set aside by hand: the adverse events file is taken out of its domain.
+    app.placeFileIn({ domain: 'ae' }, null);
+    expect(app.state.files.ae).toBeUndefined();
+    const aside = () => app.state.unplaced.map((item) => item.file.name);
+    expect(aside()).toEqual(['adae.csv']);
+    // Another snapshot has the file, and the app would place it: it stays set aside, and nothing is said.
+    await choose('2012-02-29');
+    expect(app.state.files.subject.rows).toHaveLength(2);
+    expect(app.state.files.ae).toBeUndefined();
+    expect(app.state.mappings.ae).toBeUndefined();
+    expect(aside()).toEqual(['adae.csv']);
+    expect(app.state.notes).toEqual([]);
+    await choose('2012-04-30');
+    expect(app.state.files.ae).toBeUndefined();
+    expect(aside()).toEqual(['adae.csv']);
+    // The first snapshot does not have the file, and the page says what that means.
+    await choose('2012-01-31');
+    expect(aside()).toEqual([]);
+    expect(app.state.notes).toEqual([
+      'Files set aside by hand are placed again when they are back, because this snapshot does not have them: adae.csv.'
+    ]);
+    await choose('2012-02-29');
+    expect(app.state.files.ae.name).toBe('adae.csv');
+    expect(aside()).toEqual([]);
+    // A file the reader placed again by hand is no longer one set aside.
+    app.placeFileIn({ domain: 'ae' }, null);
+    app.placeFileIn({ unplaced: 0 }, 'ae');
+    await choose('2012-04-30');
+    expect(app.state.files.ae.name).toBe('adae.csv');
+    expect(aside()).toEqual([]);
+  });
+
+  it('APP-STUDY-014: with a simulated study in use a file the app’s own buttons offer for download says it is simulated in its name: Download CSV in a file’s Details gives simulated-adsl.csv, a raw file’s gives simulated-Raw_SUBJ.csv, and Download mapping gives simulated-study-viz-mapping.json, which loads back as the mapping it is; a demo study’s files and a reader’s own keep their names (#431)', async () => {
+    const mountStudy = vi.fn(() => ({ destroy() {} }));
+    globalThis.StudyViewer = { mount: vi.fn() };
+    globalThis.StudyBuilder = { mountStudy };
+    // What a download is saved as: the name on the link the page presses.
+    const saved = [];
+    const hadCreate = URL.createObjectURL;
+    const hadRevoke = URL.revokeObjectURL;
+    URL.createObjectURL = () => 'blob:saved';
+    URL.revokeObjectURL = () => {};
+    const press = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function () {
+      saved.push(this.download);
+    });
+    try {
+      mounted({ viewer });
+      await app.ready;
+      const files = () => {
+        app.state.exploring = false;
+        app.select('data');
+      };
+      const downloadCsv = (name) => {
+        const details = q(`.sva-file-details[data-details="${name}"]`);
+        details.open = true;
+        details.dispatchEvent(new Event('toggle'));
+        details.querySelector('.sva-detail-download').click();
+      };
+      const names = (...of) => {
+        saved.length = 0;
+        files();
+        for (const name of of) downloadCsv(name);
+        q('[data-action="download-mapping"]').click();
+        return [...saved];
+      };
+      // A demo study: the names are the files' own.
+      expect(q('.sva-chip-name').textContent).toBe('Study one');
+      expect(names('dm.csv')).toEqual(['dm.csv', 'study-viz-mapping.json']);
+      // A simulated study, as study.builder hands one over: every name says so.
+      const built = keptStudy('KEPT', ['2012-01-31', '2012-02-29']);
+      handOver(built, 'preset:kept');
+      await settle();
+      expect(q('.sva-chip-under').textContent).toBe('Simulated · Snapshot 2 of 2');
+      expect(names('adsl.csv', 'Raw_SUBJ.csv')).toEqual([
+        'simulated-adsl.csv',
+        'simulated-Raw_SUBJ.csv',
+        'simulated-study-viz-mapping.json'
+      ]);
+      expect(app.downloadName('simulated-adsl.csv')).toBe('simulated-adsl.csv');
+      // One with a single snapshot, as a saved study or one just built.
+      handOver({ id: 'PLAIN', files: () => built.files() }, 'saved:study:PLAIN');
+      expect(names('adae.csv')).toEqual(['simulated-adae.csv', 'simulated-study-viz-mapping.json']);
+      // The mapping file loads back under the name it was saved by: a row set by hand comes with it.
+      app.setColumn('subject', 'ARM', 'SEX');
+      const mapping = JSON.stringify(app.mappingFile());
+      handOver({ id: 'PLAIN', files: () => built.files() }, 'saved:study:PLAIN-2');
+      expect(app.state.mappings.subject.columns.ARM).toEqual({ value: 'ARM', source: 'same name' });
+      app.loadFiles([{ name: 'simulated-study-viz-mapping.json', text: mapping }]);
+      expect(app.state.mappings.subject.columns.ARM).toEqual({ value: 'SEX', source: 'chosen' });
+      expect(app.state.notes[0]).toContain(
+        'simulated-study-viz-mapping.json is a saved mapping for:'
+      );
+      // It is still the simulated study, and its files still say so.
+      expect(app.state.named.name).toBe('PLAIN');
+      expect(app.downloadName('adsl.csv')).toBe('simulated-adsl.csv');
+      // A reader's own files keep their names, also after a simulated study.
+      app.loadFiles([DM]);
+      expect(q('.sva-chip-name').textContent).toBe('Your files');
+      expect(names('dm.csv')).toEqual(['dm.csv', 'study-viz-mapping.json']);
+    } finally {
+      press.mockRestore();
+      URL.createObjectURL = hadCreate;
+      URL.revokeObjectURL = hadRevoke;
+    }
+  });
+
   it('APP-STUDY-002: a study opens on its own last snapshot: the study view is opened there, and a snapshot chosen in one study is not carried to the next, even where the next has one of the same date (#406)', async () => {
     const mountStudy = vi.fn(() => ({ destroy() {} }));
     globalThis.StudyViewer = { mount: vi.fn() };
@@ -729,14 +950,18 @@ describe('the data view’s second face', () => {
     await settle();
     expect(q('.sva-chip-name').textContent).toBe('KEPT');
     expect(q('.sva-chip-snap').textContent).toBe('Snapshot 3 of 3');
-    expect(studyChip().getAttribute('aria-label')).toBe('KEPT, snapshot 3 of 3, 2012-03-31');
+    expect(studyChip().getAttribute('aria-label')).toBe(
+      'KEPT, simulated study, snapshot 3 of 3, 2012-03-31'
+    );
     mountStudy.mock.calls.at(-1)[1].onView({ view: 'overview', snapshot: '2012-01-31' });
     await settle();
     expect(q('.sva-chip-snap').textContent).toBe('Snapshot 1 of 3');
     // On another tab the chip still says it.
     app.select(STUDIES_VIEW_ID);
     expect(q('.sva-chip-snap').textContent).toBe('Snapshot 1 of 3');
-    expect(studyChip().getAttribute('aria-label')).toBe('KEPT, snapshot 1 of 3, 2012-01-31');
+    expect(studyChip().getAttribute('aria-label')).toBe(
+      'KEPT, simulated study, snapshot 1 of 3, 2012-01-31'
+    );
     q('[data-action="study-info"]').click();
     const facts = [...q('.sva-chip-card').querySelectorAll('dt')].map((term) => [
       term.textContent,
@@ -746,10 +971,58 @@ describe('the data view’s second face', () => {
     // A study with one snapshot, and a reader's own files, say nothing of one.
     handOver({ id: 'PLAIN', files: () => built.files() }, 'preset:plain');
     expect(q('.sva-chip-snap')).toBeNull();
-    expect(studyChip().textContent).toBe('PLAIN▾');
-    expect(studyChip().hasAttribute('aria-label')).toBe(false);
+    expect(studyChip().textContent).toBe('PLAINSimulated▾');
     app.loadFiles([DM]);
     expect(q('.sva-chip-snap')).toBeNull();
+    expect(studyChip().hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('APP-STUDY-011: the study chip marks a simulated study as simulated on every tab, in the small line under its name, before the snapshot’s words where there are any, and in its hover line and its accessible name; a demo study and a reader’s own files carry no mark; and the line is cut with the name, from 1,200 pixels, before the header takes a second row (#427)', async () => {
+    const mountStudy = vi.fn(() => ({ destroy() {} }));
+    globalThis.StudyViewer = { mount: vi.fn() };
+    globalThis.StudyBuilder = { mountStudy };
+    mounted({ viewer });
+    await app.ready;
+    const under = () => (q('.sva-chip-under') ? q('.sva-chip-under').textContent : null);
+    // A demo study says nothing of the kind.
+    expect(q('.sva-chip-name').textContent).toBe('Study one');
+    expect(under()).toBeNull();
+    expect(q('.sva-chip-sim')).toBeNull();
+    // A simulated study that kept its snapshots: the mark, then which snapshot.
+    const built = keptStudy('KEPT', ['2012-01-31', '2012-02-29', '2012-03-31']);
+    handOver(built, 'preset:kept');
+    await settle();
+    expect(under()).toBe('Simulated · Snapshot 3 of 3');
+    expect(q('.sva-chip-under').previousElementSibling).toBe(q('.sva-chip-name'));
+    expect(studyChip().title).toBe('KEPT, a simulated study, as it stood on 2012-03-31');
+    expect(studyChip().getAttribute('aria-label')).toBe(
+      'KEPT, simulated study, snapshot 3 of 3, 2012-03-31'
+    );
+    // On every tab: a chart's, the Studies view, and back on the Overview.
+    for (const view of ['ae-explorer', STUDIES_VIEW_ID, 'data']) {
+      app.select(view);
+      expect(under(), view).toBe('Simulated · Snapshot 3 of 3');
+    }
+    // One with a single snapshot, as a study just built or a saved one: the mark alone.
+    handOver({ id: 'PLAIN', files: () => built.files() }, 'saved:study:PLAIN');
+    expect(under()).toBe('Simulated');
+    expect(studyChip().title).toBe('PLAIN, a simulated study');
+    expect(studyChip().getAttribute('aria-label')).toBe('PLAIN, simulated study');
+    app.select('ae-explorer');
+    expect(under()).toBe('Simulated');
+    // A reader's own files carry no mark.
+    app.loadFiles([DM]);
+    expect(under()).toBeNull();
+    expect(studyChip().title).toBe('Your files');
+    // The line gives with the name where the header is tight, and only from 1,200 pixels.
+    const blocks = STYLES.split('@media ').slice(1);
+    const from1200 = blocks.find((block) => block.startsWith('(min-width:1200px){'));
+    expect(from1200).toContain(
+      '.sva-chip-under{max-width:100%;overflow:hidden;text-overflow:ellipsis}'
+    );
+    const everywhere = STYLES.replace(/@media[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, '');
+    expect(everywhere).toContain('.sva-chip-under{font-size:.62rem;');
+    expect(everywhere).not.toContain('.sva-chip-under{max-width');
   });
 
   it('hands the viewer each placed file’s mapping as roles, and a role set in the viewer sets the app’s mapping', async () => {

@@ -12,6 +12,7 @@
 // the reader opens the Overview tab or loads files of their own.
 
 import { el } from './dom.js';
+import { MEASURES, applySavedMapping, setColumn, setMeasure } from './mapping.js';
 import { note } from './note.js';
 
 const messageOf = (error) =>
@@ -242,6 +243,23 @@ export function snapshotDrawn(named) {
 }
 
 /**
+ * The date the loaded study's data stands at (#427), for a simulated study:
+ * the snapshot the page draws, or, for a study that kept only its last, the
+ * date the study itself carries. The RBQM tab hands R this date and says it,
+ * so the tab agrees with the chip on which snapshot is shown. A demo study
+ * and a reader's own files name no date.
+ * @param {?Object} named What the page keeps of the loaded study (`state.named`).
+ * @returns {?{date: string, number: number, of: number}} The date as `2012-01-31`, with which snapshot it is of how many; null where the study names none.
+ */
+export function studyDate(named) {
+  const drawn = snapshotDrawn(named);
+  const built = named && named.built;
+  const date = String((drawn ? drawn.date : built && built.snapshotDate) || '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  return drawn ? { ...drawn, date } : { date, number: 1, of: 1 };
+}
+
+/**
  * Where study.builder's study view opens: the view and table the reader was
  * at, and the snapshot the page draws. A snapshot chosen in another study is
  * not carried over, so a study opens on its own last snapshot (#406).
@@ -254,6 +272,127 @@ function openingAt(app) {
 }
 
 /**
+ * The mapping rows the reader set by hand, for each placed file (#427, #431):
+ * the rows marked chosen, each with the column or the measure's name it was
+ * set to, and the rows the reader cleared, each as null. A row nothing
+ * matched is empty too, and is not one of these: only a row emptied on the
+ * page carries the mark (mapping.js's `setColumn` and `setMeasure`).
+ * @param {Object} app The app handle.
+ * @returns {Object<string, {file: string, columns: Object, measures: Object}>} Domain → its file's name and its hand-set rows; a domain with none is left out.
+ */
+function handSet(app) {
+  const chosen = (rows) =>
+    Object.fromEntries(
+      Object.entries(rows || {})
+        .filter(([, row]) => row && ((row.source === 'chosen' && row.value) || row.cleared))
+        .map(([key, row]) => [key, row.value || null])
+    );
+  const kept = {};
+  for (const [domain, mapping] of Object.entries(app.state.mappings)) {
+    const file = app.state.files[domain];
+    const columns = chosen(mapping.columns);
+    const measures = chosen(mapping.measures);
+    if (!file || !(Object.keys(columns).length || Object.keys(measures).length)) continue;
+    kept[domain] = { file: file.name, columns, measures };
+  }
+  return kept;
+}
+
+/** What the Files face calls a mapping row: the column's label, or the measure's. */
+function rowName(app, domain, kind, key) {
+  if (kind === 'measures') {
+    const measure = MEASURES.find((one) => one.key === key);
+    return measure ? measure.label : key;
+  }
+  const meta = ((app.manifest.domains[domain] || {}).columns || {})[key];
+  return (meta && meta.label) || key;
+}
+
+/**
+ * Set the reader's hand-set rows again on the files of the snapshot just
+ * loaded (#427). A row is set only where it is safe: the same file is placed
+ * in the same domain, and it has the column, or the measure column has the
+ * name, the row was set to. What could not be set is returned, to be said.
+ *
+ * A row the reader cleared is cleared again on the same file in the same
+ * domain, and stays marked as cleared by hand whether or not this snapshot's
+ * file would have filled it, so it is still cleared at the snapshot after
+ * this one (#431). Where the file is not there, the row is returned, to be said.
+ * @param {Object} app The app handle.
+ * @param {Object} kept What `handSet` gave before the snapshot changed.
+ * @returns {{set: boolean, lost: string[], refilled: string[]}} Whether any row was set; each row set to a value that was not, as the value with its file, "AEBODSYS (adae.csv)"; and each cleared row that was not kept, as its name on the Files face with its file, "Severity (adae.csv)".
+ */
+function setAgain(app, kept) {
+  let set = false;
+  const lost = [];
+  const refilled = [];
+  for (const [domain, saved] of Object.entries(kept)) {
+    const file = app.state.files[domain];
+    if (!file || file.name !== saved.file || !app.state.mappings[domain]) {
+      for (const kind of ['columns', 'measures']) {
+        for (const [key, value] of Object.entries(saved[kind])) {
+          if (value === null) refilled.push(`${rowName(app, domain, kind, key)} (${saved.file})`);
+          else lost.push(`${value} (${saved.file})`);
+        }
+      }
+      continue;
+    }
+    const { mapping, skipped } = applySavedMapping(app.state.mappings[domain], saved, file);
+    let next = mapping;
+    for (const [key, value] of Object.entries(saved.columns)) {
+      if (value === null && next.columns[key] && !next.columns[key].cleared) {
+        next = setColumn(next, key, null, file);
+      }
+    }
+    for (const [key, value] of Object.entries(saved.measures)) {
+      if (value === null && next.measures[key] && !next.measures[key].cleared) {
+        next = setMeasure(next, key, null);
+      }
+    }
+    if (next !== app.state.mappings[domain]) set = true;
+    app.state.mappings[domain] = next;
+    lost.push(...skipped.map((value) => `${value} (${saved.file})`));
+  }
+  return { set, lost, refilled };
+}
+
+/** The files the reader set aside by hand (#431), by name: page.js's `placeFileIn` marks each. */
+const asideByHand = (app) =>
+  app.state.unplaced.filter((item) => item.byHand).map((item) => item.file.name);
+
+/**
+ * Set aside again, on the snapshot just loaded, each file the reader had set
+ * aside by hand (#431): the app has just placed it, as it places any file.
+ * It is taken out of its domain with its mapping, as `placeFileIn` does, and
+ * keeps its mark. A file the snapshot does not have is returned, to be said.
+ * @param {Object} app The app handle.
+ * @param {string[]} names What `asideByHand` gave before the snapshot changed.
+ * @returns {{moved: boolean, absent: string[]}} Whether any file was set aside, and the files this snapshot does not have.
+ */
+function setAsideAgain(app, names) {
+  const { state } = app;
+  let moved = false;
+  const absent = [];
+  for (const name of names) {
+    const domain = Object.keys(state.files).find((id) => state.files[id].name === name);
+    const waiting = state.unplaced.find((item) => item.file.name === name);
+    if (domain) {
+      state.unplaced.push({
+        file: state.files[domain],
+        placement: state.placements[domain],
+        byHand: true
+      });
+      delete state.files[domain];
+      delete state.mappings[domain];
+      delete state.placements[domain];
+      moved = true;
+    } else if (waiting) waiting.byHand = true;
+    else absent.push(name);
+  }
+  return { moved, absent };
+}
+
+/**
  * The reader moved on the study view. Where they are is kept; and when they
  * chose another snapshot, the app is handed that snapshot's files in place of
  * the ones it had, so the charts and the RBQM tab draw the snapshot the
@@ -261,6 +400,12 @@ function openingAt(app) {
  * itself (`study.at`), with no R. The files are handed over as builder-view.js
  * hands a study over: gsm's raw files kept as they are, the standard files
  * placed, and an efficacy score left out.
+ *
+ * It is the same study at another date, so what the reader did by hand on the
+ * Files face is kept across the change (#427, #431), wherever the snapshot
+ * has the same file: a mapping row set to a column or a measure the file
+ * still has, a mapping row cleared, and a file set aside. What cannot be
+ * kept is named in a note on the page, with its file.
  */
 function viewed(app, built, at) {
   app.state.viewing = at;
@@ -281,11 +426,31 @@ function viewed(app, built, at) {
     );
     const standard = every.filter((file) => !scores.has(file.name));
     const as = { ...named, snapshot: shown.snapshotDate ? String(shown.snapshotDate) : chosen };
+    const byHand = handSet(app);
+    const aside = asideByHand(app);
     // The files of the snapshot before are cleared whole first, so none of
     // them stays behind where this snapshot has no such file, or an empty one.
     app.reset();
     app.state.viewing = at;
     app.loadRaw(raw, { as });
     app.loadFiles(standard, { notes: [], as });
+    const { moved, absent } = setAsideAgain(app, aside);
+    const { set, lost, refilled } = setAgain(app, byHand);
+    if (lost.length) {
+      app.state.notes.push(
+        `Mapping rows set by hand were cleared, because this snapshot’s files do not have them: ${lost.join(', ')}.`
+      );
+    }
+    if (refilled.length) {
+      app.state.notes.push(
+        `Mapping rows cleared by hand were not kept, because this snapshot does not have their file in the same place: ${refilled.join(', ')}.`
+      );
+    }
+    if (absent.length) {
+      app.state.notes.push(
+        `Files set aside by hand are placed again when they are back, because this snapshot does not have them: ${absent.join(', ')}.`
+      );
+    }
+    if (moved || set || lost.length || refilled.length || absent.length) app.refresh();
   });
 }

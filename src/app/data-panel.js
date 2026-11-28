@@ -265,11 +265,17 @@ function unplacedCard(item, index, app) {
   return card;
 }
 
-/** A loaded file's details, folded shut, as the page remembers them open or shut. */
+/**
+ * A loaded file's details, folded shut, as the page remembers them open or
+ * shut. Its Download CSV saves the file under the name the page gives the
+ * app's own downloads (#431): a simulated study's file says it is simulated.
+ */
 function detailsOf(file, app) {
+  const named = (name) => (typeof app.downloadName === 'function' ? app.downloadName(name) : name);
   return fileDetails(file, {
     open: app.state.details,
-    save: typeof app.saveFile === 'function' ? (name, text) => app.saveFile(name, text) : null
+    save:
+      typeof app.saveFile === 'function' ? (name, text) => app.saveFile(named(name), text) : null
   });
 }
 
@@ -416,8 +422,14 @@ function loadedEntry(name, detail, flags, find) {
  * the loaded files.
  * @private
  */
-function sidebar(container, app, { input, domains, rows, support }) {
+function sidebar(container, app, { input, domains, rows, support, reveal = null }) {
   const { state, manifest } = app;
+  // Where a loaded file's card is: on this view, or, while a source is open in
+  // the cards' place, on the Files face once `reveal` has brought it back (#427).
+  const cardOf = (selector, index = 0) => {
+    const within = container.querySelector(selector) || !reveal ? container : reveal();
+    return within ? within.querySelectorAll(selector)[index] || null : null;
+  };
   const side = el('aside', 'sva-side');
   side.setAttribute('aria-label', 'Workflow and loaded data');
 
@@ -538,7 +550,7 @@ function sidebar(container, app, { input, domains, rows, support }) {
         file.name,
         `${manifest.domains[domain].label}, ${rowCount(file.rows.length)}`,
         flags,
-        () => container.querySelector(`.sva-file[data-domain="${domain}"]`)
+        () => cardOf(`.sva-file[data-domain="${domain}"]`)
       );
       button.classList.add(`sva-domain-${domain}`);
       button.dataset.domain = domain;
@@ -549,7 +561,7 @@ function sidebar(container, app, { input, domains, rows, support }) {
         file.name,
         `Not placed, ${rowCount(file.rows.length)}`,
         [],
-        () => container.querySelectorAll('.sva-file.sva-unplaced')[index]
+        () => cardOf('.sva-file.sva-unplaced', index)
       );
       button.querySelector('.sva-hex').classList.add('sva-hollow');
       button.dataset.unplaced = file.name;
@@ -560,7 +572,7 @@ function sidebar(container, app, { input, domains, rows, support }) {
         file.name,
         `gsm raw file, ${rowCount(file.rows)}`,
         [],
-        () => container.querySelectorAll('.sva-file.sva-raw')[index]
+        () => cardOf('.sva-file.sva-raw', index)
       );
       button.querySelector('.sva-hex').classList.add('sva-hollow');
       button.dataset.raw = file.name;
@@ -638,7 +650,31 @@ export function renderDataPanel(container, app) {
     pane.append(head, body);
     // The file picker's input stays on the page for the sidebar's button.
     main.append(input, pane);
-    container.append(sidebar(container, app, { input, domains: [], rows: {}, support: [] }), main);
+    // The sidebar says what is loaded, as it does on the Files face (#427):
+    // every placed file with its mapping's state, every file set aside and
+    // every raw file, and the steps counted from them. The files' cards are
+    // not on the page while the source is: choosing a file in the list goes
+    // back to the Files face, to its card.
+    const placed = Object.keys(manifest.domains).filter((domain) => state.files[domain]);
+    const wanted = neededBy(manifest, app.problems);
+    const host = container.parentElement;
+    const reveal = () => {
+      state.exploring = false;
+      app.openSource(null);
+      return host ? host.querySelector('.sva-data') : null;
+    };
+    container.append(
+      sidebar(container, app, {
+        input,
+        domains: placed,
+        rows: Object.fromEntries(
+          placed.map((domain) => [domain, mappingRows(domain, app, wanted)])
+        ),
+        support: app.support(),
+        reveal
+      }),
+      main
+    );
     app.drawSource(body);
     return { refresh: () => {} };
   }

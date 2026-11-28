@@ -726,12 +726,15 @@ test.describe('demo app: the first screen', () => {
     await expect(page.locator('.sva-welcome')).toHaveCount(0);
     await item(page, 'data').click();
     await expect(dataTag(page)).toHaveText('Pilot study');
-    const stored = await page.evaluate(() => ({
+    // This page has no study.builder, whose script makes a database of its own
+    // on the hosted demo (#431): here there is none.
+    const stored = await page.evaluate(async () => ({
       local: window.localStorage.length,
       session: window.sessionStorage.length,
-      cookie: document.cookie
+      cookie: document.cookie,
+      databases: (await window.indexedDB.databases()).map((database) => database.name)
     }));
-    expect(stored).toEqual({ local: 0, session: 0, cookie: '' });
+    expect(stored).toEqual({ local: 0, session: 0, cookie: '', databases: [] });
     expect(errors).toEqual([]);
   });
 
@@ -3365,7 +3368,7 @@ const OWN_AE = onDisk('site/data/rbqm/Raw_AE.csv');
 const OWN_PD = onDisk('site/data/rbqm/Raw_PD.csv');
 const OWN_NOTES = onDisk('tests/e2e/fixtures/app/site_notes.csv');
 const NOTES_UNPLACED =
-  'site_notes.csv is not recognised: its name and its columns match no gsm raw domain.';
+  'site_notes.csv is kept as it is and is not handed to R: its name and its columns match none of the raw domains gsm’s metrics read.';
 function withoutAColumn(testInfo) {
   const scenario = RBQM_TAB.scenarios.find((entry) => entry.id === 'no-column');
   const files = scenarioFiles(scenario, (file) =>
