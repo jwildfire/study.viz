@@ -1,0 +1,57 @@
+{
+  "name": "study.viz",
+  "version": "0.1.0",
+  "description": "The platform and demo app that reviews a clinical study in safety.viz's charts and the libraries beside them.",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:app": "node scripts/build-app.mjs",
+    "demo": "node scripts/demo.mjs",
+    "site": "node scripts/site.mjs",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "demo-path": "node scripts/site.mjs && playwright test -c playwright.demo-path.config.js",
+    "copied:check": "node scripts/copied.mjs --check",
+    "copied:check-source": "node scripts/copied.mjs --check-source",
+    "safety-viz:check": "node scripts/vendor-safety-viz.mjs --check",
+    "safety-viz:check-source": "node scripts/vendor-safety-viz.mjs --check-source",
+    "demo-data:check": "node scripts/check-demo-data.mjs",
+    "bio-viz:check": "node scripts/vendor-bio-viz.mjs --check",
+    "bio-viz:check-source": "node scripts/vendor-bio-viz.mjs --check-source",
+    "statistics:check": "node scripts/vendor-statistics.mjs --check",
+    "statistics:check-source": "node scripts/vendor-statistics.mjs --check-source",
+    "r-wasm:check": "node scripts/r-wasm.mjs --check",
+    "r-wasm:check-source": "node scripts/r-wasm.mjs --check-source",
+    "gsm-workflows:check": "node scripts/vendor-gsm-workflows.mjs --check",
+    "gsm-workflows:check-source": "node scripts/vendor-gsm-workflows.mjs --check-source",
+    "gsm-viz:check": "node scripts/vendor-gsm-viz.mjs --check",
+    "gsm-viz:check-source": "node scripts/vendor-gsm-viz.mjs --check-source",
+    "rbqm-study:check": "node scripts/vendor-rbqm-study.mjs --check",
+    "rbqm-study:check-source": "node scripts/vendor-rbqm-study.mjs --check-source",
+    "study-builder:check": "node scripts/vendor-study-builder.mjs --check",
+    "study-builder:check-source": "node scripts/vendor-study-builder.mjs --check-source",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@playwright/test": "^1.61.1",
+    "ajv": "^8.20.0",
+    "esbuild": "^0.28.1",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.9.4",
+    "vitest": "^4.1.9",
+    "yaml": "^2.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwildfire/study.viz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jwildfire/study.viz/issues"
+  },
+  "homepage": "https://github.com/jwildfire/study.viz#readme"
+}

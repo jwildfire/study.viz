@@ -1,0 +1,40 @@
+node_modules/
+playwright-report/
+test-results/
+package-lock.json
+_site/
+_site.build-*/
+build/
+
+# The record of the copy from safety.viz: written by scripts/copied.mjs, one
+# file to an entry, and held to the files by a test.
+SOURCE.json
+
+# The renamed-column study for the demo app's tests: written by
+# scripts/build-app-fixture.mjs, and a test pins the files to its output.
+tests/e2e/fixtures/app/
+
+# The desktop-R comparison for R on request: written by
+# scripts/derive-app-statistics.mjs and scripts/app-statistics.R, and held to
+# what they are derived from by a test.
+tests/fixtures/app-statistics/
+
+# Desktop R's rows for the RBQM pipeline: written by scripts/rbqm-reference.mjs,
+# and held to what they are derived from by a test.
+tests/fixtures/rbqm/
+
+# Copied libraries: each is copied byte for byte from its own repository and
+# held to a recorded checksum, so formatting it would break the record.
+site/vendor/
+
+# The RBQM demo study's source record: written by scripts/vendor-rbqm-study.mjs,
+# which lists the kept columns one to a line.
+site/data/rbqm/SOURCE.json
+
+# What each gsm workflow needs, as desktop R reads it from the specs: written
+# by scripts/rbqm-reference.mjs, and held to what it is derived from by a test.
+site/rbqm/needs.json
+
+# The app's requirement matrix: a wide, hand-maintained table, copied from
+# safety.viz byte for byte. Alignment padding would rewrite every row.
+requirements/*.md

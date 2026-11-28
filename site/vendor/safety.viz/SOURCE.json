@@ -1,0 +1,36 @@
+{
+  "bundle": "safety.viz chart bundle, and three source files the app reads beside it",
+  "repository": "https://github.com/jwildfire/safety.viz",
+  "ref": "v1.13.0",
+  "commit": "60845fbeb2678e6219cadf945a9b8ae78adccf28",
+  "version": "1.13.0",
+  "license": "Apache-2.0",
+  "tag": "v1.13.0",
+  "merged_to_dev": false,
+  "files": [
+    {
+      "file": "safety.viz.esm.js",
+      "source": "dist/safety.viz-1.13.0/safety.viz.esm.js",
+      "sha256": "eaf57ccedb4343039e93e3a06768f27979c613b87bacec68941173792a54b754",
+      "bytes": 1567666
+    },
+    {
+      "file": "src/tiers.js",
+      "source": "src/tiers.js",
+      "sha256": "1513cac1d3f0483aad3d092ed9201f307757e5429b8bfb7b3f351781ce3b47c0",
+      "bytes": 2484
+    },
+    {
+      "file": "src/status-label.js",
+      "source": "src/status-label.js",
+      "sha256": "9f8fba92330481c62cd6afcb98dbb4190bb16fb1f53156402d4ac7099aa113a6",
+      "bytes": 17417
+    },
+    {
+      "file": "src/data/schema/portfolio.json",
+      "source": "src/data/schema/portfolio.json",
+      "sha256": "3be184c321766795fac81ee0fed1350425d9cc33d3ec7a72fea44f577a65cfa1",
+      "bytes": 9494
+    }
+  ]
+}

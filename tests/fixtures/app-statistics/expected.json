@@ -1,0 +1,518 @@
+{
+ "measure": "Alanine Aminotransferase",
+ "visit": "Week 4",
+ "steps": [
+  {
+   "id": "over-time",
+   "chart": "group-comparison",
+   "asks": "Analyze_GroupDifferenceBy",
+   "what": "a trend tile opened: one biomarker over time, with R's test of the groups under each visit"
+  },
+  {
+   "id": "one-visit",
+   "chart": "group-comparison",
+   "asks": "Analyze_GroupDifference",
+   "what": "a visit opened from the picture over time: the single-visit view and its test"
+  },
+  {
+   "id": "cross-tab",
+   "chart": "cross-tab",
+   "asks": "Analyze_Contingency",
+   "what": "the cross-tabulation opened: a two-way table of counts and R's test of it"
+  }
+ ],
+ "derived_from": [
+  {
+   "file": "site/data/adbds.csv",
+   "sha256": "e362e4d7a3cfd1cd88863d84b46c75d90b716e3ae629ffbe88b3769b07f1cb18"
+  },
+  {
+   "file": "site/data/adsl.csv",
+   "sha256": "898d324b198ce76f01f28b2be2b890ea4f0d77f357a3d5f0a49440625b176aac"
+  },
+  {
+   "file": "src/app/parse.js",
+   "sha256": "26158b2c99410ad3adff567bd882beddee214a06664af4562c085c16edc20790"
+  },
+  {
+   "file": "src/app/detect.js",
+   "sha256": "809f7af72964bbad2f3cae6bfb52bcfb9421a70a7f3d2f37bf5ae36f027887a6"
+  },
+  {
+   "file": "src/app/mapping.js",
+   "sha256": "00c62f38e753d5f99388f1c7505febf4612b3388104cdf84be9edf5fd1e4bf01"
+  },
+  {
+   "file": "src/app/charts.js",
+   "sha256": "a1594cb551d3e622325af7b02e1d24f801938bb7dc4e8ae2478688066845548c"
+  },
+  {
+   "file": "src/app/libraries.js",
+   "sha256": "8bc8a4a8d6cf6b6141193658f67f62a00fc1e6200acf6d3beaefc31e1f4cce8f"
+  },
+  {
+   "file": "src/app/page.js",
+   "sha256": "fd77723f5f15d776867ff85c1d93db14e367be8b6bde262a984d2fd72913c1f0"
+  },
+  {
+   "file": "site/vendor/bio.viz/bio.viz.js",
+   "sha256": "bddc0d0eb3cd8dca74ab9eae4c99e3cd516252d1f752bebb03adbfb1c73560c9"
+  },
+  {
+   "file": "site/vendor/gsm.bio/statistics.R",
+   "sha256": "8c4d5b2f83a1fe6f8024d381f017fef149217c8c52f705822af68d2a61b82670"
+  }
+ ],
+ "r": "4.3.3",
+ "statistics": "site/vendor/gsm.bio/statistics.R",
+ "answers": [
+  {
+   "step": "over-time",
+   "name": "Analyze_GroupDifferenceBy",
+   "args": {
+    "strValueCol": "y",
+    "strGroupCol": "x",
+    "strByCol": "visit",
+    "strMethod": "anova",
+    "chrBy": [
+     "Baseline",
+     "Week 2",
+     "Week 4",
+     "Week 6",
+     "Week 8",
+     "Week 12",
+     "Week 16",
+     "Week 20",
+     "Week 24",
+     "Week 26"
+    ],
+    "strPAdjust": "none"
+   },
+   "rows": 1623,
+   "value": {
+    "status": "ok",
+    "reason": null,
+    "test": "anova",
+    "method": "One-way analysis of variance",
+    "estimates": [],
+    "statistic": [],
+    "p_value": null,
+    "adjustment": "none",
+    "counts": {
+     "Baseline": 230,
+     "Week 2": 225,
+     "Week 4": 207,
+     "Week 6": 184,
+     "Week 8": 176,
+     "Week 12": 148,
+     "Week 16": 132,
+     "Week 20": 116,
+     "Week 24": 109,
+     "Week 26": 96
+    },
+    "dropped": [],
+    "warnings": [],
+    "notes": [
+     "Each row is Analyze_GroupDifference()'s answer on the rows of one level of visit, for the same groups at every level: Placebo, Xanomeline High Dose, Xanomeline Low Dose.",
+     "p_value is not adjusted across the levels: it is each level's own p-value. 10 of the 10 levels have one."
+    ],
+    "rows": [
+     {
+      "by": "Baseline",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 76,
+      "n_2": 66,
+      "n_3": 88,
+      "counts": 230,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 0.666056521847723,
+      "p_unadjusted": 0.51473153204417,
+      "p_value": 0.51473153204417,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 2",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 82,
+      "n_2": 70,
+      "n_3": 73,
+      "counts": 225,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 2.08092682653491,
+      "p_unadjusted": 0.127242371705195,
+      "p_value": 0.127242371705195,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 4",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 75,
+      "n_2": 67,
+      "n_3": 65,
+      "counts": 207,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 5.46104741502294,
+      "p_unadjusted": 0.00489337447349664,
+      "p_value": 0.00489337447349664,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 6",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 71,
+      "n_2": 55,
+      "n_3": 58,
+      "counts": 184,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 3.36789418692642,
+      "p_unadjusted": 0.0366354154920035,
+      "p_value": 0.0366354154920035,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 8",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 70,
+      "n_2": 52,
+      "n_3": 54,
+      "counts": 176,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 4.47262394545128,
+      "p_unadjusted": 0.0127677949322804,
+      "p_value": 0.0127677949322804,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 12",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 66,
+      "n_2": 42,
+      "n_3": 40,
+      "counts": 148,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 0.973038107694924,
+      "p_unadjusted": 0.380386943104017,
+      "p_value": 0.380386943104017,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 16",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 67,
+      "n_2": 33,
+      "n_3": 32,
+      "counts": 132,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 1.79943488304654,
+      "p_unadjusted": 0.169518763884345,
+      "p_value": 0.169518763884345,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 20",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 61,
+      "n_2": 29,
+      "n_3": 26,
+      "counts": 116,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 3.07141162620848,
+      "p_unadjusted": 0.0502454148562088,
+      "p_value": 0.0502454148562088,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 24",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 57,
+      "n_2": 28,
+      "n_3": 24,
+      "counts": 109,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 0.664253682324271,
+      "p_unadjusted": 0.516786440878532,
+      "p_value": 0.516786440878532,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     },
+     {
+      "by": "Week 26",
+      "group_1": "Placebo",
+      "group_2": "Xanomeline High Dose",
+      "group_3": "Xanomeline Low Dose",
+      "n_1": 50,
+      "n_2": 24,
+      "n_3": 22,
+      "counts": 96,
+      "dropped": 0,
+      "estimate": null,
+      "lower": null,
+      "upper": null,
+      "level": null,
+      "method": "One-way analysis of variance",
+      "statistic": 1.39895426329416,
+      "p_unadjusted": 0.252000744694633,
+      "p_value": 0.252000744694633,
+      "adjustment": "none",
+      "adjusted_over": 10,
+      "status": "ok",
+      "reason": null,
+      "warning": null
+     }
+    ]
+   }
+  },
+  {
+   "step": "one-visit",
+   "name": "Analyze_GroupDifference",
+   "args": {
+    "strValueCol": "y",
+    "strGroupCol": "x",
+    "strMethod": "anova",
+    "bPairwise": false
+   },
+   "rows": 207,
+   "value": {
+    "status": "ok",
+    "reason": null,
+    "test": "anova",
+    "method": "One-way analysis of variance",
+    "estimates": [
+     {
+      "name": "Mean",
+      "group": "Placebo",
+      "estimate": 17.24,
+      "lower": null,
+      "upper": null,
+      "level": null
+     },
+     {
+      "name": "Mean",
+      "group": "Xanomeline High Dose",
+      "estimate": 21.5074626865672,
+      "lower": null,
+      "upper": null,
+      "level": null
+     },
+     {
+      "name": "Mean",
+      "group": "Xanomeline Low Dose",
+      "estimate": 17.4,
+      "lower": null,
+      "upper": null,
+      "level": null
+     }
+    ],
+    "statistic": [
+     {
+      "name": "F",
+      "value": 5.46104741502294
+     },
+     {
+      "name": "num df",
+      "value": 2
+     },
+     {
+      "name": "denom df",
+      "value": 204
+     }
+    ],
+    "p_value": 0.00489337447349664,
+    "adjustment": "none",
+    "counts": {
+     "Placebo": 75,
+     "Xanomeline High Dose": 67,
+     "Xanomeline Low Dose": 65
+    },
+    "dropped": [],
+    "warnings": [],
+    "notes": [],
+    "rows": []
+   }
+  },
+  {
+   "step": "cross-tab",
+   "name": "Analyze_Contingency",
+   "args": {
+    "strRowCol": "row",
+    "strColCol": "col",
+    "strMethod": "chisq",
+    "chrRowGroups": [
+     "Placebo",
+     "Xanomeline High Dose",
+     "Xanomeline Low Dose"
+    ],
+    "chrColGroups": [
+     "COMPLETED",
+     "DISCONTINUED"
+    ]
+   },
+   "rows": 254,
+   "value": {
+    "status": "ok",
+    "reason": null,
+    "test": "chisq",
+    "method": "Pearson's Chi-squared test",
+    "estimates": [],
+    "statistic": [
+     {
+      "name": "X-squared",
+      "value": 33.0477526598348
+     },
+     {
+      "name": "df",
+      "value": 2
+     }
+    ],
+    "p_value": 6.66456319290895e-08,
+    "adjustment": "none",
+    "counts": 254,
+    "dropped": [],
+    "warnings": [],
+    "notes": [],
+    "rows": [
+     {
+      "row": "Placebo",
+      "col": "COMPLETED",
+      "n": 58,
+      "expected": 37.244094488189,
+      "small_expected": false
+     },
+     {
+      "row": "Xanomeline High Dose",
+      "col": "COMPLETED",
+      "n": 27,
+      "expected": 31.1811023622047,
+      "small_expected": false
+     },
+     {
+      "row": "Xanomeline Low Dose",
+      "col": "COMPLETED",
+      "n": 25,
+      "expected": 41.5748031496063,
+      "small_expected": false
+     },
+     {
+      "row": "Placebo",
+      "col": "DISCONTINUED",
+      "n": 28,
+      "expected": 48.755905511811,
+      "small_expected": false
+     },
+     {
+      "row": "Xanomeline High Dose",
+      "col": "DISCONTINUED",
+      "n": 45,
+      "expected": 40.8188976377953,
+      "small_expected": false
+     },
+     {
+      "row": "Xanomeline Low Dose",
+      "col": "DISCONTINUED",
+      "n": 71,
+      "expected": 54.4251968503937,
+      "small_expected": false
+     }
+    ]
+   }
+  }
+ ]
+}
