@@ -1,9 +1,9 @@
 {
   "copy": "safety.viz’s demo app, as study.viz began",
   "repository": "https://github.com/jwildfire/safety.viz",
-  "commit": "57b50d1382d1e89ed1556f787d12e348c77b25da",
+  "commit": "66627d9ccfc0419b4614963c501145ac23764668",
   "version": "1.13.0",
-  "merged_to_dev": true,
+  "merged_to_dev": false,
   "left": [
     {
       "file": "docs/evidence/basic-app/demo-path/01-opens-on-the-pilot-study.png",
@@ -357,10 +357,10 @@
     },
     {
       "file": "requirements/demo-app.md",
-      "sha256": "0fb73b03756a962d3d094cfc675279b44197b71e1e49dea38eb264f23fe02cbd",
-      "bytes": 265920,
-      "source_sha256": "061bf114203290c4838831c6e4b2a6b7cfed44d1835a049d9d8b8867f65fe926",
-      "source_bytes": 264534,
+      "sha256": "b3a5cb8b7c4d164c669583fe8cc32d45a5383faaef221732bb90cd43f2f67391",
+      "bytes": 273517,
+      "source_sha256": "10280758711e69d88d1150e6e55e603ff6f5fa006b1e6c0e251cf97bd8a7e3f0",
+      "source_bytes": 271968,
       "changes": [
         {
           "original": "| APP-PAGE-018 | PAGE | The app's own parts on every view are a header and a footer; the data view alone adds a sidebar (APP-LOAD-021). The header carries the safety.viz wordmark and hex mark and says it is the demo app; the footer says what the page that mounts it does with a study, and carries the version: by default that everything runs in the browser and nothing is sent anywhere; on the hosted page that the study's data never leaves the browser and no request leaves the page unless the reader starts R; in the single file that it loads nothing. The view's name is the page's one heading, kept for screen readers and not shown. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | A header and a footer, not a sidebar (@jwildfire, 2026-10-02): beside the chart's own controls and the participant profile, a sidebar left the chart a fifth of the screen. Amended at @jwildfire's word (#183): his choice of 2026-10-02, \"R on request\", changes what this row promised that day, and the row now says what is true. |\n| APP-PAGE-019 | PAGE | The footer links to the docs site, the Domains page, the single file and the repository, each only where it was given an address; the single file is offered as a download. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. |  |",
@@ -378,9 +378,14 @@
           "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column."
         },
         {
-          "original": "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. |\n| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab's is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app's status label on the corner of the Overview tab, with that sentence, while the builder is open (\"Build a study is experimental\") and while a simulated study is in use, on both of its faces (\"The view of this simulated study is experimental\"); it shows none there for a demo study, a reader's own files or an empty page, and a chart's tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: \"Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change.\" and \"Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change.\" Neither is a chart or a tab, so neither is counted in the app panel's sentence of how many charts and tabs are Experimental; the panel's second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire's to overrule: until #427 the app gave study.builder's parts no rung of its own. |",
-          "replacement": "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. Amended for study.viz (study.viz#31): safety.viz's paragraph says the two parts are \"new in 1.13\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the paragraph stands. The choice was an agent's, and is @jwildfire's to overrule. |\n| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab's is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app's status label on the corner of the Overview tab, with that sentence, while the builder is open (\"Build a study is experimental\") and while a simulated study is in use, on both of its faces (\"The view of this simulated study is experimental\"); it shows none there for a demo study, a reader's own files or an empty page, and a chart's tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: \"Experimental: study.builder simulates the study in this browser, and what it makes may still change.\" and \"Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.\" Neither is a chart or a tab, so neither is counted in the app panel's sentence of how many charts and tabs are Experimental; the panel's second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire's to overrule: until #427 the app gave study.builder's parts no rung of its own. Amended for study.viz (study.viz#31): each of safety.viz's two sentences begins \"Experimental: new in 1.13.\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of each sentence stands. The choice was an agent's, and is @jwildfire's to overrule. |",
+          "original": "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. |\n| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab's is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app's status label on the corner of the Overview tab, with that sentence, while the builder is open (\"Build a study is experimental\") and while a simulated study is in use, on both of its faces (\"The view of this simulated study is experimental\"); it shows none there for a demo study, a reader's own files or an empty page, and a chart's tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: \"Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change.\" and \"Experimental: new in 1.13. study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.\" The second is on the label on both faces of the Overview tab, and is true on both: until #431 it read \"The view is study.builder’s and every row is synthetic; what it shows may still change.\", and the Files face, where it also showed, is the app's own. Explore the data is the name the page gives the face that is study.builder's. Neither is a chart or a tab, so neither is counted in the app panel's sentence of how many charts and tabs are Experimental; the panel's second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire's to overrule: until #427 the app gave study.builder's parts no rung of its own. |",
+          "replacement": "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. Amended for study.viz (study.viz#31): safety.viz's paragraph says the two parts are \"new in 1.13\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the paragraph stands. The choice was an agent's, and is @jwildfire's to overrule. |\n| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab's is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app's status label on the corner of the Overview tab, with that sentence, while the builder is open (\"Build a study is experimental\") and while a simulated study is in use, on both of its faces (\"The view of this simulated study is experimental\"); it shows none there for a demo study, a reader's own files or an empty page, and a chart's tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: \"Experimental: study.builder simulates the study in this browser, and what it makes may still change.\" and \"Experimental: study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.\" The second is on the label on both faces of the Overview tab, and is true on both: until #431 it read \"The view is study.builder’s and every row is synthetic; what it shows may still change.\", and the Files face, where it also showed, is the app's own. Explore the data is the name the page gives the face that is study.builder's. Neither is a chart or a tab, so neither is counted in the app panel's sentence of how many charts and tabs are Experimental; the panel's second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire's to overrule: until #427 the app gave study.builder's parts no rung of its own. Amended for study.viz (study.viz#31): each of safety.viz's two sentences begins \"Experimental: new in 1.13.\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of each sentence stands. The choice was an agent's, and is @jwildfire's to overrule. |",
           "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column. safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
+        },
+        {
+          "original": "| APP-STUDY-014 | STUDY | With a simulated study in use, ready-made, saved or built, a file the app's own buttons offer for download says it is simulated in its name: Download CSV in a file's Details saves `simulated-adsl.csv`, and a raw file's `simulated-Raw_AE.csv`; Download mapping saves `simulated-safety-viz-mapping.json`. A demo study's files and a reader's own keep their names, and a name that already starts \"simulated-\" is not given the word twice. The mapping file is read by what it holds, not by its name, so it loads back under the name it was saved by; and a raw file saved this way is still read as the raw file it is when it is chosen again. The downloads study.builder's own widget offers are not the app's and are not renamed: in the study view on the Overview tab, a table's Download CSV, Study file and Download all (.zip); and the same in Build a study. | safety.viz src/app/page.js::downloadName, downloadMapping; src/app/data-panel.js::detailsOf; src/app/file-details.js; src/app/rbqm-files.js::fileNamed | unit; browser | tests/unit/app/portfolio.test.js; tests/unit/app/rbqm-files.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #431, from the re-review of the second review's fixes. Until then Details, Download CSV gave `adsl.csv` for a simulated study, the name the real pilot study's file has, and Download mapping gave `safety-viz-mapping.json`: a file read back out of the page said nowhere in its name that its rows are made up. Only the name changes; the file's content is what it was, and a simulated file chosen again under its new name is a reader's own file, which keeps that name. A raw file saved as `simulated-Raw_AE.csv` and chosen again is still a gsm raw file, and still the adverse events file by its name: where a file's name is read for its raw domain, the word in front is passed over (`fileNamed` in src/app/rbqm-files.js), so the rules of APP-RBQM-033 and APP-RBQM-074 hold for a file the app saved. study.builder's study view and study.viewer save through the app's own `saveFile`, so the app could mark those names too; that is left to study.builder (jwildfire/study.builder#1) and is @jwildfire's to overrule. |",
+          "replacement": "| APP-STUDY-014 | STUDY | With a simulated study in use, ready-made, saved or built, a file the app's own buttons offer for download says it is simulated in its name: Download CSV in a file's Details saves `simulated-adsl.csv`, and a raw file's `simulated-Raw_AE.csv`; Download mapping saves `simulated-study-viz-mapping.json`. A demo study's files and a reader's own keep their names, and a name that already starts \"simulated-\" is not given the word twice. The mapping file is read by what it holds, not by its name, so it loads back under the name it was saved by; and a raw file saved this way is still read as the raw file it is when it is chosen again. The downloads study.builder's own widget offers are not the app's and are not renamed: in the study view on the Overview tab, a table's Download CSV, Study file and Download all (.zip); and the same in Build a study. | safety.viz src/app/page.js::downloadName, downloadMapping; src/app/data-panel.js::detailsOf; src/app/file-details.js; src/app/rbqm-files.js::fileNamed | unit; browser | tests/unit/app/portfolio.test.js; tests/unit/app/rbqm-files.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #431, from the re-review of the second review's fixes. Until then Details, Download CSV gave `adsl.csv` for a simulated study, the name the real pilot study's file has, and Download mapping gave `study-viz-mapping.json`: a file read back out of the page said nowhere in its name that its rows are made up. Only the name changes; the file's content is what it was, and a simulated file chosen again under its new name is a reader's own file, which keeps that name. A raw file saved as `simulated-Raw_AE.csv` and chosen again is still a gsm raw file, and still the adverse events file by its name: where a file's name is read for its raw domain, the word in front is passed over (`fileNamed` in src/app/rbqm-files.js), so the rules of APP-RBQM-033 and APP-RBQM-074 hold for a file the app saved. study.builder's study view and study.viewer save through the app's own `saveFile`, so the app could mark those names too; that is left to study.builder (jwildfire/study.builder#1) and is @jwildfire's to overrule. Amended for study.viz (study.viz#31): the mapping file the app saves is `study-viz-mapping.json` here, so a simulated study's is `simulated-study-viz-mapping.json`. |",
+          "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column. The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
         }
       ]
     },
@@ -746,10 +751,10 @@
     },
     {
       "file": "site/config.json",
-      "sha256": "6eaa125b7621da9672cb8c95bb996ca02f4d908617309aae95633a3898282f9c",
-      "bytes": 13881,
-      "source_sha256": "bda376d9f09b3ab966adef7aacc8fa69e83394ffdf4b65f792f83a805fb4abb2",
-      "source_bytes": 13909,
+      "sha256": "971c69761ed987871f39af339812e3b7a373d624febfe9237904806494422194",
+      "bytes": 13935,
+      "source_sha256": "f66a9bf534f5d014683605065c8eab9c1327d250bae66dcb5caa920612199daf",
+      "source_bytes": 13963,
       "changes": [
         {
           "original": "  \"siteTitle\": \"safety.viz\",\n  \"repoUrl\": \"https://github.com/jwildfire/safety.viz\",",
@@ -762,8 +767,8 @@
           "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
         },
         {
-          "original": "      \"tierNote\": \"Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change.\"",
-          "replacement": "      \"tierNote\": \"Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.\"",
+          "original": "      \"tierNote\": \"Experimental: new in 1.13. study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.\"",
+          "replacement": "      \"tierNote\": \"Experimental: study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.\"",
           "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
         }
       ]
@@ -1595,8 +1600,8 @@
     },
     {
       "file": "src/app/builder-view.js",
-      "sha256": "bfda74a21213a277dad963d5b375060d49d96cf8c3c4c4b4e3935814f29e2c56",
-      "bytes": 23861
+      "sha256": "2349a7cf7364930829c883d0a5313dff2048fe80d91cba462218bb85b1e50237",
+      "bytes": 25669
     },
     {
       "file": "src/app/charts.js",
@@ -1605,8 +1610,8 @@
     },
     {
       "file": "src/app/data-panel.js",
-      "sha256": "c3f57466aae4b0a692622c46552904056a8789baa7d6fdd64bb1848c68d9d507",
-      "bytes": 34119
+      "sha256": "319a1cfbdc75a896eed12443b1f511dee2b5cf7e48875d416a6332941617047e",
+      "bytes": 34383
     },
     {
       "file": "src/app/detect.js",
@@ -1712,10 +1717,10 @@
     },
     {
       "file": "src/app/mapping.js",
-      "sha256": "e2ed748f32c2bb0b77bdc7a35de5d3bb843a45915223bc5f38bf5225a12a3200",
-      "bytes": 14777,
-      "source_sha256": "6ace4cad4707a31da71826ffd8186bea5a1d444077b703a71e7d9e6c82a96049",
-      "source_bytes": 14778,
+      "sha256": "00c62f38e753d5f99388f1c7505febf4612b3388104cdf84be9edf5fd1e4bf01",
+      "bytes": 15165,
+      "source_sha256": "4e56c80fa5bbf66372f7e2752d4790424c8c1b997dfb8769abf1c549b500fa14",
+      "source_bytes": 15166,
       "changes": [
         {
           "original": "      'Provisional format, written by the safety.viz demo app. Drop this file on the app ' +",
@@ -1731,10 +1736,10 @@
     },
     {
       "file": "src/app/page.js",
-      "sha256": "6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3",
-      "bytes": 83109,
-      "source_sha256": "4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196",
-      "source_bytes": 82515,
+      "sha256": "fd77723f5f15d776867ff85c1d93db14e367be8b6bde262a984d2fd72913c1f0",
+      "bytes": 84209,
+      "source_sha256": "d64133b5b51378ee4e982059182da2e94a1c320bb664b8903d788773ad7efee0",
+      "source_bytes": 83616,
       "changes": [
         {
           "original": "export const MAPPING_FILE_NAME = 'safety-viz-mapping.json';",
@@ -1820,6 +1825,11 @@
           "original": "          console.warn('safety.viz app: a source could not list its studies.', error);",
           "replacement": "          console.warn('study.viz app: a source could not list its studies.', error);",
           "reason": "The app’s console warnings start with its name: \"study.viz app:\"."
+        },
+        {
+          "original": "     * says so: `simulated-adsl.csv`, `simulated-safety-viz-mapping.json`. A",
+          "replacement": "     * says so: `simulated-adsl.csv`, `simulated-study-viz-mapping.json`. A",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
         }
       ]
     },
@@ -1855,8 +1865,8 @@
     },
     {
       "file": "src/app/rbqm-files.js",
-      "sha256": "71d8baefe1de54df3ad8c223e9549c6521b84c0010f5707513670afbe096f22a",
-      "bytes": 18342
+      "sha256": "2cc96d1937dec329773015f673a65302523738b216d0a6c330e08bf855555607",
+      "bytes": 18636
     },
     {
       "file": "src/app/rbqm-view.js",
@@ -1865,8 +1875,8 @@
     },
     {
       "file": "src/app/rbqm.js",
-      "sha256": "b63c665e30fe9ed41d1bf82048693cc4f59b6f22501ac5967af46edd4c3aced3",
-      "bytes": 24534
+      "sha256": "d3e5419126e6429ddfaff459bc7650b5e67f54da935c59fbfb3b98f8c43f8ac3",
+      "bytes": 24774
     },
     {
       "file": "src/app/site.js",
@@ -1890,8 +1900,8 @@
     },
     {
       "file": "src/app/viewer-view.js",
-      "sha256": "25cb9fb75ffeef79291bd5c8e0881eae93fc18cd97e25f2b8ac2c03656d50593",
-      "bytes": 15194
+      "sha256": "297011574cf1d269d677db8531845578c2736f1c3dde8f88ba682f42aea4f70f",
+      "bytes": 18964
     },
     {
       "file": "tests/demo-path/demo-path.spec.js",
@@ -1900,10 +1910,10 @@
     },
     {
       "file": "tests/e2e/basic-app.spec.js",
-      "sha256": "c06be0eb0e26339c2ffb10b68341cab8bbf629e04fd7a18b07518ec41b47d0c5",
-      "bytes": 307763,
-      "source_sha256": "0db593710ea6ee75b353c49ed36a68d8d782d0505b64fddefd88d0887bb07652",
-      "source_bytes": 307292,
+      "sha256": "525fffd2c43644fa0f21bed7a940479fe1e85273e1cef6ef740720b5b68fc34e",
+      "bytes": 308006,
+      "source_sha256": "353828c9f85e5abdd0536611663c86b1b61dea3d390893bba389da0895abc764",
+      "source_bytes": 307535,
       "changes": [
         {
           "original": "  test('APP-PAGE-037: the wordmark is a link to the docs home, the mark and the words \"Demo app\" inside it, and nothing else in the header moves (#270)', async ({",
@@ -2075,14 +2085,14 @@
     },
     {
       "file": "tests/fixtures/app-statistics/expected.json",
-      "sha256": "a58c589122c4166c55330c8b9591bf5da0eb0301b42a0d2f98abbdf4c6ca25e0",
+      "sha256": "defa6dfa707d0b5ad6a444b9c1b2680a00f0a3c53b447e8951e4a4f85748d791",
       "bytes": 12337,
-      "source_sha256": "caffe4a49361ecb1babd7e9d2412d86db957dc978be6f845848442a65863e735",
+      "source_sha256": "2b09bacfcefa4ba1d92f4e6c2cc822b4db4a55300f71505558d89e270933b155",
       "source_bytes": 12337,
       "changes": [
         {
-          "original": "   \"sha256\": \"6ace4cad4707a31da71826ffd8186bea5a1d444077b703a71e7d9e6c82a96049\"",
-          "replacement": "   \"sha256\": \"e2ed748f32c2bb0b77bdc7a35de5d3bb843a45915223bc5f38bf5225a12a3200\"",
+          "original": "   \"sha256\": \"4e56c80fa5bbf66372f7e2752d4790424c8c1b997dfb8769abf1c549b500fa14\"",
+          "replacement": "   \"sha256\": \"00c62f38e753d5f99388f1c7505febf4612b3388104cdf84be9edf5fd1e4bf01\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
@@ -2091,22 +2101,22 @@
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
-          "original": "   \"sha256\": \"4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196\"",
-          "replacement": "   \"sha256\": \"6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3\"",
+          "original": "   \"sha256\": \"d64133b5b51378ee4e982059182da2e94a1c320bb664b8903d788773ad7efee0\"",
+          "replacement": "   \"sha256\": \"fd77723f5f15d776867ff85c1d93db14e367be8b6bde262a984d2fd72913c1f0\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         }
       ]
     },
     {
       "file": "tests/fixtures/app-statistics/requests.json",
-      "sha256": "d02182bf51993ceef9239a30639636ff8ff04ad573a058d54cfc246343e885e9",
+      "sha256": "c1a887eef8c0853a53f99164894fde1299ce3441b87b4b1708564ab6570032d2",
       "bytes": 224662,
-      "source_sha256": "df2bad63df5de0c3a106190339a1a2c9db07d86d61c32c96c86537c50128815a",
+      "source_sha256": "04ca2cf68754083007eef3f840cf854a84d5d0614f7e4c05c730904ab7c4da30",
       "source_bytes": 224662,
       "changes": [
         {
-          "original": "   \"sha256\": \"6ace4cad4707a31da71826ffd8186bea5a1d444077b703a71e7d9e6c82a96049\"",
-          "replacement": "   \"sha256\": \"e2ed748f32c2bb0b77bdc7a35de5d3bb843a45915223bc5f38bf5225a12a3200\"",
+          "original": "   \"sha256\": \"4e56c80fa5bbf66372f7e2752d4790424c8c1b997dfb8769abf1c549b500fa14\"",
+          "replacement": "   \"sha256\": \"00c62f38e753d5f99388f1c7505febf4612b3388104cdf84be9edf5fd1e4bf01\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
@@ -2115,8 +2125,8 @@
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
-          "original": "   \"sha256\": \"4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196\"",
-          "replacement": "   \"sha256\": \"6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3\"",
+          "original": "   \"sha256\": \"d64133b5b51378ee4e982059182da2e94a1c320bb664b8903d788773ad7efee0\"",
+          "replacement": "   \"sha256\": \"fd77723f5f15d776867ff85c1d93db14e367be8b6bde262a984d2fd72913c1f0\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         }
       ]
@@ -2152,10 +2162,10 @@
     },
     {
       "file": "tests/unit/app/builder-view.test.js",
-      "sha256": "498a9bfa1cddd5656bedf7568190511fe2f6592515dd4c4f651dcda110d00954",
-      "bytes": 61387,
-      "source_sha256": "dc9183dd0c79f36c754af66b077c17e5e1555d948fe9ab5f9a387dfcfac12555",
-      "source_bytes": 61413,
+      "sha256": "1148072fefbd8834a5d82771de1f5268b6739f566c08f4139f1acc9cf27b3501",
+      "bytes": 68329,
+      "source_sha256": "4781a102f232b79f7d827881659b2f4deb63dab8b0bf4d645c3d0181ba8a3bef",
+      "source_bytes": 68368,
       "changes": [
         {
           "original": "          'Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change.'",
@@ -2163,8 +2173,13 @@
           "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
         },
         {
-          "original": "          'Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change.'",
-          "replacement": "          'Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.'",
+          "original": "          'Experimental: new in 1.13. study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.'",
+          "replacement": "          'Experimental: study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.'",
+          "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
+        },
+        {
+          "original": "      'Experimental: new in 1.13. study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.'",
+          "replacement": "      'Experimental: study.builder simulated this study and every row is synthetic; Explore the data shows it in study.builder’s own view, which may still change.'",
           "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
         }
       ]
@@ -2253,8 +2268,8 @@
     },
     {
       "file": "tests/unit/app/mapping.test.js",
-      "sha256": "ee0f9e514633ebdb47cc709f84880631d5dafd60bbd89102260987a189087667",
-      "bytes": 10983
+      "sha256": "54095b8da29f43c8e9f9db4005e8c8cc126372df1c7998834d3e1a0f7952a6d7",
+      "bytes": 11732
     },
     {
       "file": "tests/unit/app/note.test.js",
@@ -2297,14 +2312,44 @@
     },
     {
       "file": "tests/unit/app/portfolio.test.js",
-      "sha256": "8867c97c681493d2f575532e1282e130995d09851b8193d9d404f4040123129b",
-      "bytes": 44014,
-      "source_sha256": "237d3af03c15eed66a5e8e530707413ac5adce391000c913301c1b09fda5fc9d",
-      "source_bytes": 44015,
+      "sha256": "b2bbfb089a071396ebd174a073c9fd9aa8d1c6d69dfd3f155acd518df93d53e1",
+      "bytes": 53462,
+      "source_sha256": "6bf4b893b6944a1913c6f447f6ef1954e295cbd677de85af425186eed761ca51",
+      "source_bytes": 53494,
       "changes": [
         {
           "original": "    name: 'safety-viz-mapping.json',",
           "replacement": "    name: 'study-viz-mapping.json',",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": "  it('APP-STUDY-014: with a simulated study in use a file the app’s own buttons offer for download says it is simulated in its name: Download CSV in a file’s Details gives simulated-adsl.csv, a raw file’s gives simulated-Raw_SUBJ.csv, and Download mapping gives simulated-safety-viz-mapping.json, which loads back as the mapping it is; a demo study’s files and a reader’s own keep their names (#431)', async () => {",
+          "replacement": "  it('APP-STUDY-014: with a simulated study in use a file the app’s own buttons offer for download says it is simulated in its name: Download CSV in a file’s Details gives simulated-adsl.csv, a raw file’s gives simulated-Raw_SUBJ.csv, and Download mapping gives simulated-study-viz-mapping.json, which loads back as the mapping it is; a demo study’s files and a reader’s own keep their names (#431)', async () => {",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": "      // A demo study: the names are the files' own.\n      expect(q('.sva-chip-name').textContent).toBe('Study one');\n      expect(names('dm.csv')).toEqual(['dm.csv', 'safety-viz-mapping.json']);",
+          "replacement": "      // A demo study: the names are the files' own.\n      expect(q('.sva-chip-name').textContent).toBe('Study one');\n      expect(names('dm.csv')).toEqual(['dm.csv', 'study-viz-mapping.json']);",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": "        'simulated-adsl.csv',\n        'simulated-Raw_SUBJ.csv',\n        'simulated-safety-viz-mapping.json'",
+          "replacement": "        'simulated-adsl.csv',\n        'simulated-Raw_SUBJ.csv',\n        'simulated-study-viz-mapping.json'",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": "      expect(names('adae.csv')).toEqual([\n        'simulated-adae.csv',\n        'simulated-safety-viz-mapping.json'\n      ]);",
+          "replacement": "      expect(names('adae.csv')).toEqual(['simulated-adae.csv', 'simulated-study-viz-mapping.json']);",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name. The name is one letter shorter, so the list fits on one line, as the formatter writes it."
+        },
+        {
+          "original": "      app.loadFiles([{ name: 'simulated-safety-viz-mapping.json', text: mapping }]);\n      expect(app.state.mappings.subject.columns.ARM).toEqual({ value: 'SEX', source: 'chosen' });\n      expect(app.state.notes[0]).toContain(\n        'simulated-safety-viz-mapping.json is a saved mapping for:'",
+          "replacement": "      app.loadFiles([{ name: 'simulated-study-viz-mapping.json', text: mapping }]);\n      expect(app.state.mappings.subject.columns.ARM).toEqual({ value: 'SEX', source: 'chosen' });\n      expect(app.state.notes[0]).toContain(\n        'simulated-study-viz-mapping.json is a saved mapping for:'",
+          "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
+        },
+        {
+          "original": "      expect(q('.sva-chip-name').textContent).toBe('Your files');\n      expect(names('dm.csv')).toEqual(['dm.csv', 'safety-viz-mapping.json']);",
+          "replacement": "      expect(q('.sva-chip-name').textContent).toBe('Your files');\n      expect(names('dm.csv')).toEqual(['dm.csv', 'study-viz-mapping.json']);",
           "reason": "The mapping file the app saves carries the app’s name: study-viz-mapping.json. The safetyVizMapping key inside it, which the app reads back, keeps its name."
         }
       ]
@@ -2369,8 +2414,8 @@
     },
     {
       "file": "tests/unit/app/rbqm-files.test.js",
-      "sha256": "2e2be4a29fbb7e3f00935e940a80f500ea06254945052105639009badabe897e",
-      "bytes": 23571
+      "sha256": "0b3ec20f48036707ba27a171d8657a1864aa809f24e35d6da637e13591a804da",
+      "bytes": 25086
     },
     {
       "file": "tests/unit/app/rbqm-pipeline.test.js",
@@ -2389,13 +2434,13 @@
     },
     {
       "file": "tests/unit/app/rbqm-view.test.js",
-      "sha256": "24ce70b245dc4cc5f3f1701c44d429c8e5496034f9b5e3fa2f94b7edd58ba0c5",
-      "bytes": 146920
+      "sha256": "fc4de7578fccd5432e4fe4346a81a5b4b413265e26f9c8d08037e4d22899b51d",
+      "bytes": 146961
     },
     {
       "file": "tests/unit/app/rbqm.test.js",
-      "sha256": "63808193f4e1893ad54a1291bfe53fbc8d16192043a52781518f4930fac88bf8",
-      "bytes": 29494
+      "sha256": "4d5586e4c472c20e18109705acc064399f79766a3eaf366f071fcbd9d74495f4",
+      "bytes": 31340
     },
     {
       "file": "tests/unit/app/single-file.test.js",
