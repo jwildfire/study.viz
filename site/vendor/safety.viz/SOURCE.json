@@ -1,11 +1,12 @@
 {
   "bundle": "safety.viz chart bundle, and three source files the app reads beside it",
   "repository": "https://github.com/jwildfire/safety.viz",
-  "ref": "dev",
-  "commit": "75b918cd6e2c2118e5d8163f245470e6a9af22f1",
+  "ref": "v1.13.0",
+  "commit": "60845fbeb2678e6219cadf945a9b8ae78adccf28",
   "version": "1.13.0",
   "license": "Apache-2.0",
-  "merged_to_dev": true,
+  "tag": "v1.13.0",
+  "merged_to_dev": false,
   "files": [
     {
       "file": "safety.viz.esm.js",
