@@ -2,7 +2,7 @@
   "bundle": "safety.viz chart bundle, and three source files the app reads beside it",
   "repository": "https://github.com/jwildfire/safety.viz",
   "ref": "dev",
-  "commit": "7d1066d0a46298b88f2667c62491d79356e4761e",
+  "commit": "57b50d1382d1e89ed1556f787d12e348c77b25da",
   "version": "1.13.0",
   "license": "Apache-2.0",
   "merged_to_dev": true,
