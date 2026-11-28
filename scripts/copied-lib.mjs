@@ -75,7 +75,7 @@ export const COPIED = {
   // on top of the one that moved its copy of study.builder to v0.5.1
   // (safety.viz#423 and #425; study.viz#29). It prepares safety.viz 1.13.0,
   // which is not released there yet.
-  commit: '7d1066d0a46298b88f2667c62491d79356e4761e',
+  commit: '5aedf9934ed98d21e3331b7deadb8781fb6e352b',
   folders: [
     // The app.
     'src/app',
@@ -832,6 +832,10 @@ const WHY = {
     'The requirement rows say what the app does here: it is named study.viz, its wordmark ' +
     'is not a link to safety.viz’s docs, its footer names both versions, and its ' +
     'installer installs into ./study.viz. An amended row says so in its last column.',
+  since:
+    'safety.viz’s words give "new in 1.13" as a reason, and 1.13 is a version of safety.viz. ' +
+    'The app is study.viz here and has no 1.13, so those words are left out and the rest of ' +
+    'the sentence stands.',
   leak:
     'The test asks that the server never hands out package.json, by looking for the ' +
     'package’s name in the answer. The package here is study.viz, so that is the name to ' +
@@ -865,6 +869,15 @@ const RENAMED = {
       replacement:
         "| APP-LOCAL-008 | LOCAL | Run with no arguments, the installer clones the latest release alone, without its history and with its files as the repository holds them, into ./study.viz, installs what the release's lock file names, and starts the release's own demo script with the Node that ran the installer, ending as the demo ends; `--ref` names another release, `--dir` another directory, and `--port` and `--no-open` reach the demo. Run again where a checkout already is, it uses it as it is: nothing is cloned, and nothing is installed unless an earlier install did not finish. Run again with the `--ref` it was installed with, it does the same: the release named is the one installed when it is the tag of the installed version, `v` and that version, or the branch the clone's own git record names, and nothing is asked of the network to tell. A checkout is never moved to another release: `--ref` naming any other release where one already is stops the installer, which says to name another directory and changes nothing. A release's tag named over a clone of a branch other than `main` stops it too and names the branch, because such a branch holds a version both before and after its tag. A release that does not exist stops it with git's own reason and leaves no clone behind, and a release from before the demo command says so before anything is installed for it. Stopping the installer stops the demo it started. | safety.viz scripts/install-demo.mjs::parseInstallArgs, steps, isInstalled, holdsRelease, branchIn, spawnable | unit | tests/unit/local-demo/install-demo.test.js | ai-reviewed | OK for human review. | Each case is tested by running the file itself on a made-up release, a small git repository with nothing to install, so no test installs from the network; the run against the real repository, from an empty directory to the page answering, is recorded on the pull request (#214). `main` is the release branch, so it is the latest release. The independent review (#214) found the first version ignored `--ref` once a clone existed, reinstalled on every run, and left the demo running when the installer alone was stopped; each now has a test that failed when the fix was taken out. The review of the v1.9.2 release candidate (#219) found that the installer, run again with the `--ref` it was installed with, stopped and told the reader to install the release they already had; the test of that second run failed before the fix. On Windows npm is started through a shell, as one string of its own fixed arguments; that path is tested as a function and has not been run on Windows. |",
       reason: why('matrix')
+    },
+    {
+      original:
+        "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. |\n" +
+        '| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab\'s is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app\'s status label on the corner of the Overview tab, with that sentence, while the builder is open ("Build a study is experimental") and while a simulated study is in use, on both of its faces ("The view of this simulated study is experimental"); it shows none there for a demo study, a reader\'s own files or an empty page, and a chart\'s tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: "Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change." and "Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change." Neither is a chart or a tab, so neither is counted in the app panel\'s sentence of how many charts and tabs are Experimental; the panel\'s second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire\'s to overrule: until #427 the app gave study.builder\'s parts no rung of its own. |',
+      replacement:
+        "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. Amended for study.viz (study.viz#31): safety.viz's paragraph says the two parts are \"new in 1.13\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the paragraph stands. The choice was an agent's, and is @jwildfire's to overrule. |\n" +
+        "| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab's is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app's status label on the corner of the Overview tab, with that sentence, while the builder is open (\"Build a study is experimental\") and while a simulated study is in use, on both of its faces (\"The view of this simulated study is experimental\"); it shows none there for a demo study, a reader's own files or an empty page, and a chart's tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: \"Experimental: study.builder simulates the study in this browser, and what it makes may still change.\" and \"Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.\" Neither is a chart or a tab, so neither is counted in the app panel's sentence of how many charts and tabs are Experimental; the panel's second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire's to overrule: until #427 the app gave study.builder's parts no rung of its own. Amended for study.viz (study.viz#31): each of safety.viz's two sentences begins \"Experimental: new in 1.13.\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of each sentence stands. The choice was an agent's, and is @jwildfire's to overrule. |",
+      reason: why('matrix', 'since')
     }
   ],
   'scripts/build-app.mjs': [
@@ -1042,6 +1055,41 @@ const RENAMED = {
       replacement:
         '  "siteTitle": "study.viz",\n' + '  "repoUrl": "https://github.com/jwildfire/study.viz",',
       reason: why('repo', 'name')
+    },
+    {
+      original:
+        '      "tierNote": "Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change."',
+      replacement:
+        '      "tierNote": "Experimental: study.builder simulates the study in this browser, and what it makes may still change."',
+      reason: why('since')
+    },
+    {
+      original:
+        '      "tierNote": "Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change."',
+      replacement:
+        '      "tierNote": "Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change."',
+      reason: why('since')
+    }
+  ],
+  'src/app/header.js': [
+    {
+      original:
+        " * study are not safety.viz's own, and every row is synthetic. Both stand on\n" +
+        ' * Experimental here, by their entries in site/config.json (`appParts`), and\n' +
+        ' * each carries the label on its corner with its reason (#427).\n' +
+        ' */\n' +
+        'export const APP_STATUS_SIMULATED =\n' +
+        "  'Build a study and the view of a simulated study are Experimental, and say so where you ' +\n" +
+        "  'open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.';",
+      replacement:
+        " * study are not study.viz's own, and every row is synthetic. Both stand on\n" +
+        ' * Experimental here, by their entries in site/config.json (`appParts`), and\n' +
+        ' * each carries the label on its corner with its reason (#427).\n' +
+        ' */\n' +
+        'export const APP_STATUS_SIMULATED =\n' +
+        "  'Build a study and the view of a simulated study are Experimental, and say so where you ' +\n" +
+        "  'open them. Both are study.builder’s, and every row it makes is synthetic.';",
+      reason: why('since', 'name')
     }
   ],
   'src/app/libraries.js': [
@@ -1426,9 +1474,9 @@ const RENAMED = {
       reason: why('checksums')
     },
     {
-      original: '   "sha256": "68df35c7f7c9bce0635742c5cc19fd180687139b2552257f4e8c22fb95fa4f6b"',
+      original: '   "sha256": "4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196"',
       replacement:
-        '   "sha256": "48bb793f56ad0ffcea25fa487d3fdfcca41e17c339bc619d6f8018485b8a63fa"',
+        '   "sha256": "6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3"',
       reason: why('checksums')
     }
   ],
@@ -1446,10 +1494,26 @@ const RENAMED = {
       reason: why('checksums')
     },
     {
-      original: '   "sha256": "68df35c7f7c9bce0635742c5cc19fd180687139b2552257f4e8c22fb95fa4f6b"',
+      original: '   "sha256": "4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196"',
       replacement:
-        '   "sha256": "48bb793f56ad0ffcea25fa487d3fdfcca41e17c339bc619d6f8018485b8a63fa"',
+        '   "sha256": "6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3"',
       reason: why('checksums')
+    }
+  ],
+  'tests/unit/app/builder-view.test.js': [
+    {
+      original:
+        "          'Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change.'",
+      replacement:
+        "          'Experimental: study.builder simulates the study in this browser, and what it makes may still change.'",
+      reason: why('since')
+    },
+    {
+      original:
+        "          'Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change.'",
+      replacement:
+        "          'Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.'",
+      reason: why('since')
     }
   ],
   'tests/unit/app/data-panel.test.js': [
@@ -1579,6 +1643,15 @@ const RENAMED = {
       original: "    expect(html).toContain('<title>safety.viz demo</title>');",
       replacement: "    expect(html).toContain('<title>study.viz demo</title>');",
       reason: why('title')
+    }
+  ],
+  'tests/unit/app/status-label.test.js': [
+    {
+      original:
+        "        'open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.'",
+      replacement:
+        "        'open them. Both are study.builder’s, and every row it makes is synthetic.'",
+      reason: why('since')
     }
   ],
   'tests/unit/app/view-items.test.js': [

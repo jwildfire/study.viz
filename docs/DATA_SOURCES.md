@@ -527,7 +527,7 @@ above.
 The demo app's study chip offers three ready-made simulated studies, and Build
 a study offers five example protocols. Both come with
 [study.builder](https://github.com/jwildfire/study.builder) and are copied with
-it into `site/vendor/study.builder/` from its v0.5.1 release (commit 11d1103).
+it into `site/vendor/study.builder/` from its v0.5.2 release (commit b6ac945).
 None is made or changed here, and `SOURCE.json` beside the copy records the
 commit and each file's checksum:
 
@@ -584,6 +584,34 @@ They are not among the eleven datasets above.
   content, and copies no code or script of DDF-RA's.
 - Attribution, exactly as each protocol file carries it in `source`: "Content based on DDF-RA (GitHub), https://github.com/cdisc-org/DDF-RA, used under the CC-BY-4.0 licence."
 - They are changed from CDISC's files, as each protocol file says in `source`: "Changed from CDISC’s file: read by study.builder’s reader and cut down to what a simulated study follows (visits, arms, epochs, objectives, endpoints and activities). Not CDISC’s own form of the protocol, and not endorsed by CDISC or by any sponsor it names."
+- DDF-RA's MIT notice is given here too, in case the example study definitions
+  count as code and not as content: they are JSON files, and DDF-RA's README
+  names "documentation and minutes" as its content. This is its `LICENSE` file
+  as it stands at that commit, whole:
+
+  ```text
+  MIT License
+
+  Copyright (c) 2022 CDISC
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+  ```
 
 ## License and attribution
 
@@ -623,7 +651,14 @@ line of what it copies itself: gsm.reporting's
 `Results.yaml` names `FilterByLatestSnapshotDate` without `gsm.kri::`, because
 gsm.kri is not installed in browser R. The `SOURCE.json` beside the copy records
 the line as it was and as it is, and the checks hold the file to its tag with
-that one line changed.
+that one line changed. The changed file is served in two copies, each with the
+same one line changed and each with the change recorded in the `SOURCE.json`
+beside it: `site/vendor/gsm.reporting/workflow/3_reporting/Results.yaml`, which
+the RBQM tab's R reads, and
+`site/vendor/study.builder/vendor/gsm.reporting/workflow/3_reporting/Results.yaml`,
+inside the copy of study.builder, which a build of a simulated study reads.
+study.builder's copy also carries a notice of change at its top, five comment
+lines; safety.viz's own copy carries none in the file (#263).
 
 | What                                                                       | Version | Licence, as the project states it                               | How it is here                                                              |
 | -------------------------------------------------------------------------- | ------- | --------------------------------------------------------------- | --------------------------------------------------------------------------- |
@@ -633,7 +668,7 @@ that one line changed.
 | [workr](https://github.com/Gilead-Public/workr)                            | 1.1.0   | MIT + file LICENSE                                              | Built for R in the browser                                                  |
 | [gsm.kri](https://github.com/Gilead-Public/gsm.kri)                        | 1.7.0   | Apache License (>= 2)                                           | Eight metric workflows and one R file, copied; the package is not installed |
 | [gsm.viz](https://github.com/Gilead-Public/gsm.viz)                        | 2.4.1   | Apache-2.0, by its `LICENSE` file; its `package.json` names ISC | Its built bundle, copied                                                    |
-| [study.builder](https://github.com/jwildfire/study.builder)                | 0.5.1   | Apache-2.0                                                      | Its two built bundles and the files its R reads, copied, for Build a study  |
+| [study.builder](https://github.com/jwildfire/study.builder)                | 0.5.2   | Apache-2.0                                                      | Its two built bundles and the files its R reads, copied, for Build a study  |
 | A modified copy of [gsm.datasim](https://github.com/jwildfire/gsm.datasim) | 2.1.0   | Apache License (>= 2)                                           | Its R source, copied inside the copy of study.builder                       |
 
 - The versions and tags are in `site/vendor/r-wasm/pins.json` and in the

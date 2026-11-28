@@ -1,9 +1,9 @@
 {
   "copy": "safety.viz’s demo app, as study.viz began",
   "repository": "https://github.com/jwildfire/safety.viz",
-  "commit": "7d1066d0a46298b88f2667c62491d79356e4761e",
+  "commit": "5aedf9934ed98d21e3331b7deadb8781fb6e352b",
   "version": "1.13.0",
-  "merged_to_dev": true,
+  "merged_to_dev": false,
   "left": [
     {
       "file": "docs/evidence/basic-app/demo-path/01-opens-on-the-pilot-study.png",
@@ -313,8 +313,8 @@
   "files": [
     {
       "file": "docs/DATA_SOURCES.md",
-      "sha256": "ee591b3f7ee2fe4b1aec8039c74628236b4ca6dd80fadb124e22f780bd0f333f",
-      "bytes": 49805
+      "sha256": "ef422e91ca364705369f8405dd8a201851736492cc55d1af27b989a02e34498d",
+      "bytes": 51732
     },
     {
       "file": "docs/evidence/basic-app/APP-R-037-rbqm-pipeline-measurements.json",
@@ -357,10 +357,10 @@
     },
     {
       "file": "requirements/demo-app.md",
-      "sha256": "e2e77e4b27ebf568fead6d49cf6d6bbb5c704586de4f1276b4c21bec7cfb3fa3",
-      "bytes": 244222,
-      "source_sha256": "1ab59293803a4057e94ff1d8769f819841da7d43413ba5dd2fb40be9c7789116",
-      "source_bytes": 243412,
+      "sha256": "0fb73b03756a962d3d094cfc675279b44197b71e1e49dea38eb264f23fe02cbd",
+      "bytes": 265920,
+      "source_sha256": "061bf114203290c4838831c6e4b2a6b7cfed44d1835a049d9d8b8867f65fe926",
+      "source_bytes": 264534,
       "changes": [
         {
           "original": "| APP-PAGE-018 | PAGE | The app's own parts on every view are a header and a footer; the data view alone adds a sidebar (APP-LOAD-021). The header carries the safety.viz wordmark and hex mark and says it is the demo app; the footer says what the page that mounts it does with a study, and carries the version: by default that everything runs in the browser and nothing is sent anywhere; on the hosted page that the study's data never leaves the browser and no request leaves the page unless the reader starts R; in the single file that it loads nothing. The view's name is the page's one heading, kept for screen readers and not shown. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. | A header and a footer, not a sidebar (@jwildfire, 2026-10-02): beside the chart's own controls and the participant profile, a sidebar left the chart a fifth of the screen. Amended at @jwildfire's word (#183): his choice of 2026-10-02, \"R on request\", changes what this row promised that day, and the row now says what is true. |\n| APP-PAGE-019 | PAGE | The footer links to the docs site, the Domains page, the single file and the repository, each only where it was given an address; the single file is offered as a download. | safety.viz src/app/page.js::mountApp | unit | tests/unit/app/page.test.js | ai-reviewed | OK for human review. |  |",
@@ -376,13 +376,18 @@
           "original": "| APP-LOCAL-008 | LOCAL | Run with no arguments, the installer clones the latest release alone, without its history and with its files as the repository holds them, into ./safety.viz, installs what the release's lock file names, and starts the release's own demo script with the Node that ran the installer, ending as the demo ends; `--ref` names another release, `--dir` another directory, and `--port` and `--no-open` reach the demo. Run again where a checkout already is, it uses it as it is: nothing is cloned, and nothing is installed unless an earlier install did not finish. Run again with the `--ref` it was installed with, it does the same: the release named is the one installed when it is the tag of the installed version, `v` and that version, or the branch the clone's own git record names, and nothing is asked of the network to tell. A checkout is never moved to another release: `--ref` naming any other release where one already is stops the installer, which says to name another directory and changes nothing. A release's tag named over a clone of a branch other than `main` stops it too and names the branch, because such a branch holds a version both before and after its tag. A release that does not exist stops it with git's own reason and leaves no clone behind, and a release from before the demo command says so before anything is installed for it. Stopping the installer stops the demo it started. | safety.viz scripts/install-demo.mjs::parseInstallArgs, steps, isInstalled, holdsRelease, branchIn, spawnable | unit | tests/unit/local-demo/install-demo.test.js | ai-reviewed | OK for human review. | Each case is tested by running the file itself on a made-up release, a small git repository with nothing to install, so no test installs from the network; the run against the real repository, from an empty directory to the page answering, is recorded on the pull request (#214). `main` is the release branch, so it is the latest release. The independent review (#214) found the first version ignored `--ref` once a clone existed, reinstalled on every run, and left the demo running when the installer alone was stopped; each now has a test that failed when the fix was taken out. The review of the v1.9.2 release candidate (#219) found that the installer, run again with the `--ref` it was installed with, stopped and told the reader to install the release they already had; the test of that second run failed before the fix. On Windows npm is started through a shell, as one string of its own fixed arguments; that path is tested as a function and has not been run on Windows. |",
           "replacement": "| APP-LOCAL-008 | LOCAL | Run with no arguments, the installer clones the latest release alone, without its history and with its files as the repository holds them, into ./study.viz, installs what the release's lock file names, and starts the release's own demo script with the Node that ran the installer, ending as the demo ends; `--ref` names another release, `--dir` another directory, and `--port` and `--no-open` reach the demo. Run again where a checkout already is, it uses it as it is: nothing is cloned, and nothing is installed unless an earlier install did not finish. Run again with the `--ref` it was installed with, it does the same: the release named is the one installed when it is the tag of the installed version, `v` and that version, or the branch the clone's own git record names, and nothing is asked of the network to tell. A checkout is never moved to another release: `--ref` naming any other release where one already is stops the installer, which says to name another directory and changes nothing. A release's tag named over a clone of a branch other than `main` stops it too and names the branch, because such a branch holds a version both before and after its tag. A release that does not exist stops it with git's own reason and leaves no clone behind, and a release from before the demo command says so before anything is installed for it. Stopping the installer stops the demo it started. | safety.viz scripts/install-demo.mjs::parseInstallArgs, steps, isInstalled, holdsRelease, branchIn, spawnable | unit | tests/unit/local-demo/install-demo.test.js | ai-reviewed | OK for human review. | Each case is tested by running the file itself on a made-up release, a small git repository with nothing to install, so no test installs from the network; the run against the real repository, from an empty directory to the page answering, is recorded on the pull request (#214). `main` is the release branch, so it is the latest release. The independent review (#214) found the first version ignored `--ref` once a clone existed, reinstalled on every run, and left the demo running when the installer alone was stopped; each now has a test that failed when the fix was taken out. The review of the v1.9.2 release candidate (#219) found that the installer, run again with the `--ref` it was installed with, stopped and told the reader to install the release they already had; the test of that second run failed before the fix. On Windows npm is started through a shell, as one string of its own fixed arguments; that path is tested as a function and has not been run on Windows. |",
           "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column."
+        },
+        {
+          "original": "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. |\n| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab's is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app's status label on the corner of the Overview tab, with that sentence, while the builder is open (\"Build a study is experimental\") and while a simulated study is in use, on both of its faces (\"The view of this simulated study is experimental\"); it shows none there for a demo study, a reader's own files or an empty page, and a chart's tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: \"Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change.\" and \"Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change.\" Neither is a chart or a tab, so neither is counted in the app panel's sentence of how many charts and tabs are Experimental; the panel's second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire's to overrule: until #427 the app gave study.builder's parts no rung of its own. |",
+          "replacement": "| APP-TIER-029 | TIER | On a page whose libraries bring study.builder's way to load data, the app's status panel says in a second paragraph, after the disclaimer, where study.builder's parts stand: \"Build a study and the view of a simulated study are Experimental, and say so where you open them. Both are study.builder’s, and every row it makes is synthetic.\" A page without study.builder says nothing of them, and the hover line, the count of charts and the marked rung are unchanged. | safety.viz src/app/header.js::APP_STATUS_SIMULATED; src/app/page.js::mountApp | unit; browser | tests/unit/app/status-label.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #424, from the review of the v1.13.0 release candidate: the new parts stated no rung. As written for #424 the paragraph reported the status study.builder's README gives itself (\"Status: experimental\", read at its v0.5.1 commit) and gave study.builder no rung on safety.viz's ladder. Since #427 the two parts stand on Experimental by entries in `site/config.json` and carry the label themselves (APP-TIER-030), and the paragraph says that; the rung and its two sentences are @jwildfire's to overrule. The test page has no study.builder, so no stored picture of the panel changes. Amended for study.viz (study.viz#31): safety.viz's paragraph says the two parts are \"new in 1.13\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the paragraph stands. The choice was an agent's, and is @jwildfire's to overrule. |\n| APP-TIER-030 | TIER | Build a study and the view of a simulated study each stand on a rung of the status ladder, set in `site/config.json` under `appParts` as a tab's is under `appTabs`: both Experimental, each with one sentence saying why. The build holds a part to what it holds a tab to (a rung that exists, never Qualified, a reason below Exploratory) and hands the page both rungs. The page shows the app's status label on the corner of the Overview tab, with that sentence, while the builder is open (\"Build a study is experimental\") and while a simulated study is in use, on both of its faces (\"The view of this simulated study is experimental\"); it shows none there for a demo study, a reader's own files or an empty page, and a chart's tab still says only where the chart stands. The label is the one every chart and tab uses, and its panel opens inside the window. | safety.viz site/config.json (appParts); scripts/tiers.mjs::tierEntries; scripts/app-libraries.mjs::chartTiers; src/app/page.js::dataLabel, cornerLabel; src/app/builder-view.js::SIMULATED_RUNG_ID | unit; browser | tests/unit/app/builder-view.test.js; tests/unit/app/tiers.test.js; tests/e2e/site.spec.js | ai-reviewed | OK for human review. | #427; `CONTRIBUTING.md`, convention 7. The reasons, as the label shows them: \"Experimental: study.builder simulates the study in this browser, and what it makes may still change.\" and \"Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.\" Neither is a chart or a tab, so neither is counted in the app panel's sentence of how many charts and tabs are Experimental; the panel's second paragraph names them (APP-TIER-029). The rung and the two sentences are @jwildfire's to overrule: until #427 the app gave study.builder's parts no rung of its own. Amended for study.viz (study.viz#31): each of safety.viz's two sentences begins \"Experimental: new in 1.13.\", which is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of each sentence stands. The choice was an agent's, and is @jwildfire's to overrule. |",
+          "reason": "The requirement rows say what the app does here: it is named study.viz, its wordmark is not a link to safety.viz’s docs, its footer names both versions, and its installer installs into ./study.viz. An amended row says so in its last column. safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
         }
       ]
     },
     {
       "file": "scripts/app-libraries.mjs",
-      "sha256": "4a471caf792a614875e90bf4162a6c21b2bcdde67062b59090d6d810ad48fecf",
-      "bytes": 19177
+      "sha256": "a27f142914b97604cd09b3c05fd2d291de23366389540a24d4868a277eb68847",
+      "bytes": 19453
     },
     {
       "file": "scripts/app-statistics-lib.mjs",
@@ -696,8 +701,8 @@
     },
     {
       "file": "scripts/tiers.mjs",
-      "sha256": "23f9e4d6e111158e6daf6b6aa171cb3804e94944d8a6b2c60a74daaa29471d71",
-      "bytes": 6395
+      "sha256": "94db2501b1d3dba5927d27949f2674b46a92d9bdcff610a1c3aa2ced0a53fc23",
+      "bytes": 6679
     },
     {
       "file": "scripts/vendor-bio-viz.mjs",
@@ -721,8 +726,8 @@
     },
     {
       "file": "scripts/vendor-lib.mjs",
-      "sha256": "2dad9c28f08610be37c3fccc40e21b2c2dcc7f19f1732cd280bd149071734565",
-      "bytes": 39262
+      "sha256": "78d7bacbcc83a089fe26e134e86aa6b04e00a86075f92485515d53b81bc3df1a",
+      "bytes": 39318
     },
     {
       "file": "scripts/vendor-rbqm-study.mjs",
@@ -741,15 +746,25 @@
     },
     {
       "file": "site/config.json",
-      "sha256": "3afec81a1aad2af027b663b9baa6806673e7d3550a6fe40ee40bd431e2c2bd48",
-      "bytes": 13398,
-      "source_sha256": "210116e9bb4017caf80ddbcab68d8d1068495607cb2f63177b94d29902717b02",
-      "source_bytes": 13400,
+      "sha256": "6eaa125b7621da9672cb8c95bb996ca02f4d908617309aae95633a3898282f9c",
+      "bytes": 13881,
+      "source_sha256": "bda376d9f09b3ab966adef7aacc8fa69e83394ffdf4b65f792f83a805fb4abb2",
+      "source_bytes": 13909,
       "changes": [
         {
           "original": "  \"siteTitle\": \"safety.viz\",\n  \"repoUrl\": \"https://github.com/jwildfire/safety.viz\",",
           "replacement": "  \"siteTitle\": \"study.viz\",\n  \"repoUrl\": \"https://github.com/jwildfire/study.viz\",",
           "reason": "The app’s source link leads to study.viz’s own repository. The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        },
+        {
+          "original": "      \"tierNote\": \"Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change.\"",
+          "replacement": "      \"tierNote\": \"Experimental: study.builder simulates the study in this browser, and what it makes may still change.\"",
+          "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
+        },
+        {
+          "original": "      \"tierNote\": \"Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change.\"",
+          "replacement": "      \"tierNote\": \"Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.\"",
+          "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
         }
       ]
     },
@@ -1110,13 +1125,13 @@
     },
     {
       "file": "site/vendor/study.builder/SOURCE.json",
-      "sha256": "a6d3de30c763b4ffcd1d13dfb97406e49e92742600b3f006d01ab62618273a6c",
+      "sha256": "656d55aee997ffc86ac671db81acb8b71b98c4d7fc1f0e5e0c3bdb535b0c6a3e",
       "bytes": 21646
     },
     {
       "file": "site/vendor/study.builder/presets/cdisc-pilot-protocol.study.json.gz",
-      "sha256": "726d0a3ecfe48629175925961742045fedf0505ff8653c5f0913e01154cf1bfd",
-      "bytes": 2313135
+      "sha256": "d86727f4767a7e0f3795810b847f1f862053c602bd9acd95e3dc8a5d18d9afb5",
+      "bytes": 2313688
     },
     {
       "file": "site/vendor/study.builder/presets/index.json",
@@ -1125,13 +1140,13 @@
     },
     {
       "file": "site/vendor/study.builder/presets/phase1-small.study.json.gz",
-      "sha256": "fd76d5a62bbced04d87a2c06bb6410d9f2b1f4fd4be21247689bc466d9e51c6e",
-      "bytes": 1162835
+      "sha256": "3b0a21e9dd26214720024d4db2e3ddb61cc9338c756273b25f3f8ae6d1d01fa5",
+      "bytes": 1163287
     },
     {
       "file": "site/vendor/study.builder/presets/phase2-oncology.study.json.gz",
-      "sha256": "98112911acf17d7024359b8f010a545ebdca3b27cde017fe5e60eb8f03a1da5c",
-      "bytes": 1346639
+      "sha256": "0894eed2b2e57c2039ee3ac6264412217e99c2c6701a0c52b898245720f04512",
+      "bytes": 1346819
     },
     {
       "file": "site/vendor/study.builder/protocols/alexion-wilsons.protocol.json",
@@ -1160,18 +1175,18 @@
     },
     {
       "file": "site/vendor/study.builder/r/builder.R",
-      "sha256": "8aa52184c122c5b063856696a9d75b71ac353098c46c6f146cc3a40e1590d89c",
-      "bytes": 33687
+      "sha256": "57ee744bb0f33b43518ef6ee2d1517b61b3a92196dd503f310162ee5cc94358f",
+      "bytes": 33915
     },
     {
       "file": "site/vendor/study.builder/studies/index.json",
-      "sha256": "3350baf8ced30e12e5a12f217f4583da59d29ee4bd8db1c35416fd9d04f8259b",
+      "sha256": "cba2bc0232dfcd0146005d7d06caf35fa28175ca0f659a66b4257c6fff12ff57",
       "bytes": 39877
     },
     {
       "file": "site/vendor/study.builder/study.builder.js",
-      "sha256": "d68583d2a7f414c92ac1bf83edfe6511c6d7829415e6118981323ba7ee7481be",
-      "bytes": 173391
+      "sha256": "08cfffa49892992aec5d89fafe614ad7f869c08db5e3c4664a3aec68bc906439",
+      "bytes": 174101
     },
     {
       "file": "site/vendor/study.builder/study.viewer.js",
@@ -1505,8 +1520,8 @@
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.reporting/SOURCE.json",
-      "sha256": "2bf58adceb53e35fd419e92976dc127bf8a185494b60426f923ad2abd30b050a",
-      "bytes": 1800
+      "sha256": "337b419052e5f061012b5424d2802be68cbb104fe83d568474e78ff82752a126",
+      "bytes": 2042
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.reporting/workflow/3_reporting/Bounds.yaml",
@@ -1525,8 +1540,8 @@
     },
     {
       "file": "site/vendor/study.builder/vendor/gsm.reporting/workflow/3_reporting/Results.yaml",
-      "sha256": "9af4f317bef0acd16a4098417aa5c1a7cb4bd945bd00d560b2ef4c8a7f7b1d36",
-      "bytes": 1061
+      "sha256": "96093845938ab14f2b7e3585104a575338cb53f31ce3b626ff813607e90654cd",
+      "bytes": 1416
     },
     {
       "file": "site/vendor/study.builder/workflows/adam/ADAE.yaml",
@@ -1580,8 +1595,8 @@
     },
     {
       "file": "src/app/builder-view.js",
-      "sha256": "f6463bdda2f7602d018fcf253af1e761ddbedb39e4731a8066761ca1e9b62034",
-      "bytes": 19208
+      "sha256": "bfda74a21213a277dad963d5b375060d49d96cf8c3c4c4b4e3935814f29e2c56",
+      "bytes": 23861
     },
     {
       "file": "src/app/charts.js",
@@ -1590,8 +1605,8 @@
     },
     {
       "file": "src/app/data-panel.js",
-      "sha256": "9b03282d2cef5e162cf3bdcb38d9dd8be7deb56a603e50cdf23ce9b25527fce5",
-      "bytes": 32904
+      "sha256": "c3f57466aae4b0a692622c46552904056a8789baa7d6fdd64bb1848c68d9d507",
+      "bytes": 34119
     },
     {
       "file": "src/app/detect.js",
@@ -1600,8 +1615,8 @@
     },
     {
       "file": "src/app/dom.js",
-      "sha256": "45366be1d39bb5f8357ec6d7ab95e5e9902a71ed62c1ab812b39733c11672368",
-      "bytes": 921
+      "sha256": "f7286b6bedd5acb98fb67e218d1414d7831e35fa0518d519d7f4d054909080dd",
+      "bytes": 1256
     },
     {
       "file": "src/app/file-details.js",
@@ -1610,8 +1625,17 @@
     },
     {
       "file": "src/app/header.js",
-      "sha256": "9b6c5b2a9c4b2f319771d72ffc7dfc9a1ff840e85d8afa513c4bd2502aabff91",
-      "bytes": 3887
+      "sha256": "8245c395869f32eea5f8a8470d3801f57bc9a64b6398f6f3617cf0a31dadf92e",
+      "bytes": 3968,
+      "source_sha256": "24dc03f6d3c451a8d44c14a91117ff0df22b62b1efe3cc62994f9d183467c5ac",
+      "source_bytes": 3982,
+      "changes": [
+        {
+          "original": " * study are not safety.viz's own, and every row is synthetic. Both stand on\n * Experimental here, by their entries in site/config.json (`appParts`), and\n * each carries the label on its corner with its reason (#427).\n */\nexport const APP_STATUS_SIMULATED =\n  'Build a study and the view of a simulated study are Experimental, and say so where you ' +\n  'open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.';",
+          "replacement": " * study are not study.viz's own, and every row is synthetic. Both stand on\n * Experimental here, by their entries in site/config.json (`appParts`), and\n * each carries the label on its corner with its reason (#427).\n */\nexport const APP_STATUS_SIMULATED =\n  'Build a study and the view of a simulated study are Experimental, and say so where you ' +\n  'open them. Both are study.builder’s, and every row it makes is synthetic.';",
+          "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands. The app is study.viz here, from its first commit: a line that names the app, where a reader sees it or in the comment beside it, names it study.viz."
+        }
+      ]
     },
     {
       "file": "src/app/icons.js",
@@ -1707,10 +1731,10 @@
     },
     {
       "file": "src/app/page.js",
-      "sha256": "48bb793f56ad0ffcea25fa487d3fdfcca41e17c339bc619d6f8018485b8a63fa",
-      "bytes": 80293,
-      "source_sha256": "68df35c7f7c9bce0635742c5cc19fd180687139b2552257f4e8c22fb95fa4f6b",
-      "source_bytes": 79699,
+      "sha256": "6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3",
+      "bytes": 83109,
+      "source_sha256": "4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196",
+      "source_bytes": 82515,
       "changes": [
         {
           "original": "export const MAPPING_FILE_NAME = 'safety-viz-mapping.json';",
@@ -1806,13 +1830,13 @@
     },
     {
       "file": "src/app/portfolio.js",
-      "sha256": "b44f19e0d720cade77b1ac240cd9ff8808f3470fb4491dfacd7004b2d723e751",
-      "bytes": 14976
+      "sha256": "4a5c8b7f7503536e216868577a794ffc64dda4ca594f1dea76155e0301ba96b1",
+      "bytes": 15719
     },
     {
       "file": "src/app/r-browser.js",
-      "sha256": "d7cc3aa380c804985327a434b62e0524cf39b608b29e0dbbbf03b40fa9541e33",
-      "bytes": 17021
+      "sha256": "e0a6a7dee6d38b306fc9d2fe081d4610f22bec6079d1e3525ed90c78f747f425",
+      "bytes": 19266
     },
     {
       "file": "src/app/r-control.js",
@@ -1831,18 +1855,18 @@
     },
     {
       "file": "src/app/rbqm-files.js",
-      "sha256": "16709edee1cc14eb25782b3ee69b64899c509604b1639967e809428b5a640030",
-      "bytes": 17728
+      "sha256": "71d8baefe1de54df3ad8c223e9549c6521b84c0010f5707513670afbe096f22a",
+      "bytes": 18342
     },
     {
       "file": "src/app/rbqm-view.js",
-      "sha256": "41fef5839465f788c55a1660bc8e247228f71ddcb6fa610ad4ab3c14a0406804",
-      "bytes": 40562
+      "sha256": "39e85a750d2566e0fb3b5c2e29a5d680753552a250503da4ce64844b6c451e8f",
+      "bytes": 41068
     },
     {
       "file": "src/app/rbqm.js",
-      "sha256": "585d7cf74bac5e73f4028e6db6570760e8df7cb4fea78e5519c85173e89ccf16",
-      "bytes": 22579
+      "sha256": "b63c665e30fe9ed41d1bf82048693cc4f59b6f22501ac5967af46edd4c3aced3",
+      "bytes": 24534
     },
     {
       "file": "src/app/site.js",
@@ -1861,13 +1885,13 @@
     },
     {
       "file": "src/app/styles.js",
-      "sha256": "3617a7a0b2b0f54be1524fe659115565abad5121dbbb91de19216666dfd52807",
-      "bytes": 36418
+      "sha256": "2efb14d4cfd1c77a589328a92e9fa79f825db9f33b6a1f7e8f50b4e6bdbb655b",
+      "bytes": 36451
     },
     {
       "file": "src/app/viewer-view.js",
-      "sha256": "789689c87727c2e05ee2d887d29d70a713a91476497fea9576fb1fa82ba19c56",
-      "bytes": 11295
+      "sha256": "25cb9fb75ffeef79291bd5c8e0881eae93fc18cd97e25f2b8ac2c03656d50593",
+      "bytes": 15194
     },
     {
       "file": "tests/demo-path/demo-path.spec.js",
@@ -1876,10 +1900,10 @@
     },
     {
       "file": "tests/e2e/basic-app.spec.js",
-      "sha256": "4d597110a716128c327101ee16353398d424e6cc25900b0284133ee65b03cf5b",
-      "bytes": 307714,
-      "source_sha256": "2b291173b59d019feaa701cdfb3d948ad371277b60250941f42b8afb25b2a305",
-      "source_bytes": 307243,
+      "sha256": "c06be0eb0e26339c2ffb10b68341cab8bbf629e04fd7a18b07518ec41b47d0c5",
+      "bytes": 307763,
+      "source_sha256": "0db593710ea6ee75b353c49ed36a68d8d782d0505b64fddefd88d0887bb07652",
+      "source_bytes": 307292,
       "changes": [
         {
           "original": "  test('APP-PAGE-037: the wordmark is a link to the docs home, the mark and the words \"Demo app\" inside it, and nothing else in the header moves (#270)', async ({",
@@ -2051,9 +2075,9 @@
     },
     {
       "file": "tests/fixtures/app-statistics/expected.json",
-      "sha256": "139c0e7d0facc26fa51deff128ad59572a7231f658e4e2f6ada9f7b8c571a6a7",
+      "sha256": "a58c589122c4166c55330c8b9591bf5da0eb0301b42a0d2f98abbdf4c6ca25e0",
       "bytes": 12337,
-      "source_sha256": "1cfffac948a9dc107a828388a92647754e494069b25852cdf7ac8de9b839da65",
+      "source_sha256": "caffe4a49361ecb1babd7e9d2412d86db957dc978be6f845848442a65863e735",
       "source_bytes": 12337,
       "changes": [
         {
@@ -2067,17 +2091,17 @@
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
-          "original": "   \"sha256\": \"68df35c7f7c9bce0635742c5cc19fd180687139b2552257f4e8c22fb95fa4f6b\"",
-          "replacement": "   \"sha256\": \"48bb793f56ad0ffcea25fa487d3fdfcca41e17c339bc619d6f8018485b8a63fa\"",
+          "original": "   \"sha256\": \"4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196\"",
+          "replacement": "   \"sha256\": \"6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         }
       ]
     },
     {
       "file": "tests/fixtures/app-statistics/requests.json",
-      "sha256": "6293dc18ba141c5ab8b4e785f43322fc57ffefe9c3c3f73508522eda4dd82c63",
+      "sha256": "d02182bf51993ceef9239a30639636ff8ff04ad573a058d54cfc246343e885e9",
       "bytes": 224662,
-      "source_sha256": "763f1a3306ee84e6c17a76888f1538a728f98de2161990e51e956b024e35b430",
+      "source_sha256": "df2bad63df5de0c3a106190339a1a2c9db07d86d61c32c96c86537c50128815a",
       "source_bytes": 224662,
       "changes": [
         {
@@ -2091,8 +2115,8 @@
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         },
         {
-          "original": "   \"sha256\": \"68df35c7f7c9bce0635742c5cc19fd180687139b2552257f4e8c22fb95fa4f6b\"",
-          "replacement": "   \"sha256\": \"48bb793f56ad0ffcea25fa487d3fdfcca41e17c339bc619d6f8018485b8a63fa\"",
+          "original": "   \"sha256\": \"4fb6bcda1026f18410f3204576049a684ea9bafd12da485f5f0601486a921196\"",
+          "replacement": "   \"sha256\": \"6f3209f6d812db5666485be45e485a23e8105289004a9c444389d6f27f4a30e3\"",
           "reason": "The file holds the checksums of src/app/mapping.js, libraries.js and page.js, which changed with the app’s name. The requests were recorded again from the renamed app and are the same; desktop R’s answers are the ones it gave, untouched."
         }
       ]
@@ -2128,8 +2152,22 @@
     },
     {
       "file": "tests/unit/app/builder-view.test.js",
-      "sha256": "80b7f766a6bb41230bda75fb367461a2e1ef419467c63ec647e44c14dd397a8b",
-      "bytes": 34989
+      "sha256": "498a9bfa1cddd5656bedf7568190511fe2f6592515dd4c4f651dcda110d00954",
+      "bytes": 61387,
+      "source_sha256": "dc9183dd0c79f36c754af66b077c17e5e1555d948fe9ab5f9a387dfcfac12555",
+      "source_bytes": 61413,
+      "changes": [
+        {
+          "original": "          'Experimental: new in 1.13. study.builder simulates the study in this browser, and what it makes may still change.'",
+          "replacement": "          'Experimental: study.builder simulates the study in this browser, and what it makes may still change.'",
+          "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
+        },
+        {
+          "original": "          'Experimental: new in 1.13. The view is study.builder’s and every row is synthetic; what it shows may still change.'",
+          "replacement": "          'Experimental: the view is study.builder’s and every row is synthetic; what it shows may still change.'",
+          "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
+        }
+      ]
     },
     {
       "file": "tests/unit/app/charts.test.js",
@@ -2166,8 +2204,8 @@
     },
     {
       "file": "tests/unit/app/data-sources.test.js",
-      "sha256": "639b871e7d6153c3bcb7801ca1b969b4f7ee02e9201c3e664fd4358a85e03e01",
-      "bytes": 5501
+      "sha256": "4dd593c6fab322af125bab6cf22163313b49074a743e0a5622743ea1b63a211e",
+      "bytes": 9361
     },
     {
       "file": "tests/unit/app/detect.test.js",
@@ -2259,10 +2297,10 @@
     },
     {
       "file": "tests/unit/app/portfolio.test.js",
-      "sha256": "c459d3cf99b801f76f6fa9b7ea796e1c24bd6121e9b4e1e7e3e44c572e6fe792",
-      "bytes": 38112,
-      "source_sha256": "d142aba21057c322dbb2831cdfeeb9eb9893fad7ff6adf5a3578f3f91eb30fd6",
-      "source_bytes": 38113,
+      "sha256": "8867c97c681493d2f575532e1282e130995d09851b8193d9d404f4040123129b",
+      "bytes": 44014,
+      "source_sha256": "237d3af03c15eed66a5e8e530707413ac5adce391000c913301c1b09fda5fc9d",
+      "source_bytes": 44015,
       "changes": [
         {
           "original": "    name: 'safety-viz-mapping.json',",
@@ -2273,8 +2311,8 @@
     },
     {
       "file": "tests/unit/app/r-browser.test.js",
-      "sha256": "f5c9e09632b8bfdc9244f88152fc3157b53d7746ba0a3057855ee3d9b380ed33",
-      "bytes": 21806
+      "sha256": "9c6b31e5bdf1f3327bded8b072f0d38fa95cb3837dfec7a759509354821baf62",
+      "bytes": 25666
     },
     {
       "file": "tests/unit/app/r-control.test.js",
@@ -2331,8 +2369,8 @@
     },
     {
       "file": "tests/unit/app/rbqm-files.test.js",
-      "sha256": "c5f218e14ec7ba6de37e33d0163945c561d6719537d1e4656d2a6196dfd2cdc8",
-      "bytes": 23491
+      "sha256": "2e2be4a29fbb7e3f00935e940a80f500ea06254945052105639009badabe897e",
+      "bytes": 23571
     },
     {
       "file": "tests/unit/app/rbqm-pipeline.test.js",
@@ -2351,13 +2389,13 @@
     },
     {
       "file": "tests/unit/app/rbqm-view.test.js",
-      "sha256": "40335f1b01ea40a9d24c11c8e249e188834bc5e47f8bdf0c148f8e8c78ac2556",
-      "bytes": 141371
+      "sha256": "24ce70b245dc4cc5f3f1701c44d429c8e5496034f9b5e3fa2f94b7edd58ba0c5",
+      "bytes": 146920
     },
     {
       "file": "tests/unit/app/rbqm.test.js",
-      "sha256": "9aaf6c7a7155575b6994f23cbd89be89b2badb2fa5e86051b479ef90bdd4588f",
-      "bytes": 29072
+      "sha256": "63808193f4e1893ad54a1291bfe53fbc8d16192043a52781518f4930fac88bf8",
+      "bytes": 29494
     },
     {
       "file": "tests/unit/app/single-file.test.js",
@@ -2380,10 +2418,10 @@
     },
     {
       "file": "tests/unit/app/status-label.test.js",
-      "sha256": "f987672f6a92c7a717e9943dbbf92ca45fa625f49789247e10a30d7e47f3ebeb",
-      "bytes": 24267,
-      "source_sha256": "97d35e548cb64ea089b57502226f3824fc6f305a86cfb9927083d3a0ce0cd4d2",
-      "source_bytes": 24561,
+      "sha256": "db7bbd37bb707ec2725c2921dcf4f3077c57ef1fada040f5c8bee74d58b0e753",
+      "bytes": 24436,
+      "source_sha256": "24b6a038ac81824a34c59a3a5acb4b4af0c0f789640f8dbb34b5cffa07b30cea",
+      "source_bytes": 24743,
       "changes": [
         {
           "cut": {
@@ -2402,6 +2440,11 @@
             "sha256": "2853844f3f6eb7ea70ad29fe5ed71904539a92a34d2dae4156ac3a9e7837c996"
           },
           "reason": "These three assertions say that safety.viz’s shell exports the status label. The shell is not in study.viz, and the bundle’s kit leaves the label out, so there is nothing here for them to hold. They stay with src/shell.js in safety.viz’s own suite."
+        },
+        {
+          "original": "        'open them. Both are study.builder’s, new in 1.13, and every row it makes is synthetic.'",
+          "replacement": "        'open them. Both are study.builder’s, and every row it makes is synthetic.'",
+          "reason": "safety.viz’s words give \"new in 1.13\" as a reason, and 1.13 is a version of safety.viz. The app is study.viz here and has no 1.13, so those words are left out and the rest of the sentence stands."
         }
       ]
     },
@@ -2427,8 +2470,8 @@
     },
     {
       "file": "tests/unit/app/tiers.test.js",
-      "sha256": "069f7bec0514c5ed9775a2db59e586e67689d16bd9b0814530d18ff4027b8175",
-      "bytes": 10274
+      "sha256": "8acc1c8a330c89f1e675c5b151f8d89d60ce24f47a6e36e3b64d22d79edf5baa",
+      "bytes": 10521
     },
     {
       "file": "tests/unit/app/view-items.test.js",
