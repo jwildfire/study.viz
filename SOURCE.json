@@ -1,9 +1,9 @@
 {
   "copy": "safety.viz’s demo app, as study.viz began",
   "repository": "https://github.com/jwildfire/safety.viz",
-  "commit": "66627d9ccfc0419b4614963c501145ac23764668",
+  "commit": "75b918cd6e2c2118e5d8163f245470e6a9af22f1",
   "version": "1.13.0",
-  "merged_to_dev": false,
+  "merged_to_dev": true,
   "left": [
     {
       "file": "docs/evidence/basic-app/demo-path/01-opens-on-the-pilot-study.png",

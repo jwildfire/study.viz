@@ -71,11 +71,13 @@ export const COPIED = {
   label: 'copy',
   repository: 'https://github.com/jwildfire/safety.viz',
   // The head of safety.viz's dev branch when the copy was last made: the commit
-  // that fixed what the second review of safety.viz's v1.13.0 release candidate
-  // found (safety.viz#427 and #430), on top of the one that moved its copy of
-  // study.builder to v0.5.2 (safety.viz#428 and #429; study.viz#31). It
-  // prepares safety.viz 1.13.0, which is not released there yet.
-  commit: '66627d9ccfc0419b4614963c501145ac23764668',
+  // that fixed what the re-review of the second review's fixes found
+  // (safety.viz#431 and #433), on top of the one that fixed what the second
+  // review of safety.viz's v1.13.0 release candidate found (safety.viz#427 and
+  // #430) and the one that moved its copy of study.builder to v0.5.2
+  // (safety.viz#428 and #429; study.viz#31). It prepares safety.viz 1.13.0,
+  // which is not released there yet.
+  commit: '75b918cd6e2c2118e5d8163f245470e6a9af22f1',
   folders: [
     // The app.
     'src/app',
